@@ -55,7 +55,7 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
   }
 
   // 通知設定有効無効
-  bool _isNotice = true;
+  // bool _isNotice = true;
 
   // 日付、時間を格納する変数
   TimeOfDay selectedTime = TimeOfDay.now();
@@ -75,6 +75,17 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
   // ラベルを格納する変数
   String _selectedLabel = '未選択';
 
+  // ボタン押下後の処理
+  void _pushedAddButton(Application app) async {
+    await app.addTask(
+      _controller.text,
+      _selectedLabel,
+      strSelectedDate,
+      strSelectedTime,
+    );
+    Navigator.pop(context);
+  }
+
   // 日付選択ウィジェット
   Future<void> selectDate(BuildContext context, WidgetRef ref) async {
     // DateTime? picked = ref.watch(selectedDateProvider);
@@ -87,8 +98,10 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
       lastDate: DateTime(2100),
     );
     if (picked != null) {
-      selectedDate = picked;
-      strSelectedDate = formattedDate(selectedDate);
+      setState(() {
+        selectedDate = picked;
+        strSelectedDate = formattedDate(selectedDate);
+      });
     }
   }
 
@@ -102,8 +115,10 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
     );
 
     if (picked != null) {
-      selectedTime = picked;
-      strSelectedTime = formattedTime(selectedTime);
+      setState(() {
+        selectedTime = picked;
+        strSelectedTime = formattedTime(selectedTime);
+      });
     }
   }
 
@@ -119,7 +134,9 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
         DropdownMenuItem<String>(child: Text('プログラミング'), value: 'プログラミング'),
       ],
       onChanged: (String? value) {
-        _selectedLabel = value ?? '未選択';
+        setState(() {
+          _selectedLabel = value ?? '未選択';
+        });
       },
       value: _selectedLabel,
     );
@@ -209,15 +226,8 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
             top: 28,
             right: 16,
             child: GestureDetector(
-              onTap: () async {
-                await app.addTask(
-                  _controller.text,
-                  _selectedLabel,
-                  strSelectedDate,
-                  strSelectedTime,
-                );
-                Navigator.pop(context);
-              },
+              onTap: () => _pushedAddButton(app),
+              // Navigator.pop(context);
               child: Container(
                 height: 35,
                 width: 75,
@@ -285,50 +295,7 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
                       // ),
                     ),
                   ),
-                  Positioned(
-                    top: 38,
-                    child: _selectDataTimeScreen(context),
-                    // Container(
-                    //     padding: EdgeInsets.only(top: 8, left: 12),
-                    //     height: 100,
-                    //     width: 300,
-                    //     color: Color(0xFFebebeb),
-                    //     // color: Color.fromARGB(0, 0, 0, 3),
-                    //     child: Stack(
-                    //       children: [
-                    //         Positioned(
-                    //           top: 0,
-                    //           child: Text('日時設定', style: TextStyle(fontSize: 18)),
-                    //         ),
-                    //         Positioned(
-                    //           top: 30,
-                    //           child: InkWell(
-                    //             onTap: () => selectDate(context, ref),
-                    //             child: Container(
-                    //               child: Text(
-                    //                 strSelectedDate,
-                    //                 style: TextStyle(fontSize: 22),
-                    //               ),
-                    //             ),
-                    //           ),
-                    //         ),
-                    //         Positioned(
-                    //           top: 30,
-                    //           left: 70,
-                    //           child: InkWell(
-                    //             onTap: () => _selectTime(context, ref),
-                    //             child: Container(
-                    //               child: Text(
-                    //                 strSelectedTime,
-                    //                 style: TextStyle(fontSize: 22),
-                    //               ),
-                    //             ),
-                    //           ),
-                    //         ),
-                    //       ],
-                    //     ),
-                    //   ),
-                  ),
+                  Positioned(top: 38, child: _selectDataTimeScreen(context)),
                 ],
               ),
             ),
@@ -339,28 +306,6 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
             top: 150,
             left: 208,
             child: _selectLabelScreen(context),
-            // Stack(
-            //   children: [
-            //     Positioned(
-            //       // top: 140,
-            //       // left: 212,
-            //       child: Text('ラベルを選択', style: TextStyle(fontSize: 18)),
-            //     ),
-            //     Positioned(
-            //       // left: 212,
-            //       top: 30,
-            //       // height: 0,
-            //       // width: 120,
-            //       child: Container(
-            //         padding: EdgeInsets.only(left: 10),
-            //         height: 50,
-            //         width: 200,
-            //         color: Color(0xFFEBEBEB),
-            //         child: _selectLabel(context, ref),
-            //       ),
-            //     ),
-            //   ],
-            // ),
           ),
         ],
       ),
