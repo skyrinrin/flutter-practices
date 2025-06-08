@@ -22,7 +22,7 @@ class Application {
   ) async {
     // final tasks = ref.read(taskProvider);
     final task = Task(
-      id: tasks.length + 1,
+      id: tasks.length,
       title: title,
       label: label,
       date: date,
@@ -43,10 +43,16 @@ class Application {
     //List<Task> tasks, tasksをグローバルに取得する
     final updatedTasks = [...tasks];
     updatedTasks[index] = updatedTasks[index].copyWith(
+      //テストをsharedの方でする
       isDone: !updatedTasks[index].isDone,
     );
     ref.read(taskProvider.notifier).updateTasks(updatedTasks);
     // repository.saveTasks(tasks);
+  }
+
+  // タスクを得る
+  Task getTask(int index) {
+    return tasks[index];
   }
 
   // // タスクの削除

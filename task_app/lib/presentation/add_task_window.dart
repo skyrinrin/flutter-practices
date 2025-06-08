@@ -86,6 +86,12 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
     Navigator.pop(context);
   }
 
+  // テスト用ダミーデータ
+  void _testPushedAddButton(Application app) async {
+    await app.addTask('このタスクはサンプルです。', 'Sample', '06/08', '11:41');
+    Navigator.pop(context);
+  }
+
   // 日付選択ウィジェット
   Future<void> selectDate(BuildContext context, WidgetRef ref) async {
     // DateTime? picked = ref.watch(selectedDateProvider);
@@ -226,7 +232,7 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
             top: 28,
             right: 16,
             child: GestureDetector(
-              onTap: () => _pushedAddButton(app),
+              onTap: () => _testPushedAddButton(app),
               // Navigator.pop(context);
               child: Container(
                 height: 35,
