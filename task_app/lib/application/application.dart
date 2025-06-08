@@ -11,7 +11,7 @@ class Application {
   final Repository repository;
   Application(this.ref, this.repository);
 
-  List<Task> get tasks => ref.read(taskProvider);
+  List<Task> get tasks => ref.read(tasksProvider);
 
   Future<void> addTask(
     // int id,
@@ -31,7 +31,7 @@ class Application {
     await repository.addTask(task);
 
     // TaskNotifierの状態も更新(プロバイダーのStateも同期)
-    ref.read(taskProvider.notifier).addTask(task);
+    ref.read(tasksProvider.notifier).addTask(task);
   }
 
   // Future<List<Task>> getTasks() async {
@@ -46,7 +46,7 @@ class Application {
       //テストをsharedの方でする
       isDone: !updatedTasks[index].isDone,
     );
-    ref.read(taskProvider.notifier).updateTasks(updatedTasks);
+    ref.read(tasksProvider.notifier).updateTasks(updatedTasks);
     // repository.saveTasks(tasks);
   }
 

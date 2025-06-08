@@ -40,12 +40,26 @@ final applicationProvider = Provider<Application>((ref) {
 });
 
 // タスクリスト (状態管理（UI表示用）)
-final taskProvider = StateNotifierProvider<TaskNotifier, List<Task>>((ref) {
+final tasksProvider = StateNotifierProvider<TaskNotifier, List<Task>>((ref) {
   final app = ref.read(applicationProvider);
   return TaskNotifier(app);
 });
 
-//UI関係プロバイダー(数が増えてきたらファイルを分けるべき) 追記 結局必要なかった...
-// final selectedDateProvider = StateProvider<DateTime?>((ref) => null); //日付選択変数
-// final selectedTimeProvider = StateProvider<TimeOfDay?>((ref) => null); //時間選択変数
-// final selectedLabelProvider = StateProvider<String?>((ref) => null); //ラベル選択変数
+// 今日のタスク
+final todayTasksProvider = Provider<List<Task>>((ref) {
+  final allTasks = ref.watch(tasksProvider);
+  final today = DateTime.now(); //どのような形式で日付が保存されるのかわからない
+  return allTasks.where((task) => task.date == today).toList();
+});
+
+// 明日のタスク
+final tomorrowTasksProvider = Provider<List<Task>>((ref) {
+  final allTasks = ref.watch(tasksProvider);
+  final tomorrow = DateTime.now(); //どのような形式で日付が保存されるのかわからない
+  return allTasks.where((task) => task.date == tomorrow).toList();
+});
+
+// その他のタスク
+final otherTasksProvider = Provider<List<Task>>((ref) {
+  return List<Task>.empty(); //後で実装する
+});

@@ -88,7 +88,9 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
 
   // テスト用ダミーデータ
   void _testPushedAddButton(Application app) async {
-    await app.addTask('このタスクはサンプルです。', 'Sample', '06/08', '11:41');
+    for (int i = 0; i < 10; i++) {
+      await app.addTask('このタスクはサンプルです。', 'Sample', '06/08', '11:41');
+    }
     Navigator.pop(context);
   }
 

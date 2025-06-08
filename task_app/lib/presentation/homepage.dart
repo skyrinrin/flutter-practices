@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:task_app/presentation/task_homeview.dart';
 import 'package:task_app/provider/provider.dart';
 // import 'package:task_app/provider/provider.dart';
 import 'package:task_app/repository/repository.dart';
@@ -115,7 +116,7 @@ class _HomePageState extends ConsumerState<HomePage>
       ),
       body: TabBarView(
         controller: _tabController,
-        children: _tabs.map((tabTitle) => TaskPageValue()).toList(),
+        children: _tabs.map((tabTitle) => TaskHomeview()).toList(), //ここを変更する
       ),
 
       floatingActionButton: FloatingActionButton(
