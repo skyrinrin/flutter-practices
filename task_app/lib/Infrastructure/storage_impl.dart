@@ -1,26 +1,16 @@
-import 'dart:convert';
-
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:task_app/domain/domain.dart';
+import 'dart:convert';
+import 'storage.dart';
 
-class Task {
-  String title;
+// 問題あり！データの整合性が無い
 
-  bool isDone;
-
-  Task({required this.title, this.isDone = false});
-
-  //JSON型に変換
-  Map<String, dynamic> toJson() => {'title': title, 'isDone': isDone};
-
-  //JSON型からMap型に変換
-  factory Task.fromJson(Map<String, dynamic> json) =>
-      Task(title: json['title'], isDone: json['isDone']);
-}
-
-// データ保存
-class TaskStorage {
+class StorageImpl implements Storage {
+  // データ保存
   static const _taskKey = 'tasks';
+  List<Task> tasks = []; //タスクリスト！
 
+  @override
   Future<void> saveTasks(List<Task> tasks) async {
     final prefs = await SharedPreferences.getInstance();
     final List<String> taskList =
@@ -29,6 +19,7 @@ class TaskStorage {
   }
 
   // データのロード
+  @override
   Future<List<Task>> loadTasks() async {
     final prefs = await SharedPreferences.getInstance();
     final List<String>? taskList = prefs.getStringList(_taskKey);
@@ -41,6 +32,7 @@ class TaskStorage {
   }
 
   //タスクの削除
+  @override
   Future<void> clearTasks() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_taskKey);

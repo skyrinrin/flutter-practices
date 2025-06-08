@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:task_app/task_card.dart';
-import 'add_task.dart';
+import 'package:task_app/presentation/task_card.dart';
+import 'package:task_app/domain/domain.dart';
 
 class TaskPageValue extends StatelessWidget {
   Widget build(BuildContext context) {

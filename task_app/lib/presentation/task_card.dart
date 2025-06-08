@@ -1,12 +1,32 @@
 import 'package:flutter/material.dart';
-import 'add_task.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+// import 'package:provider/provider.dart';
+import 'package:task_app/application/application.dart';
+import 'package:task_app/domain/domain.dart';
+import 'package:task_app/provider/provider.dart';
 
-class TaskCard extends StatefulWidget {
+class TaskCard extends ConsumerStatefulWidget {
   @override
-  _TaskCardState createState() => _TaskCardState();
+  ConsumerState<TaskCard> createState() => _TaskCardState();
 }
 
-class _TaskCardState extends State<TaskCard> {
+class _TaskCardState extends ConsumerState<TaskCard> {
+  late Application app;
+  // late List<Task> tasks;
+
+  @override
+  void initState() {
+    super.initState();
+    final app = ref.read(applicationProvider);
+    // List<Task> tasks = ref.watch(taskProvider);
+  }
+
+  void _pushedToggleButton(int index) {
+    setState(() {
+      app.toggleTask(index);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
