@@ -83,6 +83,9 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
       strSelectedDate,
       strSelectedTime,
     );
+    print(
+      '現在保存したタスク: ${_controller.text} $_selectedLabel $strSelectedDate $strSelectedTime',
+    );
     Navigator.pop(context);
   }
 
@@ -234,7 +237,7 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
             top: 28,
             right: 16,
             child: GestureDetector(
-              onTap: () => _testPushedAddButton(app),
+              onTap: () => _pushedAddButton(app),
               // Navigator.pop(context);
               child: Container(
                 height: 35,

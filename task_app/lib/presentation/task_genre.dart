@@ -13,28 +13,31 @@ class TaskGenre extends ConsumerStatefulWidget {
 }
 
 class _TaskGenreState extends ConsumerState<TaskGenre> {
-  @override
-  void initState() {
-    super.initState();
-    chooseKind();
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   chooseKind();
+  // }
 
-  // ウィジェットの種類の識別
-  void chooseKind() {
-    int number = widget.number;
+  // late List<Task> selectedTasks;
 
-    if (number == 0) {
-      _listTitle = '今日()';
-    }
-    if (number == 1) {
-      _listTitle = '明日()';
-    }
-    if (number == 2) {
-      _listTitle = 'その他()';
-    }
-  }
+  // // ウィジェットの種類の識別
+  // void chooseKind() {
+  //   int number = widget.number;
 
-  String _listTitle = '';
+  //   if (number == 0) {
+  //     _listTitle = '今日()';
+  //     selectedTasks = ref.watch(todayTasksProvider);
+  //   }
+  //   if (number == 1) {
+  //     _listTitle = '明日()';
+  //     selectedTasks = ref.watch(tomorrowTasksProvider);
+  //   }
+  //   if (number == 2) {
+  //     _listTitle = 'その他()';
+  //     selectedTasks = ref.watch(otherTasksProvider);
+  //   }
+  // }
 
   //もっと見るウィジェット
   late double _listWidth;
@@ -42,17 +45,30 @@ class _TaskGenreState extends ConsumerState<TaskGenre> {
   Icon _icon = Icon(Icons.keyboard_arrow_down, color: Colors.black, size: 40);
 
   bool _isOpened = false;
+  bool _isVisibility = false;
 
-  void _pushedMoreSeeButton() {
+  void _pushedMoreSeeButton(List<Task> selectedTasks) {
     _isOpened = !_isOpened;
     if (_isOpened == true) {
+      //6/08  ボタンを教えてからのウィジェットサイズの調整とテキストの表示・非表示から始める
       setState(() {
-        _listHeight = 2000;
+        double _momentlyHeight = selectedTasks.length * 104;
+        if (selectedTasks.isEmpty) {
+          _momentlyHeight = 100;
+          _isVisibility = true;
+        }
+        // else (_momentlyHeight <= 280) {   //なぜかエラーを吐く
+        //   _momentlyHeight = 280;
+        // };
+        _listHeight = _momentlyHeight;
         _icon = Icon(Icons.keyboard_arrow_up, color: Colors.black, size: 40);
         print('発火: ${_isOpened}:${_listHeight}');
       });
     } else {
       setState(() {
+        if (selectedTasks.isEmpty) {
+          _isVisibility = false;
+        }
         _listHeight = 280;
         _icon = Icon(Icons.keyboard_arrow_down, color: Colors.black, size: 40);
         print('発火: ${_isOpened}:${_listHeight}');
@@ -60,9 +76,9 @@ class _TaskGenreState extends ConsumerState<TaskGenre> {
     }
   }
 
-  Widget _moreSeeButton() {
+  Widget _moreSeeButton(List<Task> selectedTasks) {
     return GestureDetector(
-      onTap: _pushedMoreSeeButton,
+      onTap: () => {_pushedMoreSeeButton(selectedTasks)},
       child: Stack(
         children: [
           Opacity(
@@ -87,24 +103,50 @@ class _TaskGenreState extends ConsumerState<TaskGenre> {
 
   // カードのリストビューウィジェット
   Widget _cardsView(BuildContext context, List<Task> tasks) {
-    return Container(
-      // color: Colors.amber,
-      height: _listHeight,
+    return Stack(
+      children: [
+        Visibility(visible: _isVisibility, child: Text('挑戦できるタスクはありません')),
+        Container(
+          // color: Colors.amber,
+          height: _listHeight,
 
-      width: _listWidth,
-      child: ListView.builder(
-        physics: NeverScrollableScrollPhysics(),
-        itemCount: tasks.length,
-        itemBuilder: (BuildContext context, int index) {
-          return TaskCard(task: tasks[index]);
-        },
-      ),
+          width: _listWidth,
+          child: ListView.builder(
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: tasks.length,
+            itemBuilder: (BuildContext context, int index) {
+              return TaskCard(task: tasks[index]);
+            },
+          ),
+        ),
+      ],
     );
   }
 
   Widget build(BuildContext context) {
-    List<Task> tasks = ref.watch(tasksProvider);
     _listWidth = MediaQuery.of(context).size.width - 32;
+    // List<Task> tasks = ref.watch(tasksProvider);
+    // List<Task> todayTasks = ref.watch(todayTasksProvider);
+    // List<Task> tomorrowTasks = ref.watch(tomorrowTasksProvider);
+    // List<Task> otherTasks = ref.watch(otherTasksProvider);
+
+    int number = widget.number;
+    List<Task> selectedTasks = [];
+    String _listTitle = '';
+
+    if (number == 0) {
+      _listTitle = '今日()';
+      selectedTasks = ref.watch(todayTasksProvider);
+    }
+    if (number == 1) {
+      _listTitle = '明日()';
+      selectedTasks = ref.watch(tomorrowTasksProvider);
+    }
+    if (number == 2) {
+      _listTitle = 'その他()';
+      selectedTasks = ref.watch(otherTasksProvider);
+    }
+
     return Container(
       padding: EdgeInsets.only(top: 24, left: 16, right: 16),
       child: Column(
@@ -118,8 +160,8 @@ class _TaskGenreState extends ConsumerState<TaskGenre> {
           SizedBox(height: 16),
           Stack(
             children: [
-              _cardsView(context, tasks),
-              Positioned(bottom: 0, child: _moreSeeButton()),
+              _cardsView(context, selectedTasks),
+              Positioned(bottom: 0, child: _moreSeeButton(selectedTasks)),
             ],
           ),
 

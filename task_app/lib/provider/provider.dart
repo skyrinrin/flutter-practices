@@ -48,14 +48,23 @@ final tasksProvider = StateNotifierProvider<TaskNotifier, List<Task>>((ref) {
 // 今日のタスク
 final todayTasksProvider = Provider<List<Task>>((ref) {
   final allTasks = ref.watch(tasksProvider);
-  final today = DateTime.now(); //どのような形式で日付が保存されるのかわからない
+  final today = DateTime.now()
+      .toString()
+      .substring(5, 10)
+      .replaceAll('-', '/')
+      .padLeft(2, '0'); //どのような形式で日付が保存されるのかわからない
   return allTasks.where((task) => task.date == today).toList();
 });
 
 // 明日のタスク
 final tomorrowTasksProvider = Provider<List<Task>>((ref) {
   final allTasks = ref.watch(tasksProvider);
-  final tomorrow = DateTime.now(); //どのような形式で日付が保存されるのかわからない
+  final tomorrow = DateTime.now()
+      .add(const Duration(days: 1))
+      .toString()
+      .substring(5, 10)
+      .replaceAll('-', '/')
+      .padLeft(2, '0'); //どのような形式で日付が保存されるのかわからない
   return allTasks.where((task) => task.date == tomorrow).toList();
 });
 
