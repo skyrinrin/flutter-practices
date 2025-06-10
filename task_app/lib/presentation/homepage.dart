@@ -19,44 +19,43 @@ class HomePage extends ConsumerStatefulWidget {
   ConsumerState<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends ConsumerState<HomePage>
-    with TickerProviderStateMixin {
-  //with TickerProviderStateMixin があった
-  late TabController _tabController;
-  List<String> _tabs = ['タブ1', 'タブ2'];
-  // final storage = Storage();
+class _HomePageState extends ConsumerState<HomePage> {
+  // with TickerProviderStateMixin {
+  // //with TickerProviderStateMixin があった
+  // late TabController _tabController;
+  // List<String> _tabs = ['タブ1', 'タブ2'];
 
   // 実行時最初に行われる処理
 
   // late Application application;
 
-  @override
-  void initState() {
-    super.initState();
-    _createController(); //タブコントローラー最初の作成
-    // final repository = ref.watch(repositoryProvider);
+  // @override
+  // void initState() {
+  //   super.initState();
+  // _createController(); //タブコントローラー最初の作成
+  // final repository = ref.watch(repositoryProvider);
 
-    // repository.getTasks().then((loadedTasks) {
-    //   setState(() {
-    //     tasks = loadedTasks;
-    //   });
-    // });
-    // application = Application(repository);
-  } //必要ないかも？
+  // repository.getTasks().then((loadedTasks) {
+  //   setState(() {
+  //     tasks = loadedTasks;
+  //   });
+  // });
+  // application = Application(repository);
+  // } //必要ないかも？
 
-  //タブコントローラーの作成
-  void _createController() {
-    _tabController = TabController(length: _tabs.length, vsync: this);
-  }
+  // //タブコントローラーの作成
+  // void _createController() {
+  //   _tabController = TabController(length: _tabs.length, vsync: this);
+  // }
 
-  // タブの追加・アップデート
-  void _updateTabs() {
-    setState(() {
-      _tabs.add('ここに内容');
-      _tabController.dispose(); //前のコントローラーを破棄
-      _createController(); //新しいコントローラーの作成
-    });
-  }
+  // // タブの追加・アップデート
+  // void _updateTabs() {
+  //   setState(() {
+  //     _tabs.add('ここに内容');
+  //     _tabController.dispose(); //前のコントローラーを破棄
+  //     _createController(); //新しいコントローラーの作成
+  //   });
+  // }
 
   // タスク追加ウィンドウの表示
   void popAddTaskWindow() {
@@ -67,15 +66,15 @@ class _HomePageState extends ConsumerState<HomePage>
     );
   }
 
-  // タブの削除
-  void _removeTab() {
-    if (_tabs.length <= 1) return;
-    setState(() {
-      _tabs.removeLast();
-      _tabController.dispose();
-      _createController();
-    });
-  }
+  // // タブの削除
+  // void _removeTab() {
+  //   if (_tabs.length <= 1) return;
+  //   setState(() {
+  //     _tabs.removeLast();
+  //     _tabController.dispose();
+  //     _createController();
+  //   });
+  // }
 
   // @override
   // void dispose() {
@@ -83,42 +82,58 @@ class _HomePageState extends ConsumerState<HomePage>
   //   super.dispose();
   // }
 
-  // // タスクの追加
-  // void _addTask(String title, String label, String date, String time) {
-  //   setState(() {
-  //     tasks.add(Task(title: title, label: label, date: date, time: time));
-  //   });
-  //   storage.saveTasks(tasks);
-  //   print(tasks);
-  // }
+  // @override
+  // Widget build(BuildContext context) {
+  //   return Scaffold(
+  //     backgroundColor: Colors.white,
+  //     appBar: AppBar(
+  //       toolbarHeight: 0,
+  //       // title: Text('タスク管理アプリ'),
+  //       bottom: TabBar(
+  //         controller: _tabController,
+  //         tabs: _tabs.map((tabTitle) => Tab(text: tabTitle)).toList(),
+  //         isScrollable: true, //タブが多かった場合のスクロールの許可
+  //       ),
+  //     ),
+  //     body: TabBarView(
+  //       controller: _tabController,
+  //       children: _tabs.map((tabTitle) => TaskHomeview()).toList(), //ここを変更する
+  //     ),
 
-  // // タスクの削除
-  // void deleteTask(int index) {
-  //   setState(() {
-  //     tasks.removeAt(index);
-  //   });
-  //   storage.saveTasks(tasks);
+  //     floatingActionButton: FloatingActionButton(
+  //       onPressed: popAddTaskWindow,
+  //       child: Icon(Icons.add),
+  //       tooltip: 'タスクの追加',
+  //     ),
+  //   );
   // }
+  // final storage = Storage();
 
   @override
   Widget build(BuildContext context) {
-    // List<Task> tasks = ref.watch(taskProvider);
+    // List<Task> tasks = ref.watch(tasksProvider);
+
+    // // タスクの追加
+    // void _addTask(String title, String label, String date, String time) {
+    //   setState(() {
+    //     tasks.add(Task(title: title, label: label, date: date, time: time));
+    //   });
+    //   storage.saveTasks(tasks);
+    //   print(tasks);
+    // }
+
+    // // タスクの削除
+    // void deleteTask(int index) {
+    //   setState(() {
+    //     tasks.removeAt(index);
+    //   });
+    //   storage.saveTasks(tasks);
+    // }
+
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        toolbarHeight: 0,
-        // title: Text('タスク管理アプリ'),
-        bottom: TabBar(
-          controller: _tabController,
-          tabs: _tabs.map((tabTitle) => Tab(text: tabTitle)).toList(),
-          isScrollable: true, //タブが多かった場合のスクロールの許可
-        ),
-      ),
-      body: TabBarView(
-        controller: _tabController,
-        children: _tabs.map((tabTitle) => TaskHomeview()).toList(), //ここを変更する
-      ),
-
+      appBar: AppBar(title: Text('タスク管理アプリ')),
+      body: TaskHomeview(),
       floatingActionButton: FloatingActionButton(
         onPressed: popAddTaskWindow,
         child: Icon(Icons.add),

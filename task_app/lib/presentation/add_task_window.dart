@@ -77,15 +77,19 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
 
   // ボタン押下後の処理
   void _pushedAddButton(Application app) async {
-    await app.addTask(
-      _controller.text,
-      _selectedLabel,
-      strSelectedDate,
-      strSelectedTime,
-    );
-    print(
-      '現在保存したタスク: ${_controller.text} $_selectedLabel $strSelectedDate $strSelectedTime',
-    );
+    if (_controller.text == '') {
+      ScaffoldMessenger.of(context).showSnackBar(_warningSnackBar);
+    } else {
+      await app.addTask(
+        _controller.text,
+        _selectedLabel,
+        strSelectedDate,
+        strSelectedTime,
+      );
+      print(
+        '現在保存したタスク: ${_controller.text} $_selectedLabel $strSelectedDate $strSelectedTime',
+      );
+    }
     Navigator.pop(context);
   }
 
@@ -152,6 +156,15 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
       value: _selectedLabel,
     );
   }
+
+  // 注意書きスナックバー
+  final _warningSnackBar = SnackBar(
+    content: Text(
+      '入力していない項目があります',
+      style: TextStyle(fontSize: 20),
+      selectionColor: Color.fromARGB(0, 218, 50, 50),
+    ),
+  );
 
   // 日付時間選択画面ウィジェットスクリーン
   Widget _selectDataTimeScreen(BuildContext context) {

@@ -52,24 +52,33 @@ class _TaskGenreState extends ConsumerState<TaskGenre> {
     if (_isOpened == true) {
       //6/08  ボタンを教えてからのウィジェットサイズの調整とテキストの表示・非表示から始める
       setState(() {
-        double _momentlyHeight = selectedTasks.length * 104;
         if (selectedTasks.isEmpty) {
-          _momentlyHeight = 100;
+          _listHeight = 100;
           _isVisibility = true;
+        } else {
+          if (selectedTasks.length * 104 < 280) {
+            _listHeight = 280;
+          } else {
+            _listHeight = (selectedTasks.length + 1) * 104;
+          }
+          _isVisibility = false;
         }
         // else (_momentlyHeight <= 280) {   //なぜかエラーを吐く
         //   _momentlyHeight = 280;
         // };
-        _listHeight = _momentlyHeight;
+        // _listHeight = _momentlyHeight;
         _icon = Icon(Icons.keyboard_arrow_up, color: Colors.black, size: 40);
         print('発火: ${_isOpened}:${_listHeight}');
       });
     } else {
       setState(() {
         if (selectedTasks.isEmpty) {
+          _listHeight = 100;
+          _isVisibility = true;
+        } else {
           _isVisibility = false;
+          _listHeight = 280;
         }
-        _listHeight = 280;
         _icon = Icon(Icons.keyboard_arrow_down, color: Colors.black, size: 40);
         print('発火: ${_isOpened}:${_listHeight}');
       });
@@ -135,16 +144,21 @@ class _TaskGenreState extends ConsumerState<TaskGenre> {
     String _listTitle = '';
 
     if (number == 0) {
-      _listTitle = '今日()';
       selectedTasks = ref.watch(todayTasksProvider);
+      _listTitle = '今日(${selectedTasks.length})';
     }
     if (number == 1) {
-      _listTitle = '明日()';
       selectedTasks = ref.watch(tomorrowTasksProvider);
+      _listTitle = '明日(${selectedTasks.length})';
     }
     if (number == 2) {
-      _listTitle = 'その他()';
       selectedTasks = ref.watch(otherTasksProvider);
+      _listTitle = 'その他(${selectedTasks.length})';
+    }
+
+    if (selectedTasks.isEmpty) {
+      _isVisibility = true;
+      _listHeight = 100;
     }
 
     return Container(
