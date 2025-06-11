@@ -7,7 +7,7 @@ import 'package:task_app/domain/domain.dart';
 import 'package:task_app/repository/repository.dart';
 import 'package:task_app/repository/repository_impl.dart';
 
-// StateNotifierを使って状態管理
+// タスクリスト用
 class TaskNotifier extends StateNotifier<List<Task>> {
   Application app;
   TaskNotifier(this.app) : super([]); //親クラスに空のリストを渡す
@@ -20,6 +20,34 @@ class TaskNotifier extends StateNotifier<List<Task>> {
   // リストのアップデート
   void updateTasks(List<Task> tasks) {
     state = tasks;
+  }
+}
+
+// ラベル（ジャンル分け）用
+class LabelsTasksNotifier extends StateNotifier<Map<String, List<Task>>> {
+  LabelsTasksNotifier() : super({});
+
+  // ジャンル追加
+  void addLabel(String labelName) {
+    // すでに同じ名前のジャンルがないかチェック
+    if (!state.containsKey(labelName)) {
+      state = {...state, labelName: []};
+    }
+  }
+
+  // ラベル（ジャンル）にタスクを追加する
+  void addTaskToLabel(String labelName, Task task) {
+    final currentTasks = state[labelName] ?? [];
+    final updateList = [...currentTasks, task];
+
+    state = {...state, labelName: updateList};
+  }
+
+  // ラベルを削除する
+  void removeLabel(String labelName) {
+    final newState = Map<String, List<Task>>.from(state);
+    newState.remove(labelName);
+    state = newState;
   }
 }
 
@@ -44,6 +72,12 @@ final tasksProvider = StateNotifierProvider<TaskNotifier, List<Task>>((ref) {
   final app = ref.read(applicationProvider);
   return TaskNotifier(app);
 });
+
+// タスクラベルリスト
+final labelsTaskProvider =
+    StateNotifierProvider<LabelsTasksNotifier, Map<String, List<Task>>>((ref) {
+      return LabelsTasksNotifier();
+    });
 
 // 今日のタスク
 final todayTasksProvider = Provider<List<Task>>((ref) {

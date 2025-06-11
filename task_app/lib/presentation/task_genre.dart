@@ -13,32 +13,6 @@ class TaskGenre extends ConsumerStatefulWidget {
 }
 
 class _TaskGenreState extends ConsumerState<TaskGenre> {
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   chooseKind();
-  // }
-
-  // late List<Task> selectedTasks;
-
-  // // ウィジェットの種類の識別
-  // void chooseKind() {
-  //   int number = widget.number;
-
-  //   if (number == 0) {
-  //     _listTitle = '今日()';
-  //     selectedTasks = ref.watch(todayTasksProvider);
-  //   }
-  //   if (number == 1) {
-  //     _listTitle = '明日()';
-  //     selectedTasks = ref.watch(tomorrowTasksProvider);
-  //   }
-  //   if (number == 2) {
-  //     _listTitle = 'その他()';
-  //     selectedTasks = ref.watch(otherTasksProvider);
-  //   }
-  // }
-
   //もっと見るウィジェット
   late double _listWidth;
   double _listHeight = 280;
@@ -183,6 +157,43 @@ class _TaskGenreState extends ConsumerState<TaskGenre> {
           // Positioned(child: TaskCard()),
         ],
       ),
+    );
+  }
+}
+
+// ここからファイルを分けるべきかも
+
+class TaskGenreList extends ConsumerWidget {
+  Widget expansionTaskWidget(String labelName, List<Task> tasks) {
+    return ExpansionPanelList(
+      children: [
+        ExpansionPanel(
+          headerBuilder: (BuildContext context, bool isExpanded) {
+            return ListTile(
+              title: Text(labelName),
+            ); //リストタイルを使うのとテキストを使うのの違いが判らない
+          },
+          body: ListView.builder(
+            itemCount: tasks.length,
+            itemBuilder: (BuildContext context, int index) {
+              return TaskCard(task: tasks[index]);
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final labelsTasks = ref.watch(labelsTaskProvider);
+
+    return expansionTaskWidget(
+      labelsTasks
+          .entries
+          .first
+          .key, //次にすること： タスクを追加したときにラベルにジャンル分けすること、そしてその時間関係をしっかりしてnullエラーが起こらないようにする
+      labelsTasks.entries.first.value,
     );
   }
 }

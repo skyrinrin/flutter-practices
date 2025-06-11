@@ -12,6 +12,7 @@ class TaskHomeview extends StatelessWidget {
           TaskGenre(number: 0),
           TaskGenre(number: 1),
           TaskGenre(number: 2),
+          TaskGenreList(), //ここにラベルリストがある
         ],
       ),
     );
