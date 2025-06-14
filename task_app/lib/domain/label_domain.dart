@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 class Label {
-  final int id;
+  final int id; //IDを数字管理すると穴があいたときに困るかも(要注意)
   final String name;
   final String color;
 

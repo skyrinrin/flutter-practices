@@ -50,7 +50,7 @@ class TaskHomeview extends ConsumerWidget {
           ElevatedButton(
             onPressed: () {
               // ここにコード
-              app.addLabel('テスト', 1, '234');
+              app.addLabel('テスト', 10, '234');
 
               // ラベル追加用ウィジェットを作りそちらに処理を任せる
             },

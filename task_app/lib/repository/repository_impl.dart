@@ -59,6 +59,7 @@ class RepositoryImpl implements Repository {
   // ラベルのキャッシュ
   List<Label> _cachedLabels = [];
   // 正しく保存されない場合、キャッシュ部分に問題がある可能性あり
+  // 現在ラベルが2重に保存される（Notifier側の処理が行われていない＝整合性に著しい欠陥あり）
 
   // ラベルの追加
   @override

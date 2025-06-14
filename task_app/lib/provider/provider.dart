@@ -123,6 +123,12 @@ final labelsNameProvider = Provider<List<String>>((ref) {
   return labels.map((label) => label.name).toList();
 });
 
+// ラベルのIDリスト
+final labelIdProvider = Provider<List<int>>((ref) {
+  final labels = ref.watch(labelsProvider);
+  return labels.map((label) => label.id).toList();
+});
+
 // 今日のタスク
 final todayTasksProvider = Provider<List<Task>>((ref) {
   final allTasks = ref.watch(tasksProvider);

@@ -38,11 +38,18 @@ class Application {
 
   Future<void> addLabel(String name, int id, String color) async {
     final label = Label(name: name, id: id, color: color);
-    await repository.addLabel(label);
+    final labelsIds = ref.read(labelIdProvider);
 
-    // LabelNotifierの状態も更新(プロバイダーのStateも同期)
-    ref.read(labelsProvider.notifier).addLabel(label);
-    print('ラベル保存完了');
+    if (!labelsIds.contains(label.id)) {
+      await repository.addLabel(label);
+
+      // LabelNotifierの状態も更新(プロバイダーのStateも同期)
+      ref.read(labelsProvider.notifier).addLabel(label);
+      print('ラベル保存完了');
+    } else {
+      print('すでに同じラベルがあります');
+      // スナックバーの表示
+    }
   }
 
   // タスクをラベル分けする
