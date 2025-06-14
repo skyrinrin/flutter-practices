@@ -3,7 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:task_app/repository/repository.dart';
 import 'package:task_app/repository/repository_impl.dart';
 import 'presentation/task_card.dart';
-import 'domain/domain.dart';
+import 'domain/task_domain.dart';
 import 'presentation/task_genre.dart';
 import 'presentation/add_task_window.dart';
 import 'application/application.dart';

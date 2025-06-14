@@ -42,6 +42,11 @@ class RepositoryImpl implements Repository {
     await storage.saveTasks(tasks);
   }
 
+  // // タスクのロード
+  // @override
+  // Future<List<Task>> loadTasks() async {
+  //   return await storage.loadTasks();
+  // }
   // タスクのロード
   @override
   Future<List<Task>> loadTasks() async {

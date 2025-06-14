@@ -1,5 +1,6 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:task_app/Infrastructure/storage.dart';
+import 'package:task_app/domain/label_domain.dart';
 import 'package:task_app/provider/provider.dart';
 import 'package:task_app/repository/repository.dart';
 import 'package:task_app/domain/task_domain.dart';
@@ -68,20 +69,17 @@ class Application {
 
 // アプリケーション層にnotifier系を入れる
 class TaskNotifier extends StateNotifier<List<Task>> {
-  Application app;
-  TaskNotifier(this.app) : super([]); //親クラスに空のリストを渡す
-
-  // // タスクのロード   永続化処理はstorageのみで行う
-  // void loadTasks() async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   final jsonList = prefs.getStringList('tasks') ?? [];
-  //   final loadedTasks =
-  //       jsonList.map((e) => Task.fromJson(json.decode(e))).toList();
-  //   state = loadedTasks;
-  // } //これをどこかで呼び出す
+  // // Application app;
+  // TaskNotifier(this.app) : super([]); //親クラスに空のリストを渡す
+  // Application app;
+  Repository repository;
+  TaskNotifier(this.repository) : super([]); //親クラスに空のリストを渡す
 
   // タスクのロード
-  void laodTasks() async {}
+  void laodTasks() async {
+    List<Task> _loadedData = await repository.loadTasks();
+    state = _loadedData;
+  }
 
   // タスクの追加
   void addTask(Task task) {
@@ -93,3 +91,93 @@ class TaskNotifier extends StateNotifier<List<Task>> {
     state = tasks;
   }
 }
+
+// ラベル（ジャンル分け）用
+// class LabelsTasksNotifier extends StateNotifier<Map<String, List<Label>>> {
+class LabelsTasksNotifier extends StateNotifier<List<Label>> {
+  Repository repository;
+  LabelsTasksNotifier(this.repository) : super([]);
+
+  // void loadLabels() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   final jsonList = prefs.getStringList('labels') ?? [];
+  //   final loadLabels =
+  //       jsonList.map((e) => Label.fromJson(json.decode(e))).toList();
+  //   state = loadedTasks
+  // }
+
+  void loadLabels() async {
+    List<Label> _loadedData = await repository.loadLabels();
+    state = _loadedData;
+  }
+
+  // ジャンル追加
+  void addLabel(Label label) {
+    // すでに同じ名前のジャンルがないかチェック
+    if (!state.contains(label)) {
+      state = [...state, label];
+    }
+  }
+
+  // // ラベル（ジャンル）にタスクを追加する
+  // void addTaskToLabel(String labelName, Task task) {
+  //   final currentTasks = state[labelName] ?? [];
+  //   final updateList = [...currentTasks, task];
+
+  //   state = {...state, labelName: updateList};
+  // }
+
+  // // ラベルを削除する
+  // void removeLabel(String id) {
+  //   final newState = Map<String, List<Label>>.from(state);
+  //   newState.remove(labelName);
+  //   state = newState;
+  // }
+}
+
+
+// 恐らくこのコードはリストを永続化しないように管理しようとしているためMap型で定義している
+// ラベル型を作るためこのコードは恐らく不要？
+
+// // ラベル（ジャンル分け）用  
+// // class LabelsTasksNotifier extends StateNotifier<Map<String, List<Label>>> {
+// class LabelsTasksNotifier extends StateNotifier<Map<String, List<Label>>> {
+//   Repository repository;
+//   LabelsTasksNotifier(this.repository) : super({});
+
+//   // void loadLabels() async {
+//   //   final prefs = await SharedPreferences.getInstance();
+//   //   final jsonList = prefs.getStringList('labels') ?? [];
+//   //   final loadLabels =
+//   //       jsonList.map((e) => Label.fromJson(json.decode(e))).toList();
+//   //   state = loadedTasks
+//   // }
+
+//   void loadLabels() async {
+//     List<Label> _loadedData = await repository.loadLabels();
+//     state = _loadedData;
+//   }
+
+//   // ジャンル追加
+//   void addLabel(String labelName) {
+//     // すでに同じ名前のジャンルがないかチェック
+//     if (!state.containsKey(labelName)) {
+//       state = {...state, labelName: []};
+//     }
+//   }
+
+//   // ラベル（ジャンル）にタスクを追加する
+//   void addTaskToLabel(String labelName, Task task) {
+//     final currentTasks = state[labelName] ?? [];
+//     final updateList = [...currentTasks, task];
+
+//     state = {...state, labelName: updateList};
+//   }
+
+//   // ラベルを削除する
+//   void removeLabel(String labelName) {
+//     final newState = Map<String, List<Task>>.from(state);
+//     newState.remove(labelName);
+//     state = newState;
+//   }
+// }

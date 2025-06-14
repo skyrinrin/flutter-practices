@@ -9,10 +9,10 @@ class TaskHomeview extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          TaskGenre(number: 0),
-          TaskGenre(number: 1),
-          TaskGenre(number: 2),
-          TaskGenreList(), //ここにラベルリストがある
+          // TaskGenre(number: 0),
+          // TaskGenre(number: 1),
+          // TaskGenre(number: 2),
+          // TaskGenreList(), //ここにラベルリストがある
         ],
       ),
     );

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:task_app/application/application.dart';
 import 'package:task_app/main.dart';
-import 'package:task_app/domain/domain.dart';
+import 'package:task_app/domain/task_domain.dart';
 import 'package:task_app/provider/provider.dart';
 
 class AddTaskWindow extends ConsumerStatefulWidget {
@@ -25,37 +25,11 @@ class AddTaskWindow extends ConsumerStatefulWidget {
 class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
   final TextEditingController _controller = TextEditingController();
 
-  //追加ボタンが押された際の処理 HomePage層でsetStateを実行するためにコールバック
-  // void _pushedAddButton() {
-  //   // widget.onAddTask(
-  //   //   _controller.text,
-  //   //   selectedLabel,
-  //   //   strSelectedDate,
-  //   //   strSelectedTime,
-  //   // );
-  //   // Navigator.pop(context);
-  // }
-
-  //追加ボタンが押された際の処理 UI的に適切に描画されない可能性がある　（HomePage層でsetStateをしないといけない）
-  // void _pushedAddButton(
-  //   int id,
-  //   String title,
-  //   String label,
-  //   String date,
-  //   String time,
-  // ) async {
-  //   await app.addTask(id, title, label, date, time);
-  //   Navigator.pop(context);
-  // }
-
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
   }
-
-  // 通知設定有効無効
-  // bool _isNotice = true;
 
   // 日付、時間を格納する変数
   TimeOfDay selectedTime = TimeOfDay.now();
@@ -67,10 +41,6 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
       .replaceAll('-', '/')
       .padLeft(2, '0');
   String strSelectedTime = TimeOfDay.now().toString().substring(10, 15);
-  // String selectedDate = DateTime.now()
-  //     .toString()
-  //     .substring(5, 10)
-  //     .replaceAll('-', '/');
 
   // ラベルを格納する変数
   String _selectedLabel = '未選択';
@@ -103,8 +73,6 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
 
   // 日付選択ウィジェット
   Future<void> selectDate(BuildContext context, WidgetRef ref) async {
-    // DateTime? picked = ref.watch(selectedDateProvider);
-
     DateTime? picked = await showDatePicker(
       context: context,
       // 初期日付
@@ -139,8 +107,6 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
 
   // ラベル選択ウィジェット
   DropdownButton _selectLabel(BuildContext context, WidgetRef ref) {
-    // _selectedLabel = ref.watch(selectedLabelProvider);
-
     return DropdownButton<String>(
       items: [
         DropdownMenuItem<String>(child: Text('未選択'), value: '未選択'),

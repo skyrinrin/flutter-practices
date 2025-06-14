@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:task_app/presentation/task_card.dart';
-import 'package:task_app/domain/domain.dart';
+import 'package:task_app/domain/task_domain.dart';
 import 'package:task_app/provider/provider.dart';
 
 class TaskGenre extends ConsumerStatefulWidget {
