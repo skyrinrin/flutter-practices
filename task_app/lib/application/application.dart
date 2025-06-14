@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:task_app/Infrastructure/storage.dart';
 import 'package:task_app/domain/label_domain.dart';
@@ -33,6 +34,14 @@ class Application {
 
     // TaskNotifierの状態も更新(プロバイダーのStateも同期)
     ref.read(tasksProvider.notifier).addTask(task);
+  }
+
+  Future<void> addLabel(String name, int id, String color) async {
+    final label = Label(name: name, id: id, color: color);
+    await repository.addLabel(label);
+
+    // LabelNotifierの状態も更新(プロバイダーのStateも同期)
+    ref.read(labelsTaskProvider.notifier).addLabel(label);
   }
 
   // タスクをラベル分けする
@@ -96,7 +105,8 @@ class TaskNotifier extends StateNotifier<List<Task>> {
 // class LabelsTasksNotifier extends StateNotifier<Map<String, List<Label>>> {
 class LabelsTasksNotifier extends StateNotifier<List<Label>> {
   Repository repository;
-  LabelsTasksNotifier(this.repository) : super([]);
+  LabelsTasksNotifier(this.repository)
+    : super([Label(name: '未選択', id: 1, color: '000')]);
 
   // void loadLabels() async {
   //   final prefs = await SharedPreferences.getInstance();

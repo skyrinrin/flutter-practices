@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 // import 'package:provider/provider.dart';
 import 'package:task_app/application/application.dart';
-import 'package:task_app/domain/domain.dart';
+import 'package:task_app/domain/task_domain.dart';
 import 'package:task_app/provider/provider.dart';
 
 class TaskCard extends ConsumerStatefulWidget {

@@ -8,7 +8,7 @@ import 'task_card.dart';
 import 'task_genre.dart';
 import 'add_task_window.dart';
 import 'package:task_app/application/application.dart';
-import 'package:task_app/domain/domain.dart';
+import 'package:task_app/domain/task_domain.dart';
 import 'package:task_app/Infrastructure/storage.dart';
 // import 'package:provider/provider.dart';
 
@@ -108,6 +108,13 @@ class _HomePageState extends ConsumerState<HomePage> {
   //   );
   // }
   // final storage = Storage();
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   ref.read(labelsTaskProvider).
+  //   ref.read(tasksProvider.notifier).loadTasks();
+  // }
 
   @override
   Widget build(BuildContext context) {

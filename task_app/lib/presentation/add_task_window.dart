@@ -5,6 +5,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:task_app/application/application.dart';
+import 'package:task_app/domain/label_domain.dart';
 import 'package:task_app/main.dart';
 import 'package:task_app/domain/task_domain.dart';
 import 'package:task_app/provider/provider.dart';
@@ -107,13 +108,29 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
 
   // ラベル選択ウィジェット
   DropdownButton _selectLabel(BuildContext context, WidgetRef ref) {
+    List<Label> labels = ref.watch(labelsTaskProvider);
+
+    List<String> dropdownItems = [labels.first.name];
+
+    void addLabelsNames() {
+      List<String> labelNames = [];
+      for (int i = 0; i < labels.length; i++) {
+        labelNames.add(labels[i].name);
+      }
+      dropdownItems = labelNames;
+    }
+
     return DropdownButton<String>(
-      items: [
-        DropdownMenuItem<String>(child: Text('未選択'), value: '未選択'),
-        DropdownMenuItem<String>(child: Text('ラベル1'), value: 'ラベル1'),
-        DropdownMenuItem<String>(child: Text('ラベル2'), value: 'ラベル2'),
-        DropdownMenuItem<String>(child: Text('プログラミング'), value: 'プログラミング'),
-      ],
+      // items: [
+      //   DropdownMenuItem<String>(child: Text('未選択'), value: '未選択'),
+      //   // DropdownMenuItem<String>(child: Text('ラベル1'), value: 'ラベル1'),
+      //   // DropdownMenuItem<String>(child: Text('ラベル2'), value: 'ラベル2'),
+      //   // DropdownMenuItem<String>(child: Text('プログラミング'), value: 'プログラミング'),
+      // ],
+      items:
+          dropdownItems.map((String item) {
+            return DropdownMenuItem<String>(value: item, child: Text(item));
+          }).toList(),
       onChanged: (String? value) {
         setState(() {
           _selectedLabel = value ?? '未選択';
