@@ -2,7 +2,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:task_app/Infrastructure/storage.dart';
 import 'package:task_app/provider/provider.dart';
 import 'package:task_app/repository/repository.dart';
-import 'package:task_app/domain/domain.dart';
+import 'package:task_app/domain/task_domain.dart';
 // import 'package:provider/provider.dart';
 
 class Application {
@@ -34,6 +34,8 @@ class Application {
     ref.read(tasksProvider.notifier).addTask(task);
   }
 
+  // タスクをラベル分けする
+
   // Future<List<Task>> getTasks() async {
   //   return repository.getTasks();
   // }
@@ -62,4 +64,32 @@ class Application {
   //   });
   //   storage.saveTasks(tasks);
   // }
+}
+
+// アプリケーション層にnotifier系を入れる
+class TaskNotifier extends StateNotifier<List<Task>> {
+  Application app;
+  TaskNotifier(this.app) : super([]); //親クラスに空のリストを渡す
+
+  // // タスクのロード   永続化処理はstorageのみで行う
+  // void loadTasks() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   final jsonList = prefs.getStringList('tasks') ?? [];
+  //   final loadedTasks =
+  //       jsonList.map((e) => Task.fromJson(json.decode(e))).toList();
+  //   state = loadedTasks;
+  // } //これをどこかで呼び出す
+
+  // タスクのロード
+  void laodTasks() async {}
+
+  // タスクの追加
+  void addTask(Task task) {
+    state = [...state, task]; //もともとのリストにtaskを追加
+  }
+
+  // リストのアップデート
+  void updateTasks(List<Task> tasks) {
+    state = tasks;
+  }
 }

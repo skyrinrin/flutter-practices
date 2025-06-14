@@ -1,5 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:task_app/domain/domain.dart';
+import 'package:task_app/domain/label_domain.dart';
+import 'package:task_app/domain/task_domain.dart';
 import 'dart:convert';
 import 'package:task_app/Infrastructure/storage.dart';
 
@@ -26,6 +27,8 @@ class RepositoryImpl implements Repository {
   //   return _cachedTasks;
   // }
 
+  //
+
   Future<void> toggleTaskDone(int id) async {
     if (id != -1) {
       _cachedTasks[id].isDone = !_cachedTasks[id].isDone;
@@ -33,9 +36,27 @@ class RepositoryImpl implements Repository {
     storage.saveTasks(_cachedTasks);
   }
 
-  // データ保存
+  // タスクの保存
   @override
   Future<void> saveTasks(List<Task> tasks) async {
     await storage.saveTasks(tasks);
+  }
+
+  // タスクのロード
+  @override
+  Future<List<Task>> loadTasks() async {
+    return await storage.loadTasks();
+  }
+
+  // ラベルの保存
+  @override
+  Future<void> saveLabels(List<Label> labels) async {
+    await storage.saveLabels(labels);
+  }
+
+  // ラベルのロード
+  @override
+  Future<List<Label>> loadLabels() async {
+    return await storage.loadLabels();
   }
 }

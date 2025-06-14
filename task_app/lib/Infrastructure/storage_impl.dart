@@ -1,15 +1,21 @@
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:task_app/domain/domain.dart';
+import 'package:task_app/domain/label_domain.dart';
+import 'package:task_app/domain/task_domain.dart';
 import 'dart:convert';
 import 'storage.dart';
 
-// 問題あり！データの整合性が無い
+// ラベル用の保存ロジックも作る
 
 class StorageImpl implements Storage {
   // データ保存
   static const _taskKey = 'tasks';
-  List<Task> tasks = []; //タスクリスト！
+  static const _labelKey = 'labels';
+  // List<
+  // List<Task> tasks = []; //タスクリスト！
 
+  // タスク
+
+  // タスクの保存
   @override
   Future<void> saveTasks(List<Task> tasks) async {
     final prefs = await SharedPreferences.getInstance();
@@ -18,7 +24,7 @@ class StorageImpl implements Storage {
     await prefs.setStringList(_taskKey, taskList);
   }
 
-  // データのロード
+  // タスクのロード
   @override
   Future<List<Task>> loadTasks() async {
     final prefs = await SharedPreferences.getInstance();
@@ -31,10 +37,34 @@ class StorageImpl implements Storage {
     }).toList();
   }
 
-  //タスクの削除
+  // //タスクの削除
+  // @override
+  // Future<void> clearTasks() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   await prefs.remove(_taskKey);
+  // }
+
+  // ラベル
+
+  // ラベルの保存
   @override
-  Future<void> clearTasks() async {
+  Future<void> saveLabels(List<Label> labels) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.remove(_taskKey);
+    final List<String> labelList =
+        labels.map((label) => jsonEncode(label.toJson())).toList();
+    await prefs.setStringList(_labelKey, labelList);
+  }
+
+  // ラベルのロード
+  @override
+  Future<List<Label>> loadLabels() async {
+    final prefs = await SharedPreferences.getInstance();
+    final List<String>? labelList = prefs.getStringList(_labelKey);
+    if (labelList == null) return [];
+
+    return labelList.map((labelStr) {
+      final json = jsonDecode(labelStr);
+      return Label.fromJson(json);
+    }).toList();
   }
 }
