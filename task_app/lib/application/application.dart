@@ -41,7 +41,8 @@ class Application {
     await repository.addLabel(label);
 
     // LabelNotifierの状態も更新(プロバイダーのStateも同期)
-    ref.read(labelsTaskProvider.notifier).addLabel(label);
+    ref.read(labelsProvider.notifier).addLabel(label);
+    print('ラベル保存完了');
   }
 
   // タスクをラベル分けする

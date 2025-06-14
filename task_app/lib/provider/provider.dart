@@ -108,12 +108,20 @@ final tasksProvider = StateNotifierProvider<TaskNotifier, List<Task>>((ref) {
 //       final repository = ref.read(repositoryProvider);
 //       return LabelsTasksNotifier(repository);
 //     });
-// タスクラベルリスト
-final labelsTaskProvider =
-    StateNotifierProvider<LabelsTasksNotifier, List<Label>>((ref) {
-      final repository = ref.read(repositoryProvider);
-      return LabelsTasksNotifier(repository);
-    });
+
+// ラベルリスト
+final labelsProvider = StateNotifierProvider<LabelsTasksNotifier, List<Label>>((
+  ref,
+) {
+  final repository = ref.read(repositoryProvider);
+  return LabelsTasksNotifier(repository);
+});
+
+// ラベルの名前リスト
+final labelsNameProvider = Provider<List<String>>((ref) {
+  final labels = ref.watch(labelsProvider);
+  return labels.map((label) => label.name).toList();
+});
 
 // 今日のタスク
 final todayTasksProvider = Provider<List<Task>>((ref) {

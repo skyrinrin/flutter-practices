@@ -108,17 +108,18 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
 
   // ラベル選択ウィジェット
   DropdownButton _selectLabel(BuildContext context, WidgetRef ref) {
-    List<Label> labels = ref.watch(labelsTaskProvider);
+    List<String> labelsNames = ref.watch(labelsNameProvider);
 
-    List<String> dropdownItems = [labels.first.name];
+    // List<String> dropdownItems = [labels.first.name];
 
-    void addLabelsNames() {
-      List<String> labelNames = [];
-      for (int i = 0; i < labels.length; i++) {
-        labelNames.add(labels[i].name);
-      }
-      dropdownItems = labelNames;
-    }
+    // void addLabelsNames() {
+    //   List<String> labelNames = [];
+    //   for (int i = 0; i < labels.length; i++) {
+    //     labelNames.add(labels[i].name);
+    //   }
+    //   List<String> sample = labels.map((e) => labels.first.name).toList();
+    //   dropdownItems = labelNames;
+    // }
 
     return DropdownButton<String>(
       // items: [
@@ -128,7 +129,7 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
       //   // DropdownMenuItem<String>(child: Text('プログラミング'), value: 'プログラミング'),
       // ],
       items:
-          dropdownItems.map((String item) {
+          labelsNames.map((String item) {
             return DropdownMenuItem<String>(value: item, child: Text(item));
           }).toList(),
       onChanged: (String? value) {
