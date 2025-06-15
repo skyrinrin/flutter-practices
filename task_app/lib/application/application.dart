@@ -15,6 +15,22 @@ class Application {
 
   List<Task> get tasks => ref.read(tasksProvider);
 
+  // ColorをString型に変換 あまりよくロジックがわかっていないし推奨されていないvalueを使っている
+  String convertHexColor(Color color) {
+    final colorStr = color.value.toRadixString(16).toString();
+    if (colorStr.length == 8) {
+      final hexcolor = colorStr.substring(2);
+      final transparent = colorStr.substring(0, 2);
+      if (transparent == "ff") {
+        return "#" + hexcolor;
+      } else {
+        return "#" + hexcolor + transparent;
+      }
+    } else {
+      return "#" + colorStr + "00";
+    }
+  }
+
   Future<void> addTask(
     // int id,
     String title,
@@ -36,8 +52,13 @@ class Application {
     ref.read(tasksProvider.notifier).addTask(task);
   }
 
-  Future<void> addLabel(String name, int id, String color) async {
-    final label = Label(name: name, id: id, color: color);
+  Future<void> addLabel(String name, int id, Color color) async {
+    String colorStr = convertHexColor(color);
+    final label = Label(
+      name: name,
+      id: id,
+      color: colorStr,
+    ); //ここのcolorのところを変更する
     final labelsIds = ref.read(labelIdProvider);
 
     if (!labelsIds.contains(label.id)) {

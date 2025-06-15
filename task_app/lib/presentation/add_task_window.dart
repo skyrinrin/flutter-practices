@@ -5,6 +5,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:task_app/application/application.dart';
+import 'package:task_app/common/common.dart';
 import 'package:task_app/domain/label_domain.dart';
 import 'package:task_app/main.dart';
 import 'package:task_app/domain/task_domain.dart';
@@ -46,10 +47,10 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
   // ラベルを格納する変数
   String _selectedLabel = '未選択';
 
-  // ボタン押下後の処理
+  // 追加ボタン押下
   void _pushedAddButton(Application app) async {
     if (_controller.text == '') {
-      ScaffoldMessenger.of(context).showSnackBar(_warningSnackBar);
+      ScaffoldMessenger.of(context).showSnackBar(Common.warningSnackBar);
     } else {
       await app.addTask(
         _controller.text,
@@ -141,15 +142,6 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
     );
   }
 
-  // 注意書きスナックバー
-  final _warningSnackBar = SnackBar(
-    content: Text(
-      '入力していない項目があります',
-      style: TextStyle(fontSize: 20),
-      selectionColor: Color.fromARGB(0, 218, 50, 50),
-    ),
-  );
-
   // 日付時間選択画面ウィジェットスクリーン
   Widget _selectDataTimeScreen(BuildContext context) {
     return Container(
@@ -232,7 +224,7 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
           ),
           Positioned(
             top: 28,
-            right: 16,
+            right: 24,
             child: GestureDetector(
               onTap: () => _pushedAddButton(app),
               // Navigator.pop(context);

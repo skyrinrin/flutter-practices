@@ -9,15 +9,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:task_app/application/application.dart';
+import 'package:task_app/common/common.dart';
+import 'package:task_app/provider/provider.dart';
 
-class AddLabelWindow extends StatefulWidget {
+class AddLabelWindow extends ConsumerStatefulWidget {
   @override
-  _AddLabelWindowState createState() => _AddLabelWindowState();
+  ConsumerState<AddLabelWindow> createState() => _AddLabelWindowState();
 }
 
-class _AddLabelWindowState extends State<AddLabelWindow> {
+class _AddLabelWindowState extends ConsumerState<AddLabelWindow> {
   Color _selectedColor = Colors.black;
   TextEditingController _controller = TextEditingController();
+
+  // 追加ボタン押下
+  void _pushedAddButton(Application app) async {
+    if (_controller.text == '') {
+      ScaffoldMessenger.of(context).showSnackBar(Common.warningSnackBar);
+    } else {
+      await app.addLabel(_controller.text, 1, _selectedColor);
+      // print('現在保存したラベル: ${_controller.text} $_selec')
+    }
+    Navigator.pop(context);
+  }
 
   // カラーピッカー
   Widget _colorPicker() {
@@ -86,7 +100,7 @@ class _AddLabelWindowState extends State<AddLabelWindow> {
       // color: Colors.amber,
       child: Stack(
         children: [
-          Text('イメージカラー', style: TextStyle(fontSize: 16)),
+          Text('カラー選択', style: TextStyle(fontSize: 16)),
           Positioned(
             top: 27,
             child: Row(
@@ -115,16 +129,40 @@ class _AddLabelWindowState extends State<AddLabelWindow> {
     );
   }
 
+  // 追加ボタン
+  Widget _addButtonWidget(Application app) {
+    return GestureDetector(
+      onTap: () => _pushedAddButton(app),
+      // onTap: () => ,
+      // Navigator.pop(context);
+      child: Container(
+        height: 35,
+        width: 75,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: Color(0xFFD9D9D9),
+          borderRadius: BorderRadius.circular(100),
+        ),
+        child: Text("追加", style: TextStyle(fontSize: 18)),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    Application app = ref.read(applicationProvider);
     return Container(
       height: 300,
       width: double.infinity,
       // width: 300,
       child: Stack(
         children: [
+          // Positioned(top: 72, left: 28, child: _inputLabelTitle()),
+          // Positioned(top: 80, left: 260, child: _selectColorWidget()),
+          // Positioned(top: 28, right: 24, child: _addButtonWidget()),
           Positioned(top: 36, left: 28, child: _inputLabelTitle()),
-          Positioned(top: 56, left: 260, child: _selectColorWidget()),
+          Positioned(top: 140, left: 28, child: _selectColorWidget()),
+          Positioned(top: 28, right: 24, child: _addButtonWidget(app)),
         ],
       ),
     );
