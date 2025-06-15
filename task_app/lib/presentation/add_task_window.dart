@@ -228,7 +228,7 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
           Positioned(
             top: 28,
             left: 32,
-            child: Text('タスクを追加', style: TextStyle(fontSize: 26)),
+            child: Text('タスクを追加', style: TextStyle(fontSize: 20)),
           ),
           Positioned(
             top: 28,
@@ -269,7 +269,7 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
             ),
           ),
           Positioned(
-            top: 130,
+            top: 140,
             left: 34,
             height: 120,
             width: 160,
@@ -283,12 +283,12 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
                     child: Icon(
                       Icons.notifications,
                       color: Colors.grey,
-                      size: 28,
+                      size: 25,
                     ),
                   ),
                   Positioned(
                     left: 30,
-                    child: Text('通知', style: TextStyle(fontSize: 22)),
+                    child: Text('通知', style: TextStyle(fontSize: 20)),
                   ),
                   Positioned(
                     top: -1,
@@ -311,7 +311,7 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
           Positioned(
             height: 100,
             width: 150,
-            top: 150,
+            top: 160,
             left: 208,
             child: _selectLabelScreen(context),
           ),
