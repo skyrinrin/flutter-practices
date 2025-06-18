@@ -1,9 +1,9 @@
-
 次に行うべきこと
-・ラベル追加ウィジェットの作成 
 
 ・タスクとラベルの紐づけ
-・ラベルごとのラベルリストビューの作成
+・ラベルごとのラベルリストビューの作成 ＝＞ expanstion のisExpandedの管理
+
+・expantionとsinglescrollviewの改善
 
 
 
