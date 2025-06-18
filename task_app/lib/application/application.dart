@@ -14,6 +14,15 @@ class Application {
   Application(this.ref, this.repository);
 
   List<Task> get tasks => ref.read(tasksProvider);
+  List<Label> get labels => ref.read(labelsProvider);
+
+  int getNextId(List list) {
+    if (list.isEmpty) return 0;
+    final maxId = list
+        .map((element) => element.id)
+        .reduce((a, b) => a > b ? a : b); //三項演算子とreduce関数を使ってる よくわかってない
+    return maxId + 1;
+  }
 
   // ColorをString型に変換 あまりよくロジックがわかっていないし推奨されていないvalueを使っている
   String convertHexColor(Color color) {
@@ -40,7 +49,7 @@ class Application {
   ) async {
     // final tasks = ref.read(taskProvider);
     final task = Task(
-      id: tasks.length,
+      id: getNextId(tasks),
       title: title,
       label: label,
       date: date,
@@ -52,11 +61,11 @@ class Application {
     ref.read(tasksProvider.notifier).addTask(task);
   }
 
-  Future<void> addLabel(String name, int id, Color color) async {
+  Future<void> addLabel(String name, Color color) async {
     String colorStr = convertHexColor(color);
     final label = Label(
       name: name,
-      id: id,
+      id: getNextId(labels),
       color: colorStr,
     ); //ここのcolorのところを変更する
     final labelsIds = ref.read(labelIdProvider);

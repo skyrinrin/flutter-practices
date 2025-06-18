@@ -5,7 +5,7 @@ import 'package:task_app/provider/provider.dart';
 // import 'package:task_app/provider/provider.dart';
 import 'package:task_app/repository/repository.dart';
 import 'task_card.dart';
-import 'task_genre.dart';
+import 'task_date_views.dart';
 import 'add_task_window.dart';
 import 'package:task_app/application/application.dart';
 import 'package:task_app/domain/task_domain.dart';

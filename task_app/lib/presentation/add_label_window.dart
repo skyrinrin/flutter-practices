@@ -27,7 +27,7 @@ class _AddLabelWindowState extends ConsumerState<AddLabelWindow> {
     if (_controller.text == '') {
       ScaffoldMessenger.of(context).showSnackBar(Common.warningSnackBar);
     } else {
-      await app.addLabel(_controller.text, 1, _selectedColor);
+      await app.addLabel(_controller.text, _selectedColor);
       // print('現在保存したラベル: ${_controller.text} $_selec')
     }
     Navigator.pop(context);

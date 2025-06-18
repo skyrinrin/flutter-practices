@@ -4,7 +4,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:task_app/application/application.dart';
 import 'package:task_app/domain/label_domain.dart';
 import 'package:task_app/presentation/add_label_window.dart';
-import 'package:task_app/presentation/task_genre.dart';
+import 'package:task_app/presentation/task_date_views.dart';
+import 'package:task_app/presentation/task_label_views.dart';
 import 'package:task_app/provider/provider.dart';
 
 // class TaskHomeview extends StatelessWidget {
@@ -47,15 +48,14 @@ class TaskHomeview extends ConsumerWidget {
       );
     }
 
-    Application app = ref.read(applicationProvider);
+    // Application app = ref.read(applicationProvider);
     return SingleChildScrollView(
       child: Column(
         children: [
           // TaskGenre(number: 0),
           // TaskGenre(number: 1),
           // TaskGenre(number: 2),
-          // TaskGenreList(), //ここにラベルリストがある
-
+          TaskLabelViews(),
           // テスト用
           ElevatedButton(
             onPressed: () {
