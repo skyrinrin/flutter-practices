@@ -67,6 +67,7 @@ class Application {
       name: name,
       id: getNextId(labels),
       color: colorStr,
+      isExpanded: false,
     ); //ここのcolorのところを変更する
     final labelsIds = ref.read(labelIdProvider);
 
@@ -144,7 +145,7 @@ class TaskNotifier extends StateNotifier<List<Task>> {
 class LabelsTasksNotifier extends StateNotifier<List<Label>> {
   Repository repository;
   LabelsTasksNotifier(this.repository)
-    : super([Label(name: '未選択', id: 1, color: '000')]);
+    : super([Label(name: '未選択', id: 1, color: '000', isExpanded: false)]);
 
   // void loadLabels() async {
   //   final prefs = await SharedPreferences.getInstance();
@@ -167,6 +168,12 @@ class LabelsTasksNotifier extends StateNotifier<List<Label>> {
     }
   }
 
+  void toggleLabel(int index) {
+    final newList = [...state];
+    newList[index].isExpanded = !newList[index].isExpanded;
+    state = newList;
+  }
+
   // // ラベル（ジャンル）にタスクを追加する
   // void addTaskToLabel(String labelName, Task task) {
   //   final currentTasks = state[labelName] ?? [];
@@ -182,6 +189,7 @@ class LabelsTasksNotifier extends StateNotifier<List<Label>> {
   //   state = newState;
   // }
 }
+
 
 
 // 恐らくこのコードはリストを永続化しないように管理しようとしているためMap型で定義している

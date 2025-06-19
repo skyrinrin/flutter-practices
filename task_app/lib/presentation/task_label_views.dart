@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:task_app/application/application.dart';
+import 'package:task_app/domain/label_domain.dart';
 import 'package:task_app/presentation/task_card.dart';
 import 'package:task_app/domain/task_domain.dart';
 import 'package:task_app/provider/provider.dart';
@@ -85,34 +87,38 @@ class _TaskLabelViewsState extends ConsumerState<TaskLabelViews> {
 
   Widget labelExpansionPanel(
     List<Task> tasks,
-    List<String> labelNames,
-    List<bool> isExpandedList,
+    List<Label> labels,
+    // List<bool> isExpandedList,
     // bool isExpanded,
   ) {
     // bool isExpanded = false;
     return ExpansionPanelList(
       expansionCallback: (int index, bool isExpanded) {
         setState(() {
-          isExpandedList[index] = !isExpandedList[index];
+          ref.read(labelsProvider.notifier).toggleLabel(index);
         });
       },
-      children: List.generate(labelNames.length, (index) {
+      children: List.generate(labels.length, (index) {
         return ExpansionPanel(
+          isExpanded: labels[index].isExpanded,
           headerBuilder: (context, isExpanded) {
-            return ListTile(title: Text(labelNames[index]));
+            return ListTile(title: Text(labels[index].name));
           },
 
-          body:
-          // height: 300,
-          ListView.builder(
-            shrinkWrap: true,
-            itemCount: tasks.length, //ここも数が変わる
-            itemBuilder: (BuildContext context, int index) {
-              return TaskCard(
-                task: tasks[index], //ここでフィルタリングしたデータを表示しないといけない
-              );
-            },
+          body: Container(
+            margin: EdgeInsets.only(right: 16, left: 16),
+            child: ListView.builder(
+              physics: NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: tasks.length, //ここも数が変わる
+              itemBuilder: (BuildContext context, int index) {
+                return TaskCard(
+                  task: tasks[index], //ここでフィルタリングしたデータを表示しないといけない
+                );
+              },
+            ),
           ),
+          // height: 300,
         );
       }),
       // children: [
@@ -247,14 +253,44 @@ class _TaskLabelViewsState extends ConsumerState<TaskLabelViews> {
   @override
   Widget build(BuildContext context) {
     List<Task> tasks = ref.watch(tasksProvider);
-    List<String> labelNames = ref.watch(labelsNameProvider);
-    List<bool> isExpandedList = ref.watch(isExpandedListProvider);
+    // List<String> labelNames = ref.watch(labelsNameProvider);
+    List<Label> labels = ref.watch(labelsProvider);
+    // List<bool> isExpandedList = ref.watch(isExpandedListProvider);
 
     return ListView(
       shrinkWrap: true,
       // physics: NeverScrollableScrollPhysics(), //親にスクロールを任せる
       children: [
-        labelExpansionPanel(tasks, labelNames, isExpandedList),
+        labelExpansionPanel(tasks, labels),
+
+        // //
+        // ExpansionPanelList(
+        //   expansionCallback: (int index, bool isExpanded) {
+        //     setState(() {
+        //       labels[index].isExpanded = !labels[index].isExpanded;
+        //     });
+        //   },
+        //   children: List.generate(labels.length, (index) {
+        //     return ExpansionPanel(
+        //       headerBuilder: (context, isExpanded) {
+        //         return ListTile(title: Text(labels[index].name));
+        //       },
+
+        //       body:
+        //       // height: 300,
+        //       ListView.builder(
+        //         shrinkWrap: true,
+        //         itemCount: tasks.length, //ここも数が変わる
+        //         itemBuilder: (BuildContext context, int index) {
+        //           return TaskCard(
+        //             task: tasks[index], //ここでフィルタリングしたデータを表示しないといけない
+        //           );
+        //         },
+        //       ),
+        //     );
+        //   }),
+        // ),
+        // //
 
         // ExpansionPanelList(
         //   expansionCallback: (int index, bool isExpanded) {
