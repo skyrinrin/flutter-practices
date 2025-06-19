@@ -1,9 +1,9 @@
 次に行うべきこと
 
 ・タスクとラベルの紐づけ
-・ラベルごとのラベルリストビューの作成 ＝＞ expanstion のisExpandedの管理
+・ラベルごとのラベルリストビューの作成 ＝＞ 
 
-・expantionとsinglescrollviewの改善
+・didChangeDependenciesの理解とそれを用いたlabelが追加されたときにisExpandedListに値を追加するロジックの作成
 
 
 

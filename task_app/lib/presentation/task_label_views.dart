@@ -179,6 +179,23 @@ class _TaskLabelViewsState extends ConsumerState<TaskLabelViews> {
   //   // );
   // }
 
+  // ラベルリストが更新されたときに実行 didChangeDependenciesを理解しておく
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final labels = ref.watch(labelsProvider);
+
+    if (labels.length > isExpandedList.length) {
+      final additional = List.generate(
+        labels.length - isExpandedList.length,
+        (_) => false,
+      );
+      setState(() {
+        isExpandedList.addAll(additional);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     List<Task> tasks = ref.watch(tasksProvider);
