@@ -185,11 +185,12 @@ class _TaskLabelViewsState extends ConsumerState<TaskLabelViews> {
 
     return ListView(
       shrinkWrap: true,
+      // physics: NeverScrollableScrollPhysics(), //親にスクロールを任せる
       children: [
         ExpansionPanelList(
           expansionCallback: (int index, bool isExpanded) {
             setState(() {
-              isExpandedList[index] = !isExpanded;
+              isExpandedList[index] = !isExpandedList[index];
             });
           },
           children: List.generate(3, (index) {

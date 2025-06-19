@@ -16,8 +16,7 @@ import 'package:task_app/provider/provider.dart';
 //         children: [
 //           // TaskGenre(number: 0),
 //           // TaskGenre(number: 1),
-//           // TaskGenre(number: 2),
-//           // TaskGenreList(), //ここにラベルリストがある
+//           // TaskGenre(number: 2),//           // TaskGenreList(), //ここにラベルリストがある
 
 //           // テスト用
 //           ElevatedButton(
