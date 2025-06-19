@@ -129,6 +129,12 @@ final labelIdProvider = Provider<List<int>>((ref) {
   return labels.map((label) => label.id).toList();
 });
 
+// ラベルビューのisExpandedのリスト
+final isExpandedListProvider = Provider<List<bool>>((ref) {
+  final labels = ref.watch(labelsProvider);
+  return List.generate(labels.length, (_) => false);
+});
+
 // 今日のタスク
 final todayTasksProvider = Provider<List<Task>>((ref) {
   final allTasks = ref.watch(tasksProvider);

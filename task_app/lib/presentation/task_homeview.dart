@@ -51,9 +51,9 @@ class TaskHomeview extends ConsumerWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          // TaskGenre(number: 0),
-          // TaskGenre(number: 1),
-          // TaskGenre(number: 2),
+          TaskDateViews(number: 0),
+          TaskDateViews(number: 1),
+          TaskDateViews(number: 2),
           TaskLabelViews(),
           // テスト用
           ElevatedButton(

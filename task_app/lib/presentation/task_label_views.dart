@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:task_app/presentation/task_card.dart';
 import 'package:task_app/domain/task_domain.dart';
@@ -42,14 +43,18 @@ class TaskLabelViews extends ConsumerStatefulWidget {
 }
 
 class _TaskLabelViewsState extends ConsumerState<TaskLabelViews> {
-  List<bool> isExpandedList = [];
+  // List<bool> isExpandedList = [];
 
-  @override
-  void initState() {
-    super.initState();
-    final tasks = ref.read(tasksProvider);
-    isExpandedList = List.generate(3, (_) => false); //仮 tasks.lengthにする
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   final tasks = ref.read(tasksProvider);
+  //   final labels = ref.read(labelsProvider);
+  //   isExpandedList = List.generate(
+  //     labels.length,
+  //     (_) => false,
+  //   ); //仮 tasks.lengthにする
+  // }
 
   //
   // Widget sampleWidget(bool _isExpanded) {
@@ -80,39 +85,59 @@ class _TaskLabelViewsState extends ConsumerState<TaskLabelViews> {
 
   Widget labelExpansionPanel(
     List<Task> tasks,
-    String labelName,
-    bool isExpanded,
+    List<String> labelNames,
+    List<bool> isExpandedList,
+    // bool isExpanded,
   ) {
     // bool isExpanded = false;
     return ExpansionPanelList(
       expansionCallback: (int index, bool isExpanded) {
         setState(() {
-          isExpanded = !isExpanded;
+          isExpandedList[index] = !isExpandedList[index];
         });
       },
-      children: [
-        ExpansionPanel(
-          headerBuilder: (BuildContext context, bool isExpanded) {
-            return ListTile(title: Text(labelName));
+      children: List.generate(labelNames.length, (index) {
+        return ExpansionPanel(
+          headerBuilder: (context, isExpanded) {
+            return ListTile(title: Text(labelNames[index]));
           },
 
-          body: SizedBox(
-            height: 300,
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemBuilder: (BuildContext context, int index) {
-                return Container(
-                  height: 100,
-                  width: 100,
-                  child: Text('$index'),
-                );
-
-                TaskCard(task: tasks[index]);
-              },
-            ),
+          body:
+          // height: 300,
+          ListView.builder(
+            shrinkWrap: true,
+            itemCount: tasks.length, //ここも数が変わる
+            itemBuilder: (BuildContext context, int index) {
+              return TaskCard(
+                task: tasks[index], //ここでフィルタリングしたデータを表示しないといけない
+              );
+            },
           ),
-        ),
-      ],
+        );
+      }),
+      // children: [
+      //   ExpansionPanel(
+      //     headerBuilder: (BuildContext context, bool isExpanded) {
+      //       return ListTile(title: Text(labelNames[index]));
+      //     },
+
+      //     body: SizedBox(
+      //       height: 300,
+      //       child: ListView.builder(
+      //         shrinkWrap: true,
+      //         itemBuilder: (BuildContext context, int index) {
+      //           return Container(
+      //             height: 100,
+      //             width: 100,
+      //             child: Text('$index'),
+      //           );
+
+      //           TaskCard(task: tasks[index]);
+      //         },
+      //       ),
+      //     ),
+      //   ),
+      // ],
     );
   }
 
@@ -180,49 +205,76 @@ class _TaskLabelViewsState extends ConsumerState<TaskLabelViews> {
   // }
 
   // ラベルリストが更新されたときに実行 didChangeDependenciesを理解しておく
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final labels = ref.watch(labelsProvider);
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
 
-    if (labels.length > isExpandedList.length) {
-      final additional = List.generate(
-        labels.length - isExpandedList.length,
-        (_) => false,
-      );
-      setState(() {
-        isExpandedList.addAll(additional);
-      });
-    }
-  }
+  //   final labels = ref.watch(labelsProvider);
+
+  //   if (labels.length > isExpandedList.length) {
+  //     final additional = List.generate(
+  //       labels.length - isExpandedList.length,
+  //       (_) => false,
+  //     );
+  //     setState(() {
+  //       isExpandedList.addAll(additional);
+  //       print(
+  //         'isExpandedが追加されました: isExpanded:${isExpandedList.length} : labels ${labels.length} ',
+  //       );
+  //     });
+  //   }
+  // }
+
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+
+  //   final labels = ref.watch(labelsProvider);
+
+  //   // ラベル数が変わったときだけリストを増やす
+  //   if (labels.length > isExpandedList.length) {
+  //     setState(() {
+  //       isExpandedList.addAll(
+  //         List.generate(labels.length - isExpandedList.length, (_) => false),
+  //       );
+  //       print(
+  //         'isExpandedが追加されました: isExpanded:${isExpandedList.length} : labels ${labels.length} ',
+  //       );
+  //     });
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
     List<Task> tasks = ref.watch(tasksProvider);
+    List<String> labelNames = ref.watch(labelsNameProvider);
+    List<bool> isExpandedList = ref.watch(isExpandedListProvider);
 
     return ListView(
       shrinkWrap: true,
       // physics: NeverScrollableScrollPhysics(), //親にスクロールを任せる
       children: [
-        ExpansionPanelList(
-          expansionCallback: (int index, bool isExpanded) {
-            setState(() {
-              isExpandedList[index] = !isExpandedList[index];
-            });
-          },
-          children: List.generate(3, (index) {
-            return ExpansionPanel(
-              headerBuilder: (context, isExpanded) {
-                return ListTile(title: Text('ラベル$index'));
-              },
-              body: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text('サンプル'),
-              ),
-              isExpanded: isExpandedList[index], // ✅ 必須
-            );
-          }),
-        ),
+        labelExpansionPanel(tasks, labelNames, isExpandedList),
+
+        // ExpansionPanelList(
+        //   expansionCallback: (int index, bool isExpanded) {
+        //     setState(() {
+        //       isExpandedList[index] = !isExpandedList[index];
+        //     });
+        //   },
+        //   children: List.generate(3, (index) {
+        //     return ExpansionPanel(
+        //       headerBuilder: (context, isExpanded) {
+        //         return ListTile(title: Text('ラベル$index'));
+        //       },
+        //       body: Padding(
+        //         padding: const EdgeInsets.all(16.0),
+        //         child: Text('サンプル'),
+        //       ),
+        //       isExpanded: isExpandedList[index], // ✅ 必須
+        //     );
+        //   }),
+        // ),
       ],
     );
   }
