@@ -3,7 +3,7 @@
 ・タスクとラベルの紐づけ
 ・ラベルごとのラベルリストビューの作成 ＝＞ 
 
-・didChangeDependenciesの理解とそれを用いたlabelが追加されたときにisExpandedListに値を追加するロジックの作成
+・ラベルのisExpandedの管理をdidChangeDependenciesで管理しようとしたが失敗＝＞providerにして管理しようとするもイミュータブル（直接変更できない形式）なため正しく展開しない
 
 
 
