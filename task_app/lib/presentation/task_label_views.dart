@@ -92,6 +92,7 @@ class _TaskLabelViewsState extends ConsumerState<TaskLabelViews> {
     // bool isExpanded,
   ) {
     // bool isExpanded = false;
+
     return ExpansionPanelList(
       expansionCallback: (int index, bool isExpanded) {
         setState(() {
@@ -100,6 +101,7 @@ class _TaskLabelViewsState extends ConsumerState<TaskLabelViews> {
       },
       children: List.generate(labels.length, (index) {
         return ExpansionPanel(
+          backgroundColor: Colors.white,
           isExpanded: labels[index].isExpanded,
           headerBuilder: (context, isExpanded) {
             return ListTile(title: Text(labels[index].name));
@@ -257,62 +259,64 @@ class _TaskLabelViewsState extends ConsumerState<TaskLabelViews> {
     List<Label> labels = ref.watch(labelsProvider);
     // List<bool> isExpandedList = ref.watch(isExpandedListProvider);
 
-    return ListView(
-      shrinkWrap: true,
-      // physics: NeverScrollableScrollPhysics(), //親にスクロールを任せる
-      children: [
-        labelExpansionPanel(tasks, labels),
+    return labelExpansionPanel(tasks, labels);
 
-        // //
-        // ExpansionPanelList(
-        //   expansionCallback: (int index, bool isExpanded) {
-        //     setState(() {
-        //       labels[index].isExpanded = !labels[index].isExpanded;
-        //     });
-        //   },
-        //   children: List.generate(labels.length, (index) {
-        //     return ExpansionPanel(
-        //       headerBuilder: (context, isExpanded) {
-        //         return ListTile(title: Text(labels[index].name));
-        //       },
+    // ListView(
+    //   shrinkWrap: true,
+    //   // physics: NeverScrollableScrollPhysics(), //親にスクロールを任せる
+    //   children: [
+    //     labelExpansionPanel(tasks, labels),
 
-        //       body:
-        //       // height: 300,
-        //       ListView.builder(
-        //         shrinkWrap: true,
-        //         itemCount: tasks.length, //ここも数が変わる
-        //         itemBuilder: (BuildContext context, int index) {
-        //           return TaskCard(
-        //             task: tasks[index], //ここでフィルタリングしたデータを表示しないといけない
-        //           );
-        //         },
-        //       ),
-        //     );
-        //   }),
-        // ),
-        // //
+    //     // //
+    //     // ExpansionPanelList(
+    //     //   expansionCallback: (int index, bool isExpanded) {
+    //     //     setState(() {
+    //     //       labels[index].isExpanded = !labels[index].isExpanded;
+    //     //     });
+    //     //   },
+    //     //   children: List.generate(labels.length, (index) {
+    //     //     return ExpansionPanel(
+    //     //       headerBuilder: (context, isExpanded) {
+    //     //         return ListTile(title: Text(labels[index].name));
+    //     //       },
 
-        // ExpansionPanelList(
-        //   expansionCallback: (int index, bool isExpanded) {
-        //     setState(() {
-        //       isExpandedList[index] = !isExpandedList[index];
-        //     });
-        //   },
-        //   children: List.generate(3, (index) {
-        //     return ExpansionPanel(
-        //       headerBuilder: (context, isExpanded) {
-        //         return ListTile(title: Text('ラベル$index'));
-        //       },
-        //       body: Padding(
-        //         padding: const EdgeInsets.all(16.0),
-        //         child: Text('サンプル'),
-        //       ),
-        //       isExpanded: isExpandedList[index], // ✅ 必須
-        //     );
-        //   }),
-        // ),
-      ],
-    );
+    //     //       body:
+    //     //       // height: 300,
+    //     //       ListView.builder(
+    //     //         shrinkWrap: true,
+    //     //         itemCount: tasks.length, //ここも数が変わる
+    //     //         itemBuilder: (BuildContext context, int index) {
+    //     //           return TaskCard(
+    //     //             task: tasks[index], //ここでフィルタリングしたデータを表示しないといけない
+    //     //           );
+    //     //         },
+    //     //       ),
+    //     //     );
+    //     //   }),
+    //     // ),
+    //     // //
+
+    //     // ExpansionPanelList(
+    //     //   expansionCallback: (int index, bool isExpanded) {
+    //     //     setState(() {
+    //     //       isExpandedList[index] = !isExpandedList[index];
+    //     //     });
+    //     //   },
+    //     //   children: List.generate(3, (index) {
+    //     //     return ExpansionPanel(
+    //     //       headerBuilder: (context, isExpanded) {
+    //     //         return ListTile(title: Text('ラベル$index'));
+    //     //       },
+    //     //       body: Padding(
+    //     //         padding: const EdgeInsets.all(16.0),
+    //     //         child: Text('サンプル'),
+    //     //       ),
+    //     //       isExpanded: isExpandedList[index], // ✅ 必須
+    //     //     );
+    //     //   }),
+    //     // ),
+    //   ],
+    // );
   }
 }
  
