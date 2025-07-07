@@ -93,6 +93,11 @@ class _TaskLabelViewsState extends ConsumerState<TaskLabelViews> {
   ) {
     // bool isExpanded = false;
 
+    // List<Task> labelsTasks = [];
+
+    // for (int i = 0; i < tasks.length; i ++) {
+    //   if tasks[i].label == labels
+    // }
     return ExpansionPanelList(
       expansionCallback: (int index, bool isExpanded) {
         setState(() {
@@ -100,6 +105,17 @@ class _TaskLabelViewsState extends ConsumerState<TaskLabelViews> {
         });
       },
       children: List.generate(labels.length, (index) {
+        List<Task> labelsTasks = [];
+
+        for (int i = 0; i < tasks.length; i++) {
+          if (tasks[i].label == labels[index].name) {
+            labelsTasks.add(tasks[i]);
+            print('ラベルにタスクが追加されました: ${labels[index]}: ${labelsTasks}');
+          } else {
+            print('どのラベルにも当てはまりませんでした。: ${tasks[i].label} : ${labels[index]}}');
+          }
+        }
+
         return ExpansionPanel(
           backgroundColor: Colors.white,
           isExpanded: labels[index].isExpanded,
@@ -108,18 +124,32 @@ class _TaskLabelViewsState extends ConsumerState<TaskLabelViews> {
           },
 
           body: Container(
-            margin: EdgeInsets.only(right: 16, left: 16),
+            height: labelsTasks.length * 104,
+            // height: double.infinity,
+            width: double.infinity,
+
             child: ListView.builder(
               physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: tasks.length, //ここも数が変わる
-              itemBuilder: (BuildContext context, int index) {
-                return TaskCard(
-                  task: tasks[index], //ここでフィルタリングしたデータを表示しないといけない
-                );
-              },
+
+              itemCount: labelsTasks.length,
+              itemBuilder:
+                  (context, index) => Container(
+                    margin: EdgeInsets.only(right: 16, left: 16),
+                    child: ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: tasks.length, //ここも数が変わる
+                      itemBuilder: (BuildContext context, int index) {
+                        return TaskCard(
+                          // task: tasks[index], //ここでフィルタリングしたデータを表示しないといけない
+                          task: labelsTasks[index],
+                        );
+                      },
+                    ),
+                  ),
             ),
           ),
+
           // height: 300,
         );
       }),
