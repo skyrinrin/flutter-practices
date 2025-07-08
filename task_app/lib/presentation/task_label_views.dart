@@ -105,14 +105,21 @@ class _TaskLabelViewsState extends ConsumerState<TaskLabelViews> {
         });
       },
       children: List.generate(labels.length, (index) {
-        List<Task> labelsTasks = [];
+        List<List> labelsTasksList = List.generate(labels.length, (list) => []);
+        // List<Task> labelsTasks = [];
 
-        for (int i = 0; i < tasks.length; i++) {
-          if (tasks[i].label == labels[index].name) {
-            labelsTasks.add(tasks[i]);
-            print('ラベルにタスクが追加されました: ${labels[index]}: ${labelsTasks}');
-          } else {
-            print('どのラベルにも当てはまりませんでした。: ${tasks[i].label} : ${labels[index]}}');
+        for (int j = 0; j < labels.length; j++) {
+          for (int i = 0; i < tasks.length; i++) {
+            if (tasks[i].label == labels[index].name) {
+              labelsTasksList[j].add(tasks[i]);
+              print(
+                'ラベルにタスクが追加されました: ${labels[index].name}: ${labelsTasksList[j]}',
+              );
+            } else {
+              print(
+                'どのラベルにも当てはまりませんでした。: ${tasks[i].label} : ${labels[index]}}',
+              );
+            }
           }
         }
 
@@ -124,14 +131,14 @@ class _TaskLabelViewsState extends ConsumerState<TaskLabelViews> {
           },
 
           body: Container(
-            height: labelsTasks.length * 104,
+            height: labelsTasksList[index].length * 104,
             // height: double.infinity,
             width: double.infinity,
 
             child: ListView.builder(
               physics: NeverScrollableScrollPhysics(),
 
-              itemCount: labelsTasks.length,
+              itemCount: labelsTasksList[index].length,
               itemBuilder:
                   (context, index) => Container(
                     margin: EdgeInsets.only(right: 16, left: 16),
@@ -139,10 +146,11 @@ class _TaskLabelViewsState extends ConsumerState<TaskLabelViews> {
                       physics: NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: tasks.length, //ここも数が変わる
-                      itemBuilder: (BuildContext context, int index) {
+                      itemBuilder: (BuildContext context, int i) {
                         return TaskCard(
                           // task: tasks[index], //ここでフィルタリングしたデータを表示しないといけない
-                          task: labelsTasks[index],
+                          task:
+                              labelsTasksList[index][index], //ここがなんで動いているのかわからない
                         );
                       },
                     ),
