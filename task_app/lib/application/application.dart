@@ -25,19 +25,31 @@ class Application {
   }
 
   // ColorをString型に変換 あまりよくロジックがわかっていないし推奨されていないvalueを使っている
-  String convertHexColor(Color color) {
+  String encodeHexColor(Color color) {
     final colorStr = color.value.toRadixString(16).toString();
     if (colorStr.length == 8) {
       final hexcolor = colorStr.substring(2);
       final transparent = colorStr.substring(0, 2);
       if (transparent == "ff") {
-        return "#" + hexcolor;
+        // return "#" + hexcolor; //返すhexCodeから'#'をなくす
+        return hexcolor;
       } else {
-        return "#" + hexcolor + transparent;
+        return hexcolor + transparent;
+        // return "#" + hexcolor + transparent;
       }
     } else {
-      return "#" + colorStr + "00";
+      return colorStr + "00";
+      // return "#" + colorStr + "00";
     }
+  }
+
+  // String型のカラーコードをColor型に変換
+  Color decodeHexColor(String colorCode) {
+    String colorStr = '0xFF$colorCode';
+    // int colorInt = int.parse(colorStr);
+    int colorInt = int.parse(colorCode);
+    print('作成したカラーコード: $colorInt');
+    return Color(colorStr);
   }
 
   Future<void> addTask(
@@ -62,7 +74,7 @@ class Application {
   }
 
   Future<void> addLabel(String name, Color color) async {
-    String colorStr = convertHexColor(color);
+    String colorStr = encodeHexColor(color);
     final label = Label(
       name: name,
       id: getNextId(labels),

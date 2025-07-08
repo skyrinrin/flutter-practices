@@ -88,6 +88,7 @@ class _TaskLabelViewsState extends ConsumerState<TaskLabelViews> {
   Widget labelExpansionPanel(
     List<Task> tasks,
     List<Label> labels,
+    Application app,
     // List<bool> isExpandedList,
     // bool isExpanded,
   ) {
@@ -123,8 +124,10 @@ class _TaskLabelViewsState extends ConsumerState<TaskLabelViews> {
           }
         }
 
+        Color color = app.decodeHexColor(labels[index].color);
+
         return ExpansionPanel(
-          backgroundColor: Colors.white,
+          backgroundColor: color,
           isExpanded: labels[index].isExpanded,
           headerBuilder: (context, isExpanded) {
             return ListTile(title: Text(labels[index].name));
@@ -295,9 +298,10 @@ class _TaskLabelViewsState extends ConsumerState<TaskLabelViews> {
     List<Task> tasks = ref.watch(tasksProvider);
     // List<String> labelNames = ref.watch(labelsNameProvider);
     List<Label> labels = ref.watch(labelsProvider);
+    Application app = ref.read(applicationProvider);
     // List<bool> isExpandedList = ref.watch(isExpandedListProvider);
 
-    return labelExpansionPanel(tasks, labels);
+    return labelExpansionPanel(tasks, labels, app);
 
     // ListView(
     //   shrinkWrap: true,
