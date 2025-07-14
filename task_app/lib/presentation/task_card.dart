@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 // import 'package:provider/provider.dart';
 import 'package:task_app/application/application.dart';
+import 'package:task_app/domain/label_domain.dart';
 import 'package:task_app/domain/task_domain.dart';
 import 'package:task_app/provider/provider.dart';
 
@@ -148,6 +149,8 @@ class _TaskCardState extends ConsumerState<TaskCard> {
 
   @override
   Widget build(BuildContext context) {
+    List<Label> labels = ref.watch(labelsProvider);
+    Label label = labels.where((label) => label.name == task.label).first;
     final double mediaWidth = MediaQuery.of(context).size.width;
     return Container(
       margin: EdgeInsets.only(bottom: 12),
@@ -173,7 +176,7 @@ class _TaskCardState extends ConsumerState<TaskCard> {
             child: Container(
               width: 12,
               decoration: BoxDecoration(
-                color: Color(0xFF8FC3FF),
+                color: label.color, //ここがカラー
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(8),
                   bottomLeft: Radius.circular(8),

@@ -114,7 +114,7 @@ class _TaskLabelViewsState extends ConsumerState<TaskLabelViews> {
             if (tasks[i].label == labels[index].name) {
               labelsTasksList[j].add(tasks[i]);
               print(
-                'ラベルにタスクが追加されました: ${labels[index].name}: ${labelsTasksList[j]}',
+                'ラベルにタスクが追加されました: ${labels[index].name}: ${labelsTasksList[j]} : タスクの数 : ${labelsTasksList.length}',
               );
             } else {
               print(
@@ -124,20 +124,32 @@ class _TaskLabelViewsState extends ConsumerState<TaskLabelViews> {
           }
         }
 
-        Color color = app.decodeHexColor(labels[index].color);
+        // Color color = app.decodeHexColor(labels[index].color);
+        Color color = labels[index].color.withAlpha(200);
 
         return ExpansionPanel(
+          // backgroundColor: Colors.white,
           backgroundColor: color,
+          // splashColor: color,
+          // highlightColor: color,
           isExpanded: labels[index].isExpanded,
           headerBuilder: (context, isExpanded) {
-            return ListTile(title: Text(labels[index].name));
+            return ListTile(
+              title: Text(
+                labels[index].name,
+                style: TextStyle(color: Colors.white, fontSize: 18),
+              ),
+            );
           },
 
           body: Container(
             height: labelsTasksList[index].length * 104,
             // height: double.infinity,
             width: double.infinity,
+            color: Colors.white,
+            padding: EdgeInsets.only(top: 16),
 
+            // margin: EdgeInsets.only(top: -10),
             child: ListView.builder(
               physics: NeverScrollableScrollPhysics(),
 

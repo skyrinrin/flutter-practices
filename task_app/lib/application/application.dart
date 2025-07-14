@@ -25,32 +25,32 @@ class Application {
   }
 
   // ColorをString型に変換 あまりよくロジックがわかっていないし推奨されていないvalueを使っている
-  String encodeHexColor(Color color) {
-    final colorStr = color.value.toRadixString(16).toString();
-    if (colorStr.length == 8) {
-      final hexcolor = colorStr.substring(2);
-      final transparent = colorStr.substring(0, 2);
-      if (transparent == "ff") {
-        // return "#" + hexcolor; //返すhexCodeから'#'をなくす
-        return hexcolor;
-      } else {
-        return hexcolor + transparent;
-        // return "#" + hexcolor + transparent;
-      }
-    } else {
-      return colorStr + "00";
-      // return "#" + colorStr + "00";
-    }
-  }
+  // String encodeHexColor(Color color) {
+  //   final colorStr = color.value.toRadixString(16).toString();
+  //   if (colorStr.length == 8) {
+  //     final hexcolor = colorStr.substring(2);
+  //     final transparent = colorStr.substring(0, 2);
+  //     if (transparent == "ff") {
+  //       // return "#" + hexcolor; //返すhexCodeから'#'をなくす
+  //       return hexcolor;
+  //     } else {
+  //       return hexcolor + transparent;
+  //       // return "#" + hexcolor + transparent;
+  //     }
+  //   } else {
+  //     return colorStr + "00";
+  //     // return "#" + colorStr + "00";
+  //   }
+  // }
 
-  // String型のカラーコードをColor型に変換
-  Color decodeHexColor(String colorCode) {
-    String colorStr = '0xFF$colorCode';
-    // int colorInt = int.parse(colorStr);
-    int colorInt = int.parse(colorCode);
-    print('作成したカラーコード: $colorInt');
-    return Color(colorStr);
-  }
+  // // String型のカラーコードをColor型に変換
+  // Color decodeHexColor(String colorCode) {
+  //   String colorStr = '0xFF$colorCode';
+  //   // int colorInt = int.parse(colorStr);
+  //   int colorInt = int.parse(colorCode);
+  //   print('作成したカラーコード: $colorInt');
+  //   return Color(colorStr);
+  // }
 
   Future<void> addTask(
     // int id,
@@ -74,11 +74,10 @@ class Application {
   }
 
   Future<void> addLabel(String name, Color color) async {
-    String colorStr = encodeHexColor(color);
     final label = Label(
       name: name,
       id: getNextId(labels),
-      color: colorStr,
+      color: color,
       isExpanded: false,
     ); //ここのcolorのところを変更する
     final labelsIds = ref.read(labelIdProvider);
@@ -157,7 +156,9 @@ class TaskNotifier extends StateNotifier<List<Task>> {
 class LabelsTasksNotifier extends StateNotifier<List<Label>> {
   Repository repository;
   LabelsTasksNotifier(this.repository)
-    : super([Label(name: '未選択', id: 1, color: '000', isExpanded: false)]);
+    : super([
+        Label(name: '未選択', id: 1, color: Colors.black, isExpanded: false),
+      ]);
 
   // void loadLabels() async {
   //   final prefs = await SharedPreferences.getInstance();
