@@ -106,23 +106,26 @@ class _TaskLabelViewsState extends ConsumerState<TaskLabelViews> {
         });
       },
       children: List.generate(labels.length, (index) {
-        List<List> labelsTasksList = List.generate(labels.length, (list) => []);
-        // List<Task> labelsTasks = [];
+        // List<List> labelsTasksList = List.generate(labels.length, (list) => []);
+        // // List<Task> labelsTasks = [];
 
-        for (int j = 0; j < labels.length; j++) {
-          for (int i = 0; i < tasks.length; i++) {
-            if (tasks[i].label == labels[index].name) {
-              labelsTasksList[j].add(tasks[i]);
-              print(
-                'ラベルにタスクが追加されました: ${labels[index].name}: ${labelsTasksList[j]} : タスクの数 : ${labelsTasksList.length}',
-              );
-            } else {
-              print(
-                'どのラベルにも当てはまりませんでした。: ${tasks[i].label} : ${labels[index]}}',
-              );
-            }
-          }
-        }
+        // for (int j = 0; j < labels.length; j++) {
+        //   for (int i = 0; i < tasks.length; i++) {
+        //     if (tasks[i].label == labels[index].name) {
+        //       labelsTasksList[j].add(tasks[i]);
+        //       print(
+        //         'ラベルにタスクが追加されました: ${labels[index].name}: ${labelsTasksList[j]} : タスクの数 : ${labelsTasksList.length}',
+        //       );
+        //     } else {
+        //       print(
+        //         'どのラベルにも当てはまりませんでした。: ${tasks[i].label} : ${labels[index]}}',
+        //       );
+        //     }
+        //   }
+        // }
+
+        List<Task> labelsTasksList =
+            tasks.where((task) => task.label == labels[index].name).toList();
 
         // Color color = app.decodeHexColor(labels[index].color);
         Color color = labels[index].color.withAlpha(200);
@@ -143,7 +146,8 @@ class _TaskLabelViewsState extends ConsumerState<TaskLabelViews> {
           },
 
           body: Container(
-            height: labelsTasksList[index].length * 104,
+            height: labelsTasksList.length * 104 + 24,
+            // height: labelsTasksList.length * 1040,
             // height: double.infinity,
             width: double.infinity,
             color: Colors.white,
@@ -153,23 +157,28 @@ class _TaskLabelViewsState extends ConsumerState<TaskLabelViews> {
             child: ListView.builder(
               physics: NeverScrollableScrollPhysics(),
 
-              itemCount: labelsTasksList[index].length,
+              itemCount: labelsTasksList.length,
               itemBuilder:
-                  (context, index) => Container(
-                    margin: EdgeInsets.only(right: 16, left: 16),
-                    child: ListView.builder(
-                      physics: NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: tasks.length, //ここも数が変わる
-                      itemBuilder: (BuildContext context, int i) {
-                        return TaskCard(
-                          // task: tasks[index], //ここでフィルタリングしたデータを表示しないといけない
-                          task:
-                              labelsTasksList[index][index], //ここがなんで動いているのかわからない
-                        );
-                      },
-                    ),
-                  ),
+              // (context, index) => Container(
+              //   margin: EdgeInsets.only(right: 16, left: 16),
+              //   child: ListView.builder(
+              //     physics: NeverScrollableScrollPhysics(),
+              //     shrinkWrap: true,
+              //     itemCount: tasks.length, //ここも数が変わる
+              //     itemBuilder: (BuildContext context, int i) {
+              //       return TaskCard(
+              //         // task: tasks[index], //ここでフィルタリングしたデータを表示しないといけない
+              //         task: labelsTasksList[index], //ここがなんで動いているのかわからない
+              //       );
+              //     },
+              //   ),
+              // ),
+              (context, i) {
+                return Container(
+                  margin: EdgeInsets.symmetric(horizontal: 16),
+                  child: TaskCard(task: labelsTasksList[i]),
+                );
+              },
             ),
           ),
 
