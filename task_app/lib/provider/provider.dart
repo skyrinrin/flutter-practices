@@ -135,6 +135,14 @@ final labelIdProvider = Provider<List<int>>((ref) {
 //   return List.generate(labels.length, (_) => false);
 // });
 
+// ラベルごとに仕分けたタスクのリスト
+final labelsTasksProvider = Provider<Map<Label, List<Task>>>((ref) {
+  final app = ref.read(applicationProvider);
+  final tasks = ref.watch(tasksProvider);
+  final labels = ref.watch(labelsProvider);
+  return app.labelsTasks(tasks, labels);
+});
+
 // 今日のタスク
 final todayTasksProvider = Provider<List<Task>>((ref) {
   final allTasks = ref.watch(tasksProvider);

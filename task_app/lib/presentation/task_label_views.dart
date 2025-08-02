@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -86,8 +88,7 @@ class _TaskLabelViewsState extends ConsumerState<TaskLabelViews> {
   //
 
   Widget labelExpansionPanel(
-    List<Task> tasks,
-    List<Label> labels,
+    Map labelsTasks,
     Application app,
     // List<bool> isExpandedList,
     // bool isExpanded,
@@ -105,110 +106,172 @@ class _TaskLabelViewsState extends ConsumerState<TaskLabelViews> {
           ref.read(labelsProvider.notifier).toggleLabel(index);
         });
       },
-      children: List.generate(labels.length, (index) {
-        // List<List> labelsTasksList = List.generate(labels.length, (list) => []);
-        // // List<Task> labelsTasks = [];
+      // children: List.generate(labels.length, (index) {
+      children:
+          labelsTasks.entries.map((entry) {
+            final Label label = entry.key;
+            final List<Task> labelTasks = entry.value;
+            Color color = label.color.withAlpha(200);
 
-        // for (int j = 0; j < labels.length; j++) {
-        //   for (int i = 0; i < tasks.length; i++) {
-        //     if (tasks[i].label == labels[index].name) {
-        //       labelsTasksList[j].add(tasks[i]);
-        //       print(
-        //         'ラベルにタスクが追加されました: ${labels[index].name}: ${labelsTasksList[j]} : タスクの数 : ${labelsTasksList.length}',
-        //       );
-        //     } else {
-        //       print(
-        //         'どのラベルにも当てはまりませんでした。: ${tasks[i].label} : ${labels[index]}}',
-        //       );
-        //     }
-        //   }
-        // }
-
-        List<Task> labelsTasksList =
-            tasks.where((task) => task.label == labels[index].name).toList();
-
-        // Color color = app.decodeHexColor(labels[index].color);
-        Color color = labels[index].color.withAlpha(200);
-
-        return ExpansionPanel(
-          // backgroundColor: Colors.white,
-          backgroundColor: color,
-          // splashColor: color,
-          // highlightColor: color,
-          isExpanded: labels[index].isExpanded,
-          headerBuilder: (context, isExpanded) {
-            return ListTile(
-              title: Text(
-                labels[index].name,
-                style: TextStyle(color: Colors.white, fontSize: 18),
-              ),
-            );
-          },
-
-          body: Container(
-            height: labelsTasksList.length * 104 + 24,
-            // height: labelsTasksList.length * 1040,
-            // height: double.infinity,
-            width: double.infinity,
-            color: Colors.white,
-            padding: EdgeInsets.only(top: 16),
-
-            // margin: EdgeInsets.only(top: -10),
-            child: ListView.builder(
-              physics: NeverScrollableScrollPhysics(),
-
-              itemCount: labelsTasksList.length,
-              itemBuilder:
-              // (context, index) => Container(
-              //   margin: EdgeInsets.only(right: 16, left: 16),
-              //   child: ListView.builder(
-              //     physics: NeverScrollableScrollPhysics(),
-              //     shrinkWrap: true,
-              //     itemCount: tasks.length, //ここも数が変わる
-              //     itemBuilder: (BuildContext context, int i) {
-              //       return TaskCard(
-              //         // task: tasks[index], //ここでフィルタリングしたデータを表示しないといけない
-              //         task: labelsTasksList[index], //ここがなんで動いているのかわからない
-              //       );
-              //     },
-              //   ),
-              // ),
-              (context, i) {
-                return Container(
-                  margin: EdgeInsets.symmetric(horizontal: 16),
-                  child: TaskCard(task: labelsTasksList[i]),
+            return ExpansionPanel(
+              // backgroundColor: Colors.white,
+              backgroundColor: color,
+              // splashColor: color,
+              // highlightColor: color,
+              isExpanded: label.isExpanded,
+              headerBuilder: (context, isExpanded) {
+                return ListTile(
+                  title: Text(
+                    label.name,
+                    style: TextStyle(color: Colors.white, fontSize: 18),
+                  ),
                 );
               },
-            ),
-          ),
 
-          // height: 300,
-        );
-      }),
-      // children: [
-      //   ExpansionPanel(
-      //     headerBuilder: (BuildContext context, bool isExpanded) {
-      //       return ListTile(title: Text(labelNames[index]));
-      //     },
+              body: Container(
+                height: labelTasks.length * 104 + 24,
+                // height: labelsTasksList.length * 1040,
+                // height: double.infinity,
+                width: double.infinity,
+                color: Colors.white,
+                padding: EdgeInsets.only(top: 16),
 
-      //     body: SizedBox(
-      //       height: 300,
-      //       child: ListView.builder(
-      //         shrinkWrap: true,
-      //         itemBuilder: (BuildContext context, int index) {
-      //           return Container(
-      //             height: 100,
-      //             width: 100,
-      //             child: Text('$index'),
-      //           );
+                // margin: EdgeInsets.only(top: -10),
+                child: ListView.builder(
+                  physics: NeverScrollableScrollPhysics(),
 
-      //           TaskCard(task: tasks[index]);
-      //         },
-      //       ),
-      //     ),
-      //   ),
-      // ],
+                  itemCount: labelTasks.length,
+                  itemBuilder:
+                  // (context, index) => Container(
+                  //   margin: EdgeInsets.only(right: 16, left: 16),
+                  //   child: ListView.builder(
+                  //     physics: NeverScrollableScrollPhysics(),
+                  //     shrinkWrap: true,
+                  //     itemCount: tasks.length, //ここも数が変わる
+                  //     itemBuilder: (BuildContext context, int i) {
+                  //       return TaskCard(
+                  //         // task: tasks[index], //ここでフィルタリングしたデータを表示しないといけない
+                  //         task: labelsTasksList[index], //ここがなんで動いているのかわからない
+                  //       );
+                  //     },
+                  //   ),
+                  // ),
+                  (context, i) {
+                    return Container(
+                      margin: EdgeInsets.symmetric(horizontal: 16),
+                      child: TaskCard(task: labelTasks[i]),
+                    );
+                  },
+                ),
+              ),
+
+              // height: 300,
+            );
+          }).toList(),
     );
+    // {
+    //   // List<List> labelsTasksList = List.generate(labels.length, (list) => []);
+    //   // // List<Task> labelsTasks = [];
+
+    //   // for (int j = 0; j < labels.length; j++) {
+    //   //   for (int i = 0; i < tasks.length; i++) {
+    //   //     if (tasks[i].label == labels[index].name) {
+    //   //       labelsTasksList[j].add(tasks[i]);
+    //   //       print(
+    //   //         'ラベルにタスクが追加されました: ${labels[index].name}: ${labelsTasksList[j]} : タスクの数 : ${labelsTasksList.length}',
+    //   //       );
+    //   //     } else {
+    //   //       print(
+    //   //         'どのラベルにも当てはまりませんでした。: ${tasks[i].label} : ${labels[index]}}',
+    //   //       );
+    //   //     }
+    //   //   }
+    //   // }
+
+    //   // List<Task> labelsTasksList =
+    //   //     tasks.where((task) => task.label == labels[index].name).toList();
+
+    //   // Color color = app.decodeHexColor(labels[index].color);
+    //   Color color = labels[index].color.withAlpha(200);
+
+    //   return ExpansionPanel(
+    //     // backgroundColor: Colors.white,
+    //     backgroundColor: color,
+    //     // splashColor: color,
+    //     // highlightColor: color,
+    //     isExpanded: labels[index].isExpanded,
+    //     headerBuilder: (context, isExpanded) {
+    //       return ListTile(
+    //         title: Text(
+    //           labels[index].name,
+    //           style: TextStyle(color: Colors.white, fontSize: 18),
+    //         ),
+    //       );
+    //     },
+
+    //     body: Container(
+    //       height: labelsTasksList.length * 104 + 24,
+    //       // height: labelsTasksList.length * 1040,
+    //       // height: double.infinity,
+    //       width: double.infinity,
+    //       color: Colors.white,
+    //       padding: EdgeInsets.only(top: 16),
+
+    //       // margin: EdgeInsets.only(top: -10),
+    //       child: ListView.builder(
+    //         physics: NeverScrollableScrollPhysics(),
+
+    //         itemCount: labelsTasksList.length,
+    //         itemBuilder:
+    //         // (context, index) => Container(
+    //         //   margin: EdgeInsets.only(right: 16, left: 16),
+    //         //   child: ListView.builder(
+    //         //     physics: NeverScrollableScrollPhysics(),
+    //         //     shrinkWrap: true,
+    //         //     itemCount: tasks.length, //ここも数が変わる
+    //         //     itemBuilder: (BuildContext context, int i) {
+    //         //       return TaskCard(
+    //         //         // task: tasks[index], //ここでフィルタリングしたデータを表示しないといけない
+    //         //         task: labelsTasksList[index], //ここがなんで動いているのかわからない
+    //         //       );
+    //         //     },
+    //         //   ),
+    //         // ),
+    //         (context, i) {
+    //           return Container(
+    //             margin: EdgeInsets.symmetric(horizontal: 16),
+    //             child: TaskCard(task: labelsTasksList[i]),
+    //           );
+    //         },
+    //       ),
+    //     ),
+
+    //     // height: 300,
+    //   );
+
+    // children: [
+    //   ExpansionPanel(
+    //     headerBuilder: (BuildContext context, bool isExpanded) {
+    //       return ListTile(title: Text(labelNames[index]));
+    //     },
+
+    //     body: SizedBox(
+    //       height: 300,
+    //       child: ListView.builder(
+    //         shrinkWrap: true,
+    //         itemBuilder: (BuildContext context, int index) {
+    //           return Container(
+    //             height: 100,
+    //             width: 100,
+    //             child: Text('$index'),
+    //           );
+
+    //           TaskCard(task: tasks[index]);
+    //         },
+    //       ),
+    //     ),
+    //   ),
+    // ],
   }
 
   // @override
@@ -320,9 +383,10 @@ class _TaskLabelViewsState extends ConsumerState<TaskLabelViews> {
     // List<String> labelNames = ref.watch(labelsNameProvider);
     List<Label> labels = ref.watch(labelsProvider);
     Application app = ref.read(applicationProvider);
+    final labelsTasks = ref.watch(labelsTasksProvider);
     // List<bool> isExpandedList = ref.watch(isExpandedListProvider);
 
-    return labelExpansionPanel(tasks, labels, app);
+    return labelExpansionPanel(labelsTasks, app);
 
     // ListView(
     //   shrinkWrap: true,

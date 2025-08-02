@@ -16,6 +16,14 @@ class Application {
   List<Task> get tasks => ref.read(tasksProvider);
   List<Label> get labels => ref.read(labelsProvider);
 
+  Map<Label, List<Task>> labelsTasks(List<Task> tasks, List<Label> labels) {
+    final result = <Label, List<Task>>{};
+    for (var label in labels) {
+      result[label] = tasks.where((task) => task.label == label.name).toList();
+    }
+    return result;
+  }
+
   int getNextId(List list) {
     if (list.isEmpty) return 0;
     final maxId = list
