@@ -10,6 +10,7 @@ import 'package:task_app/domain/label_domain.dart';
 import 'package:task_app/domain/task_domain.dart';
 import 'package:task_app/repository/repository.dart';
 import 'package:task_app/repository/repository_impl.dart';
+import 'package:task_app/common/common.dart';
 
 // タスクリスト用
 // class TaskNotifier extends StateNotifier<List<Task>> {
@@ -145,28 +146,32 @@ final labelsTasksProvider = Provider<Map<Label, List<Task>>>((ref) {
 
 // 今日のタスク
 final todayTasksProvider = Provider<List<Task>>((ref) {
+  List<Task> result = [];
   final allTasks = ref.watch(tasksProvider);
-  final today = DateTime.now()
-      .toString()
-      .substring(5, 10)
-      .replaceAll('-', '/')
-      .padLeft(2, '0'); //どのような形式で日付が保存されるのかわからない
-  return allTasks.where((task) => task.date == today).toList();
+  result = allTasks;
+  final today = Common.today;
+  result.where((task) => task.date == today).toList();
+  print("今日のタスク一覧 $result");
+
+  return result;
 });
 
 // 明日のタスク
 final tomorrowTasksProvider = Provider<List<Task>>((ref) {
   final allTasks = ref.watch(tasksProvider);
-  final tomorrow = DateTime.now()
-      .add(const Duration(days: 1))
-      .toString()
-      .substring(5, 10)
-      .replaceAll('-', '/')
-      .padLeft(2, '0'); //どのような形式で日付が保存されるのかわからない
+  final tomorrow = Common.tomorrow;
   return allTasks.where((task) => task.date == tomorrow).toList();
 });
 
 // その他のタスク
 final otherTasksProvider = Provider<List<Task>>((ref) {
-  return List<Task>.empty(); //後で実装する
+  List<Task> result = [];
+  final allTasks = ref.watch(tasksProvider);
+  result = allTasks;
+
+  final today = Common.today;
+  final tomorrow = Common.tomorrow;
+
+  result.removeWhere((task) => task.date == tomorrow || task.date == today);
+  return result;
 });
