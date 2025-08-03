@@ -146,21 +146,41 @@ final labelsTasksProvider = Provider<Map<Label, List<Task>>>((ref) {
 
 // 今日のタスク
 final todayTasksProvider = Provider<List<Task>>((ref) {
-  List<Task> result = [];
   final allTasks = ref.watch(tasksProvider);
-  result = allTasks;
   final today = Common.today;
-  result.where((task) => task.date == today).toList();
-  print("今日のタスク一覧 $result");
+  List<Task> result = allTasks.where((task) => task.date == today).toList();
+  if (result.isNotEmpty) {
+    print("今日のタスク一覧: ${result[0].date} ${result.length}");
+    print("タスク一覧: ${allTasks} ${allTasks.length}");
+  } else {
+    print("今日のタスク一覧: null");
+    print("タスク一覧: ${allTasks} ${allTasks.length}");
+  }
 
   return result;
+
+  // final allTasks = ref.watch(tasksProvider);
+  // final today = DateTime.now()
+  //     .toString()
+  //     .substring(5, 10)
+  //     .replaceAll('-', '/')
+  //     .padLeft(2, '0'); //どのような形式で日付が保存されるのかわからない
+  // return allTasks.where((task) => task.date == today).toList();
 });
 
 // 明日のタスク
 final tomorrowTasksProvider = Provider<List<Task>>((ref) {
   final allTasks = ref.watch(tasksProvider);
   final tomorrow = Common.tomorrow;
-  return allTasks.where((task) => task.date == tomorrow).toList();
+  List<Task> result = allTasks.where((task) => task.date == tomorrow).toList();
+  if (result.isNotEmpty) {
+    print("明日のタスク一覧: ${result[0].date} ${result.length}");
+    print("タスク一覧: ${allTasks} ${allTasks.length}");
+  } else {
+    print("明日のタスク一覧: null");
+    print("タスク一覧: ${allTasks} ${allTasks.length}");
+  }
+  return result;
 });
 
 // その他のタスク
@@ -173,5 +193,7 @@ final otherTasksProvider = Provider<List<Task>>((ref) {
   final tomorrow = Common.tomorrow;
 
   result.removeWhere((task) => task.date == tomorrow || task.date == today);
+  print('その他のタスク: $result');
+  print("タスク一覧: ${allTasks} ${result.length}");
   return result;
 });

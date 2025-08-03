@@ -110,6 +110,7 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
 
   Widget build(BuildContext context) {
     _listWidth = MediaQuery.of(context).size.width - 32;
+
     // List<Task> tasks = ref.watch(tasksProvider);
     // List<Task> todayTasks = ref.watch(todayTasksProvider);
     // List<Task> tomorrowTasks = ref.watch(tomorrowTasksProvider);
