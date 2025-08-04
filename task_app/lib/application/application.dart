@@ -146,11 +146,13 @@ class TaskNotifier extends StateNotifier<List<Task>> {
   void laodTasks() async {
     List<Task> _loadedData = await repository.loadTasks();
     state = _loadedData;
+    print('タスク一覧(本家): ${state}');
   }
 
   // タスクの追加
   void addTask(Task task) {
     state = [...state, task]; //もともとのリストにtaskを追加
+    print('タスク一覧(本家): ${state}');
   }
 
   // リストのアップデート

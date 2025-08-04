@@ -159,6 +159,8 @@ final todayTasksProvider = Provider<List<Task>>((ref) {
 
   return result;
 
+  // return ref.watch(tasksProvider);
+
   // final allTasks = ref.watch(tasksProvider);
   // final today = DateTime.now()
   //     .toString()
@@ -181,19 +183,21 @@ final tomorrowTasksProvider = Provider<List<Task>>((ref) {
     print("タスク一覧: ${allTasks} ${allTasks.length}");
   }
   return result;
+  // return ref.watch(tasksProvider);
 });
 
 // その他のタスク
 final otherTasksProvider = Provider<List<Task>>((ref) {
-  List<Task> result = [];
-  final allTasks = ref.watch(tasksProvider);
-  result = allTasks;
+  // List<Task> result = [];
+  // final allTasks = ref.watch(tasksProvider);
+  // result = allTasks;
 
-  final today = Common.today;
-  final tomorrow = Common.tomorrow;
+  // final today = Common.today;
+  // final tomorrow = Common.tomorrow;
 
-  result.removeWhere((task) => task.date == tomorrow || task.date == today);
-  print('その他のタスク: $result');
-  print("タスク一覧: ${allTasks} ${result.length}");
-  return result;
+  // result.removeWhere((task) => task.date == tomorrow || task.date == today);
+  // print('その他のタスク: $result');
+  // print("タスク一覧: ${allTasks} ${result.length}");
+  // return result;
+  return [];
 });
