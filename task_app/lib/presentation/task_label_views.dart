@@ -100,6 +100,7 @@ class _TaskLabelViewsState extends ConsumerState<TaskLabelViews> {
     // for (int i = 0; i < tasks.length; i ++) {
     //   if tasks[i].label == labels
     // }
+
     return ExpansionPanelList(
       expansionCallback: (int index, bool isExpanded) {
         setState(() {
@@ -111,6 +112,14 @@ class _TaskLabelViewsState extends ConsumerState<TaskLabelViews> {
           labelsTasks.entries.map((entry) {
             final Label label = entry.key;
             final List<Task> labelTasks = entry.value;
+            //
+            double panel_height = labelTasks.length * 104 + 24;
+            bool _isVisibility = false;
+            if (labelTasks.isEmpty) {
+              //ここら辺の処理はapplication層で任せるべきかも...
+              panel_height = 60;
+              _isVisibility = true;
+            }
             Color color = label.color.withAlpha(200);
 
             return ExpansionPanel(
@@ -129,7 +138,7 @@ class _TaskLabelViewsState extends ConsumerState<TaskLabelViews> {
               },
 
               body: Container(
-                height: labelTasks.length * 104 + 24,
+                height: panel_height,
                 // height: labelsTasksList.length * 1040,
                 // height: double.infinity,
                 width: double.infinity,
@@ -137,32 +146,64 @@ class _TaskLabelViewsState extends ConsumerState<TaskLabelViews> {
                 padding: EdgeInsets.only(top: 16),
 
                 // margin: EdgeInsets.only(top: -10),
-                child: ListView.builder(
-                  physics: NeverScrollableScrollPhysics(),
 
-                  itemCount: labelTasks.length,
-                  itemBuilder:
-                  // (context, index) => Container(
-                  //   margin: EdgeInsets.only(right: 16, left: 16),
-                  //   child: ListView.builder(
-                  //     physics: NeverScrollableScrollPhysics(),
-                  //     shrinkWrap: true,
-                  //     itemCount: tasks.length, //ここも数が変わる
-                  //     itemBuilder: (BuildContext context, int i) {
-                  //       return TaskCard(
-                  //         // task: tasks[index], //ここでフィルタリングしたデータを表示しないといけない
-                  //         task: labelsTasksList[index], //ここがなんで動いているのかわからない
-                  //       );
-                  //     },
-                  //   ),
-                  // ),
-                  (context, i) {
-                    return Container(
-                      margin: EdgeInsets.symmetric(horizontal: 16),
-                      child: TaskCard(task: labelTasks[i]),
-                    );
-                  },
+                // ここ
+                child: Stack(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.only(left: 8),
+                      child: Visibility(
+                        visible: _isVisibility,
+                        child: Text(
+                          '挑戦できるタスクはありません',
+                          style: TextStyle(
+                            color: Color.fromARGB(9100, 0, 0, 0),
+                          ),
+                        ),
+                      ),
+                    ),
+                    //
+                    ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+
+                      itemCount: labelTasks.length,
+                      itemBuilder: (context, i) {
+                        return Container(
+                          margin: EdgeInsets.symmetric(horizontal: 16),
+                          child: TaskCard(task: labelTasks[i]),
+                        );
+                      },
+                    ),
+                  ],
                 ),
+
+                // ここ
+                // child: ListView.builder(
+                //   physics: NeverScrollableScrollPhysics(),
+
+                //   itemCount: labelTasks.length,
+                //   itemBuilder:
+                //   // (context, index) => Container(
+                //   //   margin: EdgeInsets.only(right: 16, left: 16),
+                //   //   child: ListView.builder(
+                //   //     physics: NeverScrollableScrollPhysics(),
+                //   //     shrinkWrap: true,
+                //   //     itemCount: tasks.length, //ここも数が変わる
+                //   //     itemBuilder: (BuildContext context, int i) {
+                //   //       return TaskCard(
+                //   //         // task: tasks[index], //ここでフィルタリングしたデータを表示しないといけない
+                //   //         task: labelsTasksList[index], //ここがなんで動いているのかわからない
+                //   //       );
+                //   //     },
+                //   //   ),
+                //   // ),
+                //   (context, i) {
+                //     return Container(
+                //       margin: EdgeInsets.symmetric(horizontal: 16),
+                //       child: TaskCard(task: labelTasks[i]),
+                //     );
+                // },
+                // ),
               ),
 
               // height: 300,

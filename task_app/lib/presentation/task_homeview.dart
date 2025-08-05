@@ -3,6 +3,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:task_app/application/application.dart';
 import 'package:task_app/domain/label_domain.dart';
+import 'package:task_app/presentation/add_label_button.dart';
 import 'package:task_app/presentation/add_label_window.dart';
 import 'package:task_app/presentation/task_date_views.dart';
 import 'package:task_app/presentation/task_label_views.dart';
@@ -56,16 +57,18 @@ class TaskHomeview extends ConsumerWidget {
           TaskDateViews(number: 2),
           TaskLabelViews(),
           // テスト用
-          ElevatedButton(
-            onPressed: () {
-              // ここにコード
-              popAddLabelWindow();
-              // app.addLabel('テスト', 10, '234');
+          // ElevatedButton(
+          //   onPressed: () {
+          //     // ここにコード
+          //     popAddLabelWindow();
+          //     // app.addLabel('テスト', 10, '234');
 
-              // ラベル追加用ウィジェットを作りそちらに処理を任せる
-            },
-            child: Text('テスト'),
-          ),
+          //     // ラベル追加用ウィジェットを作りそちらに処理を任せる
+          //   },
+          //   child: Text('テスト'),
+          // ),
+          SizedBox(height: 44),
+          AddLabelButton(),
           SizedBox(height: 150),
         ],
       ),
