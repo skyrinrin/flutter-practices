@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:task_app/Infrastructure/storage.dart';
+import 'package:task_app/core/notification/notification_service.dart';
 import 'package:task_app/domain/label_domain.dart';
 import 'package:task_app/provider/provider.dart';
 import 'package:task_app/repository/repository.dart';
@@ -15,6 +16,15 @@ class Application {
 
   List<Task> get tasks => ref.read(tasksProvider);
   List<Label> get labels => ref.read(labelsProvider);
+
+  // 通知を送信する 実験なので後で消す
+  void sendNotifi() {
+    NotificationService().showNotification(
+      id: 1,
+      title: 'サンプル',
+      body: 'あああああああああああああああああああああああああああああああああああああああああああああああ',
+    );
+  }
 
   Map<Label, List<Task>> labelsTasks(List<Task> tasks, List<Label> labels) {
     final result = <Label, List<Task>>{};

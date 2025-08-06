@@ -48,7 +48,7 @@ class TaskHomeview extends ConsumerWidget {
       );
     }
 
-    // Application app = ref.read(applicationProvider);
+    Application app = ref.read(applicationProvider);
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -70,6 +70,15 @@ class TaskHomeview extends ConsumerWidget {
           SizedBox(height: 44),
           AddLabelButton(),
           SizedBox(height: 150),
+
+          //実装用サンプルボタン
+          ElevatedButton(
+            onPressed: () {
+              app.sendNotifi();
+            },
+            child: Text('サンプル'),
+          ),
+          SizedBox(height: 100),
         ],
       ),
     );

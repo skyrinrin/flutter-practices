@@ -11,11 +11,15 @@ import 'presentation/homepage.dart';
 // import 'package:provider/provider.dart';
 import 'Infrastructure/storage.dart';
 import 'Infrastructure/storage_impl.dart';
+import 'core/notification/notification_service.dart';
 
-void main() {
+void main() async {
   // final storage = StorageImpl();
   // final repository = RepositoryImpl(storage: storage);
   // final application = Application(repository);
+
+  WidgetsFlutterBinding.ensureInitialized();
+  await NotificationService().init(); //通知の初期化
 
   runApp(
     ProviderScope(child: MyApp()),
