@@ -19,11 +19,13 @@ class Application {
 
   // 通知を送信する 実験なので後で消す
   void sendNotifi() {
-    NotificationService().showNotification(
+    NotificationService().showScheduledNotification(
       id: 1,
       title: 'サンプル',
       body: 'あああああああああああああああああああああああああああああああああああああああああああああああ',
+      scheduledTime: DateTime.now().add(Duration(minutes: 1)), //1分後に通知を送信
     );
+    print('通知を送信しました');
   }
 
   Map<Label, List<Task>> labelsTasks(List<Task> tasks, List<Label> labels) {

@@ -11,11 +11,17 @@ class NotificationService {
 
   NotificationService._internal();
 
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+  final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
   Future<void> init() async {
     tzData.initializeTimeZones(); //timezoneの初期化
+
+    _flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin
+        >()
+        ?.requestNotificationsPermission();
 
     const AndroidInitializationSettings androidInitSettings =
         AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -24,19 +30,19 @@ class NotificationService {
       android: androidInitSettings,
     );
 
-    await flutterLocalNotificationsPlugin.initialize(initSettings);
-    await _requestPermissions();
+    await _flutterLocalNotificationsPlugin.initialize(initSettings);
+    // await _requestPermissions();
   }
 
-  // 通知の許可リクエスト表示処理
-  Future<void> _requestPermissions() async {
-    if (Platform.isAndroid) {
-      final status = await Permission.notification.status;
-      if (!status.isGranted) {
-        await Permission.notification.request();
-      }
-    } //必要ならばIOS処理
-  }
+  // // 通知の許可リクエスト表示処理
+  // Future<void> _requestPermissions() async {
+  //   if (Platform.isAndroid) {
+  //     final status = await Permission.notification.status;
+  //     if (!status.isGranted) {
+  //       await Permission.notification.request();
+  //     }
+  //   } //必要ならばIOS処理
+  // }
 
   // Future<void> showNotification({
   //   required int id,
@@ -78,9 +84,8 @@ class NotificationService {
         android: AndroidNotificationDetails('main_channel', 'Main Channel'),
         iOS: DarwinNotificationDetails(),
       ),
-      androidAllowWhileIdle: true,
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
+      androidScheduleMode:
+          AndroidScheduleMode.inexact, //通知時刻はアバウトで省電力アイドリングモードでは動作しない
       matchDateTimeComponents: DateTimeComponents.time, // 毎日同じ時刻にも可能
     );
   }
