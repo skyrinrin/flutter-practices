@@ -44,6 +44,14 @@ class Application {
     print('通知を送信しました');
   }
 
+  // データ全消し スタックしたときだけ使う！
+  void clearData() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.clear();
+    // repository.saveTasks;
+    print('削除');
+  }
+
   Map<Label, List<Task>> labelsTasks(List<Task> tasks, List<Label> labels) {
     final result = <Label, List<Task>>{};
     for (var label in labels) {
@@ -132,6 +140,32 @@ class Application {
   //   });
   //   storage.saveTasks(tasks);
   // }
+
+  //日付ウィジェットの処理
+
+  //日付によってタイトルの内容を変える
+  // String getDateListsTitle(int number) {
+  //       if (number == 0) {
+  //     selectedTasks = ref.watch(todayTasksProvider);
+  //     _listTitle = '今日(${selectedTasks.length})';
+  //   }
+  //   if (number == 1) {
+  //     selectedTasks = ref.watch(tomorrowTasksProvider);
+  //     _listTitle = '明日(${selectedTasks.length})';
+  //   }
+  //   if (number == 2) {
+  //     selectedTasks = ref.watch(otherTasksProvider);
+  //     _listTitle = 'その他(${selectedTasks.length})';
+  // }
+
+  //タスクの数からリストの高さを取得
+  double getDateListsHeight(List<Task> tasks) {
+    if (tasks.isEmpty) {
+      return 160;
+    } else {
+      return (tasks.length + 1.5) * 104;
+    }
+  }
 }
 
 // アプリケーション層にnotifier系を入れる

@@ -74,13 +74,17 @@ class TaskHomeview extends ConsumerWidget {
           AddLabelButton(),
           SizedBox(height: 150),
 
-          //実装用サンプルボタン
+          //データ全消しボタン 後で絶対消す！
+          ElevatedButton(onPressed: app.clearData, child: Text('全消し')),
+
+          //通知実装用サンプルボタン
           ElevatedButton(
             onPressed: () {
               app.sendNotifi();
             },
             child: Text('サンプル'),
           ),
+
           SizedBox(height: 100),
         ],
       ),
