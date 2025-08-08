@@ -1,4 +1,3 @@
-import 'dart:ffi';
 import 'dart:ui';
 
 class Label {
@@ -24,10 +23,10 @@ class Label {
 
   factory Label.fromJson(Map<String, dynamic> json) => Label(
     name: json['name'],
-    id: json['id'] ?? 0,
+    id: json['id'],
     color: Color(
       int.parse(json['color'].toString().replaceFirst('#', ''), radix: 16),
     ),
-    isExpanded: json['isExpanded'] == 'true' ? true : false,
+    isExpanded: json['isExpanded'],
   );
 }

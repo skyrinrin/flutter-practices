@@ -5,7 +5,6 @@ import 'package:task_app/application/application.dart';
 import 'package:task_app/domain/label_domain.dart';
 import 'package:task_app/presentation/add_label_button.dart';
 import 'package:task_app/presentation/add_label_window.dart';
-import 'package:task_app/presentation/appbar.dart';
 import 'package:task_app/presentation/task_date_views.dart';
 import 'package:task_app/presentation/task_label_views.dart';
 import 'package:task_app/provider/provider.dart';
@@ -49,12 +48,10 @@ class TaskHomeview extends ConsumerWidget {
       );
     }
 
-    Application app = ref.read(applicationProvider);
+    // Application app = ref.read(applicationProvider);
     return SingleChildScrollView(
       child: Column(
         children: [
-          // SizedBox(height: 72),
-          Appbar(),
           TaskDateViews(number: 0),
           TaskDateViews(number: 1),
           TaskDateViews(number: 2),
@@ -73,15 +70,6 @@ class TaskHomeview extends ConsumerWidget {
           SizedBox(height: 44),
           AddLabelButton(),
           SizedBox(height: 150),
-
-          //実装用サンプルボタン
-          ElevatedButton(
-            onPressed: () {
-              app.sendNotifi();
-            },
-            child: Text('サンプル'),
-          ),
-          SizedBox(height: 100),
         ],
       ),
     );

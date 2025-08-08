@@ -1,20 +1,23 @@
-// import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
-// class Appbar extends StatefulWidget {
-//   @override
-//   _AppbarState createState() => _AppbarState();
+class Appbar extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 120,
 
-// }
+      color: const Color.fromARGB(66, 63, 147, 216),
+      child: Stack(
+        children: [
+          Positioned(
+            right: 16,
+            bottom: 16,
+            child: Icon(Icons.settings, size: 32),
+          ),
 
-// class _AppbarState extends State<Appbar> {
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return DefaultTabController(
-//       initialIndex: 0,
-//       length: 3, //タブの数
-//        child: 
-       
-//        );
-//   }
-// }
+          //必要なウィジェットがあればここから追加
+        ],
+      ),
+    );
+  }
+}

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:task_app/provider/provider.dart';
 import 'package:task_app/repository/repository.dart';
 import 'package:task_app/repository/repository_impl.dart';
 import 'presentation/task_card.dart';
@@ -21,8 +22,17 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await NotificationService().init(); //通知の初期化
 
+  // // 保存されているデータを読み込む
+  // final container = ProviderContainer();
+  // await container.read(tasksProvider.notifier).loadTasks;
+  // await container.read(labelsProvider.notifier).loadLabels; //今のところ解決していない
+
+  final container = ProviderContainer();
+  final app = container.read(applicationProvider);
+  await app.init(); //初期化
+
   runApp(
-    ProviderScope(child: MyApp()),
+    UncontrolledProviderScope(container: container, child: MyApp()),
     // MultiProvider(
     //   providers: [
     //     Provider<Repository>.value(value: repository),

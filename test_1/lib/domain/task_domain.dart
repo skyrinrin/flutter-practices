@@ -58,7 +58,6 @@ class Task {
 
   //JSON型に変換
   Map<String, dynamic> toJson() => {
-    'id': id,
     'title': title,
     'isDone': isDone,
     'label': label,

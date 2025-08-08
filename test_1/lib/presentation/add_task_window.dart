@@ -135,7 +135,6 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
           }).toList(),
       onChanged: (String? value) {
         setState(() {
-          // _selectedLabel = value;
           _selectedLabel = value ?? '未選択';
         });
       },

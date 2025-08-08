@@ -1,8 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_app/domain/label_domain.dart';
 import 'package:task_app/domain/task_domain.dart';
-import 'package:task_app/provider/provider.dart';
 import 'dart:convert';
 import 'storage.dart';
 
@@ -62,34 +60,11 @@ class StorageImpl implements Storage {
   Future<List<Label>> loadLabels() async {
     final prefs = await SharedPreferences.getInstance();
     final List<String>? labelList = prefs.getStringList(_labelKey);
-    // if (labelList == null) return [];
-    List<Label> loadedLabels = [];
+    if (labelList == null) return [];
 
-    if (labelList != null) {
-      loadedLabels =
-          labelList
-              .map((labelStr) {
-                try {
-                  final json = jsonDecode(labelStr);
-                  return Label.fromJson(json);
-                } catch (e) {
-                  print('不正なラベルデータ: $e');
-                  return null;
-                }
-              })
-              .whereType<Label>()
-              .toList();
-    }
-
-    // "未選択"ラベルが存在しないならば追加
-    bool hasDefault = loadedLabels.any((label) => label.name == '未選択');
-    if (!hasDefault) {
-      loadedLabels.insert(
-        0,
-        Label(name: '未選択', id: 0, color: Colors.black, isExpanded: false),
-      );
-      await saveLabels(loadedLabels);
-    }
-    return loadedLabels;
+    return labelList.map((labelStr) {
+      final json = jsonDecode(labelStr);
+      return Label.fromJson(json);
+    }).toList();
   }
 }
