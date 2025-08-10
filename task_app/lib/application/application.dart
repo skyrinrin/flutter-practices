@@ -158,15 +158,40 @@ class Application {
   //     _listTitle = 'その他(${selectedTasks.length})';
   // }
 
-  //タスクの数からリストの高さを取得
-  double getDateListsHeight(List<Task> tasks) {
+  // 日付ごとリストの日付を判別する
+  (List<Task>, String) getDateKind(int number) {
+    if (number == 0) {
+      List<Task> tasks = ref.watch(todayTasksProvider);
+      return (tasks, '今日(${tasks.length})');
+    }
+    if (number == 1) {
+      List<Task> tasks = ref.watch(tomorrowTasksProvider);
+      return (tasks, '明日(${tasks.length})');
+    }
+    if (number == 2) {
+      List<Task> tasks = ref.watch(otherTasksProvider);
+      return (tasks, 'その他(${tasks.length})');
+    }
+    return ([], 'Error');
+  }
+
+  //タスクの数からリストの高さとリストビューの拡大縮小を管理・取得
+  (double, bool) getDateListsHightBool(List<Task> tasks) {
     if (tasks.isEmpty) {
-      return 160;
+      return (160, false);
     } else {
-      return (tasks.length + 1.5) * 104;
+      return ((tasks.length + 1.5) * 104, false);
     }
   }
 }
+//   double getDateListsHeight(List<Task> tasks) {
+//     if (tasks.isEmpty) {
+//       return 160;
+//     } else {
+//       return (tasks.length + 1.5) * 104;
+//     }
+//   }
+// }
 
 // アプリケーション層にnotifier系を入れる
 class TaskNotifier extends StateNotifier<List<Task>> {
