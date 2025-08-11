@@ -19,6 +19,7 @@ class TaskDateViews extends ConsumerStatefulWidget {
 class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
   //もっと見るウィジェット
   late Application app;
+  late final removeListener;
   late double listWidth;
   late List<Task> selectedTasks;
   late String listTitle;
@@ -27,18 +28,39 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
 
   bool isOpened = false;
   bool isVisibility = false;
+  bool isListening = false;
 
-  @override
-  void initState() {
-    super.initState();
-    // Application app = ref.watch(applicationProvider);
-    // int number = widget.number;
-    // selectedTasks = app.getDateKind(widget.number).$1;
-    // _listTitle = app.getDateKind(number).$2;
+  // @override
+  // void initState() {
+  //   super.initState();
 
-    // _listHeight = app.getDateListsHightBool(selectedTasks).$1;
-    // _isVisibility = app.getDateListsHightBool(selectedTasks).$2;
-  }
+  //   // build完了後にref.listenを仕込む
+  //   WidgetsBinding.instance.addPostFrameCallback((_) {
+  //     removeListener = ref.listenManual<List<Task>>(tasksProvider, (
+  //       previous,
+  //       next,
+  //     ) {
+  //       if (previous == null || next.length > previous.length) {
+  //         setState(() => isOpened = false);
+  //       }
+  //     });
+  //     print('listenerが発火しました');
+  //   });
+  // }
+
+  // @override
+  // void dispose() {
+  //   // リスナー解除
+  //   removeListener();
+  //   super.dispose();
+  // }
+  // Application app = ref.watch(applicationProvider);
+  // int number = widget.number;
+  // selectedTasks = app.getDateKind(widget.number).$1;
+  // _listTitle = app.getDateKind(number).$2;
+
+  // _listHeight = app.getDateListsHightBool(selectedTasks).$1;
+  // _isVisibility = app.getDateListsHightBool(selectedTasks).$2;
 
   // initStateではrefを呼び出せないためinitStateの直後のdidChangeDependenciesを使う
   @override
@@ -52,6 +74,18 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
 
     listHeight = app.getDateListsHightBool(selectedTasks).$1;
     isVisibility = app.getDateListsHightBool(selectedTasks).$2;
+
+    // 初回だけリッスンを設定
+    // if (!isListening) {
+    //   isListening = true;
+
+    //   ref.listen<List<Task>>(tasksProvider, (previous, next) {
+    //     // タスク追加時だけ閉じる
+    //     if (previous == null || next.length > previous.length) {
+    //       setState(() => isOpened = false);
+    //     }
+    //   });
+    // }
   }
 
   void _pushedMoreSeeButton(Application app) {
@@ -80,21 +114,45 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
         //   _momentlyHeight = 280;
         // };
         // _listHeight = _momentlyHeight;
-        _icon = Icon(Icons.keyboard_arrow_up, color: Colors.black, size: 40);
-        print('発火: ${isOpened}:${listHeight}');
-      });
-    } else {
-      setState(() {
+
+        // setState(() {
+        selectedTasks = app.getDateKind(widget.number).$1;
         if (selectedTasks.isEmpty) {
           listHeight = 160;
           isVisibility = true;
         } else {
           isVisibility = false;
-          listHeight = 280;
+          listHeight = app.getDateListsHightBool(selectedTasks).$1;
+          if (listHeight <= 280) {
+            listHeight = 280;
+            print('小さい');
+          }
         }
+        _icon = Icon(Icons.keyboard_arrow_up, color: Colors.black, size: 40);
+        print('発火: ${isOpened}:${listHeight}');
+        // });
+
+        // _icon = Icon(Icons.keyboard_arrow_up, color: Colors.black, size: 40);
+        // print('発火: ${isOpened}:${listHeight}');
+      });
+    } else {
+      setState(() {
+        listHeight = 280;
         _icon = Icon(Icons.keyboard_arrow_down, color: Colors.black, size: 40);
         print('発火: ${isOpened}:${listHeight}');
       });
+      // setState(() {
+      //   if (selectedTasks.isEmpty) {
+      //     listHeight = 160;
+      //     isVisibility = true;
+      //   } else {
+      //     isVisibility = false;
+      //     selectedTasks = app.getDateKind(widget.number).$1;
+      //     listHeight = app.getDateListsHightBool(selectedTasks).$1;
+      //   }
+      //   _icon = Icon(Icons.keyboard_arrow_down, color: Colors.black, size: 40);
+      //   print('発火: ${isOpened}:${listHeight}');
+      // });
     }
   }
 
@@ -163,6 +221,16 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
   // }
 
   Widget build(BuildContext context) {
+    // //値の変化を検知
+    // ref.listen<List<Task>>(tasksProvider, (previous, next) {
+    //   if (previous == null || next.length > previous.length) {
+    //     setState(() {
+    //       isOpened = false;
+    //       print('listenが発火しました!');
+    //     });
+    //   }
+    // });
+
     listWidth = MediaQuery.of(context).size.width - 32;
 
     // List<Task> tasks = ref.watch(tasksProvider);
@@ -176,9 +244,11 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
 
     final app = ref.watch(applicationProvider);
 
+    // final tasks = ref.watch(tasksProvider);
+
     final (selectedTasks, listTitle) = app.getDateKind(widget.number);
 
-    listHeight = app.getDateListsHightBool(selectedTasks).$1;
+    // listHeight = app.getDateListsHightBool(selectedTasks).$1;
     isVisibility = app.getDateListsHightBool(selectedTasks).$2;
 
     // double listHeight = app.getDateListsHightBool(selectedTasks).$1;
