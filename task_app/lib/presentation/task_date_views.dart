@@ -244,6 +244,10 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
 
     final app = ref.watch(applicationProvider);
 
+    ref.listen<List<Task>>(tasksProvider, (previous, next) {
+      listHeight = app.getDateListsHightBool(next).$1;
+      print('listener: $listHeight');
+    });
     // final tasks = ref.watch(tasksProvider);
 
     final (selectedTasks, listTitle) = app.getDateKind(widget.number);
