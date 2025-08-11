@@ -7,6 +7,8 @@ import 'package:task_app/domain/label_domain.dart';
 import 'package:task_app/provider/provider.dart';
 import 'package:task_app/repository/repository.dart';
 import 'package:task_app/domain/task_domain.dart';
+import 'package:uuid/uuid.dart';
+
 // import 'package:provider/provider.dart';
 
 class Application {
@@ -60,12 +62,20 @@ class Application {
     return result;
   }
 
-  int getNextId(List list) {
-    if (list.isEmpty) return 0;
-    final maxId = list
-        .map((element) => element.id)
-        .reduce((a, b) => a > b ? a : b); //三項演算子とreduce関数を使ってる よくわかってない
-    return maxId + 1;
+  String getUUID() {
+    Uuid uuid = Uuid();
+    String newUuid = uuid.v4();
+    return newUuid;
+  }
+
+  int getOrder(List<Task> tasks) {
+    int order = tasks.length * 10;
+    return order;
+  }
+
+  List<Task> sortTasks(List<Task> tasks) {
+    tasks.sort((a, b) => a.order.compareTo(b.order));
+    return tasks;
   }
 
   Future<void> addTask(
@@ -77,7 +87,8 @@ class Application {
   ) async {
     // final tasks = ref.read(taskProvider);
     final task = Task(
-      id: getNextId(tasks),
+      id: getUUID(),
+      order: getOrder(tasks),
       title: title,
       label: label,
       date: date,
@@ -92,7 +103,8 @@ class Application {
   Future<void> addLabel(String name, Color color) async {
     final label = Label(
       name: name,
-      id: getNextId(labels),
+      id: getUUID(),
+      order: getOrder(tasks),
       color: color,
       isExpanded: false,
     ); //ここのcolorのところを変更する
@@ -117,20 +129,37 @@ class Application {
   // }
 
   // タスクの達成状態を管理する
-  void toggleTask(int index) {
+  bool toggleTask(String id) {
     //List<Task> tasks, tasksをグローバルに取得する
     final updatedTasks = [...tasks];
+    // Task task = updatedTasks.firstWhere((task) => task.id == id);
+    // task = task.copyWith(isDone: !task.isDone);
+    // updatedTasks.firstWhere((task) => task.id == id) =
+
+    final index = updatedTasks.indexWhere(
+      (task) => task.id == id,
+    ); //firstWhereでは直接左辺に代入できないため一度indexを取る
+    if (index == -1) return false; //見つからなければ終了
+
     updatedTasks[index] = updatedTasks[index].copyWith(
-      //テストをsharedの方でする
       isDone: !updatedTasks[index].isDone,
     );
-    ref.read(tasksProvider.notifier).updateTasks(updatedTasks);
+
+    // updatedTasks.firstWhere((task) => task.id == id) =
+    //     updatedTasks.firstWhere((task) => task.id == id).copyWith(isDone: !updatedTasks.firstWhere((task) => task.id == id).isDone);
+    // print('タスクが押されました: ${task.isDone}');
+    // updatedTasks[index] = updatedTasks[index].copyWith(
+    //   //テストをsharedの方でする
+    //   isDone: !updatedTasks[index].isDone,
+    // );
+    ref.read(tasksProvider.notifier).updateTasks(updatedTasks); //Providerに反映
     // repository.saveTasks(tasks);
+    return updatedTasks[index].isDone;
   }
 
   // タスクを得る
-  Task getTask(int index) {
-    return tasks[index];
+  Task getTask(String id) {
+    return tasks.firstWhere((task) => task.id == id);
   }
 
   // // タスクの削除
@@ -236,12 +265,24 @@ class LabelsTasksNotifier extends StateNotifier<List<Label>> {
   Repository repository;
   LabelsTasksNotifier(this.repository)
     : super([
-        Label(name: '未選択', id: 1, color: Colors.black, isExpanded: false),
+        Label(
+          name: '未選択',
+          id: '000',
+          order: 0,
+          color: Colors.black,
+          isExpanded: false,
+        ),
       ]);
 
   void loadLabels() async {
     List<Label> data = [
-      Label(name: '未選択', id: 1, color: Colors.black, isExpanded: false),
+      Label(
+        name: '未選択',
+        id: '000',
+        order: 0,
+        color: Colors.black,
+        isExpanded: false,
+      ),
     ];
     List<Label> _loadedData = await repository.loadLabels();
     data.addAll(_loadedData);
@@ -261,9 +302,10 @@ class LabelsTasksNotifier extends StateNotifier<List<Label>> {
     state = labels;
   }
 
-  void toggleLabel(int index) {
+  void toggleLabel(int id) {
     final newList = [...state];
-    newList[index].isExpanded = !newList[index].isExpanded;
+    Label label = newList[id];
+    label.isExpanded = !label.isExpanded;
     state = newList;
   }
 }

@@ -53,7 +53,8 @@ class RepositoryImpl implements Repository {
   // タスクのロード
   @override
   Future<List<Task>> loadTasks() async {
-    return await storage.loadTasks();
+    List<Task> tasks = await storage.loadTasks();
+    return tasks;
   }
 
   // ラベルのキャッシュ

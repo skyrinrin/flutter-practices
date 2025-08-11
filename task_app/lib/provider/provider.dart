@@ -125,7 +125,7 @@ final labelsNameProvider = Provider<List<String>>((ref) {
 });
 
 // ラベルのIDリスト
-final labelIdProvider = Provider<List<int>>((ref) {
+final labelIdProvider = Provider<List<String>>((ref) {
   final labels = ref.watch(labelsProvider);
   return labels.map((label) => label.id).toList();
 });

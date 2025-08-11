@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 // import 'package:provider/provider.dart';
 import 'package:task_app/application/application.dart';
@@ -26,11 +27,12 @@ class _TaskCardState extends ConsumerState<TaskCard> {
     super.initState();
     app = ref.read(applicationProvider);
     _id = widget.task.id;
+    _order = widget.task.order;
     _taskTitle = widget.task.title;
     label = widget.task.label;
     _date = widget.task.date;
     _time = widget.task.time;
-    _isDone = widget.task.isDone;
+    // _isDone = widget.task.isDone;
 
     // ここでタスクリストを取得し、インデックスに基づいて情報を取得しぶち込む（1つのセットとして関数かすべきかも）
     // List<Task> tasks = ref.watch(taskProvider);
@@ -38,14 +40,22 @@ class _TaskCardState extends ConsumerState<TaskCard> {
 
   // タスク未・済 ボタンが押下されたときの処理
   void _pushedToggleButton() {
-    app.toggleTask(_id);
-    task = app.getTask(_id);
-    _isDone = task.isDone;
-    print('これが結果${task.isDone}');
-    // タスクの合否に応じて色を変更
+    bool result = app.toggleTask(_id);
+    // task = app.getTask(_id);
+    // Task task = ref.watch(tasksProvider).firstWhere((task) => task.id == _id);
+    // _isDone = task.isDone;
+    // print('これが結果${task.isDone}');
+    // // タスクの合否に応じて色を変更
+    // setState(() {
+    //   //同期ができないかも
+    //   if (_isDone == true) {
+    //     _isDoneColor = Color(0xFF4484EC);
+    //   } else {
+    //     _isDoneColor = Color(0xFF969696);
+    //   }
+    // });
     setState(() {
-      //同期ができないかも
-      if (_isDone == true) {
+      if (result == true) {
         _isDoneColor = Color(0xFF4484EC);
       } else {
         _isDoneColor = Color(0xFF969696);
@@ -54,12 +64,13 @@ class _TaskCardState extends ConsumerState<TaskCard> {
   }
 
   // カード要素の変数群
-  late int _id;
+  late String _id;
+  late int _order;
   late String _taskTitle;
   late String label;
   late String _date;
   late String _time;
-  late bool _isDone;
+  // late bool _isDone;
 
   // タスクテキストウィジェット
   Widget _taskTitleText(double mediaWidth) {

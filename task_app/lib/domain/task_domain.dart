@@ -18,7 +18,8 @@ String formattedTime(TimeOfDay selectedTime) {
 }
 
 class Task {
-  int id;
+  String id;
+  int order;
   String title;
   bool isDone;
   String label;
@@ -28,6 +29,7 @@ class Task {
 
   Task({
     required this.id,
+    required this.order,
     required this.title,
     this.isDone = false,
     required this.label,
@@ -37,7 +39,7 @@ class Task {
   });
 
   Task copyWith({
-    int? id,
+    String? id,
     String? title,
     bool? isDone,
     String? label,
@@ -47,6 +49,7 @@ class Task {
   }) {
     return Task(
       id: id ?? this.id,
+      order: order,
       title: title ?? this.title,
       isDone: isDone ?? this.isDone,
       label: label ?? this.label,
@@ -59,6 +62,7 @@ class Task {
   //JSON型に変換
   Map<String, dynamic> toJson() => {
     'id': id,
+    'order': order,
     'title': title,
     'isDone': isDone,
     'label': label,
@@ -70,6 +74,7 @@ class Task {
   //JSON型からMap型に変換
   factory Task.fromJson(Map<String, dynamic> json) => Task(
     id: json['id'],
+    order: json['order'],
     title: json['title'],
     isDone: json['isDone'],
     label: json['label'],

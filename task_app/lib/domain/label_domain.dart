@@ -2,7 +2,8 @@ import 'dart:ffi';
 import 'dart:ui';
 
 class Label {
-  final int id; //IDを数字管理すると穴があいたときに困るかも(要注意)
+  final String id;
+  final int order;
   final String name;
   final Color color;
   bool isExpanded;
@@ -10,6 +11,7 @@ class Label {
   Label({
     required this.name,
     required this.id,
+    required this.order,
     required this.color,
     required this.isExpanded,
   });
@@ -24,6 +26,7 @@ class Label {
 
   factory Label.fromJson(Map<String, dynamic> json) => Label(
     name: json['name'],
+    order: json['order'],
     id: json['id'] ?? 0,
     color: Color(
       int.parse(json['color'].toString().replaceFirst('#', ''), radix: 16),

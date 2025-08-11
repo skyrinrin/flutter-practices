@@ -17,9 +17,9 @@ class TaskLabelViews extends ConsumerStatefulWidget {
 class _TaskLabelViewsState extends ConsumerState<TaskLabelViews> {
   Widget labelExpansionPanel(Map labelsTasks, Application app) {
     return ExpansionPanelList(
-      expansionCallback: (int index, bool isExpanded) {
+      expansionCallback: (int id, bool isExpanded) {
         setState(() {
-          ref.read(labelsProvider.notifier).toggleLabel(index);
+          ref.read(labelsProvider.notifier).toggleLabel(id);
         });
       },
       children:

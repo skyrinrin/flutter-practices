@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:task_app/application/application.dart';
 import 'package:task_app/domain/label_domain.dart';
 import 'package:task_app/domain/task_domain.dart';
 import 'package:task_app/provider/provider.dart';
+import 'package:uuid/uuid.dart';
 import 'dart:convert';
 import 'storage.dart';
 
@@ -30,6 +32,7 @@ class StorageImpl implements Storage {
   @override
   Future<List<Task>> loadTasks() async {
     final prefs = await SharedPreferences.getInstance();
+    // prefs.clear(); // 絶対消す
     final List<String>? taskList = prefs.getStringList(_taskKey);
     if (taskList == null) return [];
 
@@ -86,7 +89,13 @@ class StorageImpl implements Storage {
     if (!hasDefault) {
       loadedLabels.insert(
         0,
-        Label(name: '未選択', id: 0, color: Colors.black, isExpanded: false),
+        Label(
+          name: '未選択',
+          id: '000',
+          order: 0,
+          color: Colors.black,
+          isExpanded: false,
+        ),
       );
       await saveLabels(loadedLabels);
     }
