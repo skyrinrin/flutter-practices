@@ -175,6 +175,21 @@ class Application {
     return ([], 'Error');
   }
 
+  // 日付ごとリストの日付を判別する
+  Provider<List<Task>> getDateKindProvider(int number) {
+    if (number == 0) {
+      return todayTasksProvider;
+    }
+    if (number == 1) {
+      return tomorrowTasksProvider;
+    }
+    if (number == 2) {
+      return otherTasksProvider;
+    }
+
+    return todayTasksProvider; //ここにエラー時のダミーを作るべきかも...（というか0,1,2で管理するのが良くないかも...）
+  }
+
   //タスクの数からリストの高さとリストビューの拡大縮小を管理・取得
   (double, bool) getDateListsHightBool(List<Task> tasks) {
     if (tasks.isEmpty) {
