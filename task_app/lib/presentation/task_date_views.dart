@@ -75,6 +75,8 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
     listHeight = app.getDateListsHightBool(selectedTasks).$1;
     isVisibility = app.getDateListsHightBool(selectedTasks).$2;
 
+    isOpend_false();
+
     // 初回だけリッスンを設定
     // if (!isListening) {
     //   isListening = true;
@@ -88,12 +90,36 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
     // }
   }
 
+  void isOpend_true() {
+    selectedTasks = app.getDateKind(widget.number).$1;
+    if (selectedTasks.isEmpty) {
+      listHeight = 160;
+      isVisibility = true;
+    } else {
+      isVisibility = false;
+      listHeight = app.getDateListsHightBool(selectedTasks).$1;
+      if (listHeight <= 280) {
+        listHeight = 280;
+        print('小さい');
+      }
+    }
+    _icon = Icon(Icons.keyboard_arrow_up, color: Colors.black, size: 40);
+    print('発火: ${isOpened}:${listHeight}');
+  }
+
+  void isOpend_false() {
+    listHeight = 280;
+    _icon = Icon(Icons.keyboard_arrow_down, color: Colors.black, size: 40);
+    print('発火: ${isOpened}:${listHeight}');
+  }
+
   void _pushedMoreSeeButton(Application app) {
     // void _pushedMoreSeeButton(List<Task> selectedTasks, Application app) {
     isOpened = !isOpened;
     if (isOpened == true) {
       //6/08  ボタンを教えてからのウィジェットサイズの調整とテキストの表示・非表示から始める
       setState(() {
+        isOpend_true();
         // if (selectedTasks.isEmpty) {
         //   _listHeight = 160;
         //   _isVisibility = true;
@@ -116,20 +142,7 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
         // _listHeight = _momentlyHeight;
 
         // setState(() {
-        selectedTasks = app.getDateKind(widget.number).$1;
-        if (selectedTasks.isEmpty) {
-          listHeight = 160;
-          isVisibility = true;
-        } else {
-          isVisibility = false;
-          listHeight = app.getDateListsHightBool(selectedTasks).$1;
-          if (listHeight <= 280) {
-            listHeight = 280;
-            print('小さい');
-          }
-        }
-        _icon = Icon(Icons.keyboard_arrow_up, color: Colors.black, size: 40);
-        print('発火: ${isOpened}:${listHeight}');
+
         // });
 
         // _icon = Icon(Icons.keyboard_arrow_up, color: Colors.black, size: 40);
@@ -137,9 +150,7 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
       });
     } else {
       setState(() {
-        listHeight = 280;
-        _icon = Icon(Icons.keyboard_arrow_down, color: Colors.black, size: 40);
-        print('発火: ${isOpened}:${listHeight}');
+        isOpend_false();
       });
       // setState(() {
       //   if (selectedTasks.isEmpty) {
@@ -157,7 +168,7 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
   }
 
   // Widget _moreSeeButton(List<Task> selectedTasks, Application app) {
-  Widget _moreSeeButton(Application app) {
+  Widget _moreSeeButton() {
     return GestureDetector(
       onTap: () => {_pushedMoreSeeButton(app)},
       child: Stack(
@@ -328,7 +339,7 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
                 top: 40,
                 child: Container(child: Text('挑戦できるタスクはありません')),
               ),
-              Positioned(bottom: 0, child: _moreSeeButton(app)),
+              Positioned(bottom: 0, child: _moreSeeButton()),
             ],
           ),
         )
@@ -347,7 +358,7 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
               Stack(
                 children: [
                   _cardsView(context, selectedTasks),
-                  Positioned(bottom: 0, child: _moreSeeButton(app)),
+                  Positioned(bottom: 0, child: _moreSeeButton()),
                 ],
               ),
 

@@ -26,6 +26,9 @@ class StorageImpl implements Storage {
     final List<String> taskList =
         tasks.map((task) => jsonEncode(task.toJson())).toList();
     await prefs.setStringList(_taskKey, taskList);
+
+    // データ確認用 必ず消す
+    print('保存した内容: ${prefs.getStringList(_taskKey)}');
   }
 
   // タスクのロード
@@ -38,6 +41,8 @@ class StorageImpl implements Storage {
 
     return taskList.map((taskStr) {
       final json = jsonDecode(taskStr);
+      // print('ロードした内容: ${Task.fromJson(json)}');
+      print('ロードした内容: $json}');
       return Task.fromJson(json);
     }).toList();
   }
@@ -72,13 +77,16 @@ class StorageImpl implements Storage {
       loadedLabels =
           labelList
               .map((labelStr) {
-                try {
-                  final json = jsonDecode(labelStr);
-                  return Label.fromJson(json);
-                } catch (e) {
-                  print('不正なラベルデータ: $e');
-                  return null;
-                }
+                // try {
+                //   final json = jsonDecode(labelStr);
+                //   return Label.fromJson(json);
+                // } catch (e) {
+                //   print('不正なラベルデータ: $e');
+                //   return null;
+                // }
+
+                final json = jsonDecode(labelStr);
+                return Label.fromJson(json);
               })
               .whereType<Label>()
               .toList();

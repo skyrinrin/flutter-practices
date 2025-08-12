@@ -19,6 +19,7 @@ class Label {
   Map<String, dynamic> toJson() => {
     'id': id,
     'name': name,
+    'order': order,
     // 'color': '#${color.value.toRadixString(16).padLeft(6, '0') + '00'}',
     'color': '#${color.value.toRadixString(16).padLeft(8, '0')}',
     'isExpanded': 'false',
@@ -27,7 +28,8 @@ class Label {
   factory Label.fromJson(Map<String, dynamic> json) => Label(
     name: json['name'],
     order: json['order'],
-    id: json['id'] ?? 0,
+    // order: json['order'] ?? 10,
+    id: json['id'],
     color: Color(
       int.parse(json['color'].toString().replaceFirst('#', ''), radix: 16),
     ),

@@ -13,6 +13,9 @@ class RepositoryImpl implements Repository {
 
   List<Task> _cachedTasks = []; //タスクのキャッシュ
 
+  // @override
+  // void init() {}
+
   // 正しく保存されない場合、キャッシュ部分に問題がある可能性あり
 
   //タスクの追加
@@ -53,8 +56,10 @@ class RepositoryImpl implements Repository {
   // タスクのロード
   @override
   Future<List<Task>> loadTasks() async {
-    List<Task> tasks = await storage.loadTasks();
-    return tasks;
+    // List<Task> tasks = await storage.loadTasks();
+    // return tasks;
+    _cachedTasks = await storage.loadTasks();
+    return _cachedTasks;
   }
 
   // ラベルのキャッシュ
