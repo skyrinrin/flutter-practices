@@ -13,24 +13,12 @@ class RepositoryImpl implements Repository {
 
   List<Task> _cachedTasks = []; //タスクのキャッシュ
 
-  // @override
-  // void init() {}
-
-  // 正しく保存されない場合、キャッシュ部分に問題がある可能性あり
-
   //タスクの追加
   @override
   Future<void> addTask(Task task) async {
     _cachedTasks.add(task);
     await storage.saveTasks(_cachedTasks);
   }
-
-  // // タスクの取得
-  // @override
-  // Future<List<Task>> getTasks() async {
-  //   _cachedTasks = await storage.loadTasks();
-  //   return _cachedTasks;
-  // }
 
   //
 
@@ -47,12 +35,6 @@ class RepositoryImpl implements Repository {
     await storage.saveTasks(tasks);
   }
 
-  // // タスクのロード
-  // @override
-  // Future<List<Task>> loadTasks() async {
-  //   return await storage.loadTasks();
-  // }
-
   // タスクのロード
   @override
   Future<List<Task>> loadTasks() async {
@@ -64,8 +46,6 @@ class RepositoryImpl implements Repository {
 
   // ラベルのキャッシュ
   List<Label> _cachedLabels = [];
-  // 正しく保存されない場合、キャッシュ部分に問題がある可能性あり
-  // 現在ラベルが2重に保存される（Notifier側の処理が行われていない＝整合性に著しい欠陥あり）
 
   // ラベルの追加
   @override

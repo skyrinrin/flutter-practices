@@ -16,20 +16,7 @@ class AddLabelButton extends StatelessWidget {
       onTap: () => popAddLabelWindow(),
 
       child: Container(
-        // height: 100,
-
-        // width: 200,
-        decoration: BoxDecoration(
-          // color: Colors.redAccent,
-          borderRadius: BorderRadius.circular(100),
-        ),
-
-        // child: Stack(
-        //   children: [
-        //     Icon(Icons.add, size: 40),
-        //     Text('ラベルを追加', style: TextStyle(fontSize: 20)),
-        //   ],
-        // ),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(100)),
         child: Column(
           children: [
             Icon(Icons.add, size: 40),

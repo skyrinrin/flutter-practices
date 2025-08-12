@@ -85,7 +85,6 @@ class Application {
     String date,
     String time,
   ) async {
-    // final tasks = ref.read(taskProvider);
     final task = Task(
       id: getUUID(),
       order: getOrder(tasks),
@@ -124,17 +123,10 @@ class Application {
 
   // タスクをラベル分けする
 
-  // Future<List<Task>> getTasks() async {
-  //   return repository.getTasks();
-  // }
-
   // タスクの達成状態を管理する
   bool toggleTask(String id) {
     //List<Task> tasks, tasksをグローバルに取得する
     final updatedTasks = [...tasks];
-    // Task task = updatedTasks.firstWhere((task) => task.id == id);
-    // task = task.copyWith(isDone: !task.isDone);
-    // updatedTasks.firstWhere((task) => task.id == id) =
 
     final index = updatedTasks.indexWhere(
       (task) => task.id == id,
@@ -145,13 +137,6 @@ class Application {
       isDone: !updatedTasks[index].isDone,
     );
 
-    // updatedTasks.firstWhere((task) => task.id == id) =
-    //     updatedTasks.firstWhere((task) => task.id == id).copyWith(isDone: !updatedTasks.firstWhere((task) => task.id == id).isDone);
-    // print('タスクが押されました: ${task.isDone}');
-    // updatedTasks[index] = updatedTasks[index].copyWith(
-    //   //テストをsharedの方でする
-    //   isDone: !updatedTasks[index].isDone,
-    // );
     ref.read(tasksProvider.notifier).updateTasks(updatedTasks); //Providerに反映
     // repository.saveTasks(tasks);
     return updatedTasks[index].isDone;
@@ -168,23 +153,6 @@ class Application {
   //     tasks.removeAt(index);
   //   });
   //   storage.saveTasks(tasks);
-  // }
-
-  //日付ウィジェットの処理
-
-  //日付によってタイトルの内容を変える
-  // String getDateListsTitle(int number) {
-  //       if (number == 0) {
-  //     selectedTasks = ref.watch(todayTasksProvider);
-  //     _listTitle = '今日(${selectedTasks.length})';
-  //   }
-  //   if (number == 1) {
-  //     selectedTasks = ref.watch(tomorrowTasksProvider);
-  //     _listTitle = '明日(${selectedTasks.length})';
-  //   }
-  //   if (number == 2) {
-  //     selectedTasks = ref.watch(otherTasksProvider);
-  //     _listTitle = 'その他(${selectedTasks.length})';
   // }
 
   // 日付ごとリストの日付を判別する
@@ -228,14 +196,6 @@ class Application {
     }
   }
 }
-//   double getDateListsHeight(List<Task> tasks) {
-//     if (tasks.isEmpty) {
-//       return 160;
-//     } else {
-//       return (tasks.length + 1.5) * 104;
-//     }
-//   }
-// }
 
 // アプリケーション層にnotifier系を入れる
 class TaskNotifier extends StateNotifier<List<Task>> {

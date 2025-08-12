@@ -10,32 +10,6 @@ import 'package:task_app/presentation/task_date_views.dart';
 import 'package:task_app/presentation/task_label_views.dart';
 import 'package:task_app/provider/provider.dart';
 
-// class TaskHomeview extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return SingleChildScrollView(
-//       child: Column(
-//         children: [
-//           // TaskGenre(number: 0),
-//           // TaskGenre(number: 1),
-//           // TaskGenre(number: 2),//           // TaskGenreList(), //ここにラベルリストがある
-
-//           // テスト用
-//           ElevatedButton(
-//             onPressed: () {
-//               // ここにコード
-//                Label(name: 'ラベル1', id: '1', color: Colors.black);
-
-//               // ラベル追加用ウィジェットを作りそちらに処理を任せる
-//             },
-//             child: Text('テスト'),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
-
 // Refが使えるようにconsumer化した
 class TaskHomeview extends ConsumerWidget {
   @override
@@ -53,23 +27,11 @@ class TaskHomeview extends ConsumerWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          // SizedBox(height: 72),
           Appbar(),
           TaskDateViews(number: 0),
           TaskDateViews(number: 1),
           TaskDateViews(number: 2),
           TaskLabelViews(),
-          // テスト用
-          // ElevatedButton(
-          //   onPressed: () {
-          //     // ここにコード
-          //     popAddLabelWindow();
-          //     // app.addLabel('テスト', 10, '234');
-
-          //     // ラベル追加用ウィジェットを作りそちらに処理を任せる
-          //   },
-          //   child: Text('テスト'),
-          // ),
           SizedBox(height: 44),
           AddLabelButton(),
           SizedBox(height: 150),

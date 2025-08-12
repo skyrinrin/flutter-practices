@@ -32,28 +32,12 @@ class _TaskCardState extends ConsumerState<TaskCard> {
     label = widget.task.label;
     _date = widget.task.date;
     _time = widget.task.time;
-    // _isDone = widget.task.isDone;
-
-    // ここでタスクリストを取得し、インデックスに基づいて情報を取得しぶち込む（1つのセットとして関数かすべきかも）
-    // List<Task> tasks = ref.watch(taskProvider);
+    // _isDone = widget.task.isDone; //もしかしたらこれかも？
   }
 
   // タスク未・済 ボタンが押下されたときの処理
   void _pushedToggleButton() {
     bool result = app.toggleTask(_id);
-    // task = app.getTask(_id);
-    // Task task = ref.watch(tasksProvider).firstWhere((task) => task.id == _id);
-    // _isDone = task.isDone;
-    // print('これが結果${task.isDone}');
-    // // タスクの合否に応じて色を変更
-    // setState(() {
-    //   //同期ができないかも
-    //   if (_isDone == true) {
-    //     _isDoneColor = Color(0xFF4484EC);
-    //   } else {
-    //     _isDoneColor = Color(0xFF969696);
-    //   }
-    // });
     setState(() {
       if (result == true) {
         _isDoneColor = Color(0xFF4484EC);

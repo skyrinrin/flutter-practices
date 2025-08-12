@@ -1,11 +1,3 @@
-// ここでラベル選択ウィジェットを定義する
-//ここの外（homeview?）で+を模したボタンを配置しそれで発火
-// https://zenn.dev/amuro/articles/7055725bb638af
-// このURL内のツールを使って
-// https://stackoverflow.com/questions/49835146/how-to-convert-flutter-color-to-string-and-back-to-a-color
-// のように
-// color.toStringして.splitして数字の羅列を取得しそれを値にする
-
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -28,7 +20,6 @@ class _AddLabelWindowState extends ConsumerState<AddLabelWindow> {
       ScaffoldMessenger.of(context).showSnackBar(Common.warningSnackBar);
     } else {
       await app.addLabel(_controller.text, _selectedColor);
-      // print('現在保存したラベル: ${_controller.text} $_selec')
     }
     Navigator.pop(context);
   }
@@ -61,7 +52,6 @@ class _AddLabelWindowState extends ConsumerState<AddLabelWindow> {
   // ラベルタイトル入力ウィジェット
   Widget _inputLabelTitle() {
     return Container(
-      // color: Colors.amber,
       height: 100,
       width: 205,
       child: Stack(
@@ -97,7 +87,6 @@ class _AddLabelWindowState extends ConsumerState<AddLabelWindow> {
     return Container(
       height: 80,
 
-      // color: Colors.amber,
       child: Stack(
         children: [
           Text('カラー選択', style: TextStyle(fontSize: 16)),
@@ -109,7 +98,6 @@ class _AddLabelWindowState extends ConsumerState<AddLabelWindow> {
                   icon: Icon(Icons.palette),
                   onPressed: () => _showColorPickerDialog(),
                 ),
-                // SizedBox(width: 8),
                 GestureDetector(
                   onTap: () => _showColorPickerDialog(),
                   child: Container(
@@ -133,8 +121,6 @@ class _AddLabelWindowState extends ConsumerState<AddLabelWindow> {
   Widget _addButtonWidget(Application app) {
     return GestureDetector(
       onTap: () => _pushedAddButton(app),
-      // onTap: () => ,
-      // Navigator.pop(context);
       child: Container(
         height: 35,
         width: 75,
@@ -157,9 +143,6 @@ class _AddLabelWindowState extends ConsumerState<AddLabelWindow> {
       // width: 300,
       child: Stack(
         children: [
-          // Positioned(top: 72, left: 28, child: _inputLabelTitle()),
-          // Positioned(top: 80, left: 260, child: _selectColorWidget()),
-          // Positioned(top: 28, right: 24, child: _addButtonWidget()),
           Positioned(top: 36, left: 28, child: _inputLabelTitle()),
           Positioned(top: 140, left: 28, child: _selectColorWidget()),
           Positioned(top: 28, right: 24, child: _addButtonWidget(app)),

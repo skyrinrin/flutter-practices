@@ -12,12 +12,6 @@ import 'package:task_app/domain/task_domain.dart';
 import 'package:task_app/provider/provider.dart';
 
 class AddTaskWindow extends ConsumerStatefulWidget {
-  // final void Function(String title, String label, String date, String time)
-  // onAddTask;
-
-  // AddTaskWindow({required this.onAddTask});
-  // final Application application;
-
   const AddTaskWindow({super.key});
 
   @override
@@ -92,8 +86,6 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
 
   // 時間選択ウィジェット
   Future<void> _selectTime(BuildContext context, WidgetRef ref) async {
-    // TimeOfDay? picked = ref.watch(selectedTimeProvider);
-
     TimeOfDay? picked = await showTimePicker(
       context: context,
       initialTime: selectedTime,
@@ -111,31 +103,13 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
   DropdownButton _selectLabel(BuildContext context, WidgetRef ref) {
     List<String> labelsNames = ref.watch(labelsNameProvider);
 
-    // List<String> dropdownItems = [labels.first.name];
-
-    // void addLabelsNames() {
-    //   List<String> labelNames = [];
-    //   for (int i = 0; i < labels.length; i++) {
-    //     labelNames.add(labels[i].name);
-    //   }
-    //   List<String> sample = labels.map((e) => labels.first.name).toList();
-    //   dropdownItems = labelNames;
-    // }
-
     return DropdownButton<String>(
-      // items: [
-      //   DropdownMenuItem<String>(child: Text('未選択'), value: '未選択'),
-      //   // DropdownMenuItem<String>(child: Text('ラベル1'), value: 'ラベル1'),
-      //   // DropdownMenuItem<String>(child: Text('ラベル2'), value: 'ラベル2'),
-      //   // DropdownMenuItem<String>(child: Text('プログラミング'), value: 'プログラミング'),
-      // ],
       items:
           labelsNames.map((String item) {
             return DropdownMenuItem<String>(value: item, child: Text(item));
           }).toList(),
       onChanged: (String? value) {
         setState(() {
-          // _selectedLabel = value;
           _selectedLabel = value ?? '未選択';
         });
       },
@@ -150,7 +124,6 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
       height: 100,
       width: 300,
       color: Color(0xFFebebeb),
-      // color: Color.fromARGB(0, 0, 0, 3),
       child: Stack(
         children: [
           Positioned(
@@ -185,16 +158,9 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
   Widget _selectLabelScreen(BuildContext context) {
     return Stack(
       children: [
+        Positioned(child: Text('ラベルを選択', style: TextStyle(fontSize: 18))),
         Positioned(
-          // top: 140,
-          // left: 212,
-          child: Text('ラベルを選択', style: TextStyle(fontSize: 18)),
-        ),
-        Positioned(
-          // left: 212,
           top: 30,
-          // height: 0,
-          // width: 120,
           child: Container(
             padding: EdgeInsets.only(left: 10),
             height: 50,
@@ -210,8 +176,6 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
   @override
   Widget build(BuildContext context) {
     final app = ref.read(applicationProvider);
-    // final selectedDate = ref.watch(selectedDateProvider);
-    // final seelctedTime = ref.watch(selectedTimeProvider);
 
     return Container(
       height: 320,
@@ -228,7 +192,6 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
             right: 24,
             child: GestureDetector(
               onTap: () => _pushedAddButton(app),
-              // Navigator.pop(context);
               child: Container(
                 height: 35,
                 width: 75,
@@ -267,7 +230,6 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
             height: 120,
             width: 160,
             child: Container(
-              // color: Colors.blue,
               child: Stack(
                 children: [
                   Positioned(
@@ -286,15 +248,7 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
                   Positioned(
                     top: -1,
                     left: 72,
-                    child: Transform.scale(
-                      scale: 0.8,
-
-                      // child: CupertinoSwitch(
-                      //   value: _isNotice,
-                      //   onChanged:
-                      //       (isNotice) => setState(() => _isNotice = isNotice),
-                      // ),
-                    ),
+                    child: Transform.scale(scale: 0.8),
                   ),
                   Positioned(top: 38, child: _selectDataTimeScreen(context)),
                 ],

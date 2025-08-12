@@ -34,41 +34,6 @@ class NotificationService {
     // await _requestPermissions();
   }
 
-  // // 通知の許可リクエスト表示処理
-  // Future<void> _requestPermissions() async {
-  //   if (Platform.isAndroid) {
-  //     final status = await Permission.notification.status;
-  //     if (!status.isGranted) {
-  //       await Permission.notification.request();
-  //     }
-  //   } //必要ならばIOS処理
-  // }
-
-  // Future<void> showNotification({
-  //   required int id,
-  //   required String title,
-  //   required String body,
-  // }) async {
-  //   const AndroidNotificationDetails androidDetails =
-  //       AndroidNotificationDetails(
-  //         'default_channel_id',
-  //         'Default Channel',
-  //         importance: Importance.max,
-  //         priority: Priority.high,
-  //       );
-
-  //   const NotificationDetails platformDetails = NotificationDetails(
-  //     android: androidDetails,
-  //   );
-
-  //   await flutterLocalNotificationsPlugin.show(
-  //     id,
-  //     title,
-  //     body,
-  //     platformDetails,
-  //   );
-  // }
-
   Future<void> showScheduledNotification({
     required int id,
     required String title,

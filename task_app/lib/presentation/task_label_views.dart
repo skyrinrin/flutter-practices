@@ -37,10 +37,7 @@ class _TaskLabelViewsState extends ConsumerState<TaskLabelViews> {
             Color color = label.color.withAlpha(200);
 
             return ExpansionPanel(
-              // backgroundColor: Colors.white,
               backgroundColor: color,
-              // splashColor: color,
-              // highlightColor: color,
               isExpanded: label.isExpanded,
               headerBuilder: (context, isExpanded) {
                 return ListTile(
@@ -51,43 +48,6 @@ class _TaskLabelViewsState extends ConsumerState<TaskLabelViews> {
                 );
               },
 
-              // body: Container(
-              //   height: panel_height,
-              //   width: double.infinity,
-              //   color: Colors.white,
-              //   padding: EdgeInsets.only(top: 16),
-
-              //   // ここ
-              //   child: Stack(
-              //     children: [
-              //       Container(
-              //         padding: EdgeInsets.only(left: 8),
-              //         child: Visibility(
-              //           visible: _isVisibility,
-              //           child: Text(
-              //             '挑戦できるタスクはありません',
-              //             style: TextStyle(
-              //               color: Color.fromARGB(9100, 0, 0, 0),
-              //             ),
-              //           ),
-              //         ),
-              //       ),
-              //       //
-              //       ListView.builder(
-              //         physics: NeverScrollableScrollPhysics(),
-              //         shrinkWrap: true,
-
-              //         itemCount: labelTasks.length,
-              //         itemBuilder: (context, i) {
-              //           return Container(
-              //             margin: EdgeInsets.symmetric(horizontal: 16),
-              //             child: TaskCard(task: labelTasks[i]),
-              //           );
-              //         },
-              //       ),
-              //     ],
-              //   ),
-              // ),
               body: Container(
                 width: double.infinity,
                 color: Colors.white,
@@ -108,8 +68,6 @@ class _TaskLabelViewsState extends ConsumerState<TaskLabelViews> {
                               }).toList(),
                         ),
               ),
-
-              // height: 300,
             );
           }).toList(),
     );

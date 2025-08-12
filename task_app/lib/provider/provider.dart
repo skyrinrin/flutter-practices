@@ -12,74 +12,6 @@ import 'package:task_app/repository/repository.dart';
 import 'package:task_app/repository/repository_impl.dart';
 import 'package:task_app/common/common.dart';
 
-// タスクリスト用
-// class TaskNotifier extends StateNotifier<List<Task>> {
-//   Application app;
-//   TaskNotifier(this.app) : super([]); //親クラスに空のリストを渡す
-
-//   repositoy = ref.read(repositoryProvider);
-
-//   // // タスクのロード   永続化処理はstorageのみで行う
-//   // void loadTasks() async {
-//   //   final prefs = await SharedPreferences.getInstance();
-//   //   final jsonList = prefs.getStringList('tasks') ?? [];
-//   //   final loadedTasks =
-//   //       jsonList.map((e) => Task.fromJson(json.decode(e))).toList();
-//   //   state = loadedTasks;
-//   // } //これをどこかで呼び出す
-
-//   // タスクのロード
-//   void laodTasks() async {
-
-//   }
-
-//   // タスクの追加
-//   void addTask(Task task) {
-//     state = [...state, task]; //もともとのリストにtaskを追加
-//   }
-
-//   // リストのアップデート
-//   void updateTasks(List<Task> tasks) {
-//     state = tasks;
-//   }
-// }
-
-// // ラベル（ジャンル分け）用
-// class LabelsTasksNotifier extends StateNotifier<Map<String, List<Task>>> {
-//   LabelsTasksNotifier() : super({});
-
-//   void loadLabels() async {
-//     final prefs = await SharedPreferences.getInstance();
-//     final jsonList = prefs.getStringList('labels') ?? [];
-//     final loadLabels =
-//         jsonList.map((e) => Label.fromJson(json.decode(e))).toList();
-//     state = loadedTasks
-//   }
-
-//   // ジャンル追加
-//   void addLabel(String labelName) {
-//     // すでに同じ名前のジャンルがないかチェック
-//     if (!state.containsKey(labelName)) {
-//       state = {...state, labelName: []};
-//     }
-//   }
-
-//   // ラベル（ジャンル）にタスクを追加する
-//   void addTaskToLabel(String labelName, Task task) {
-//     final currentTasks = state[labelName] ?? [];
-//     final updateList = [...currentTasks, task];
-
-//     state = {...state, labelName: updateList};
-//   }
-
-//   // ラベルを削除する
-//   void removeLabel(String labelName) {
-//     final newState = Map<String, List<Task>>.from(state);
-//     newState.remove(labelName);
-//     state = newState;
-//   }
-// }
-
 // プロバイダーの定義
 final storageProvider = Provider<Storage>((ref) => StorageImpl());
 
@@ -103,13 +35,6 @@ final tasksProvider = StateNotifierProvider<TaskNotifier, List<Task>>((ref) {
   return TaskNotifier(repository);
 });
 
-// // タスクラベルリスト
-// final labelsTaskProvider =
-//     StateNotifierProvider<LabelsTasksNotifier, Map<String, List<Task>>>((ref) {
-//       final repository = ref.read(repositoryProvider);
-//       return LabelsTasksNotifier(repository);
-//     });
-
 // ラベルリスト
 final labelsProvider = StateNotifierProvider<LabelsTasksNotifier, List<Label>>((
   ref,
@@ -129,12 +54,6 @@ final labelIdProvider = Provider<List<String>>((ref) {
   final labels = ref.watch(labelsProvider);
   return labels.map((label) => label.id).toList();
 });
-
-// // ラベルビューのisExpandedのリスト
-// final isExpandedListProvider = Provider<List<bool>>((ref) {
-//   final labels = ref.watch(labelsProvider);
-//   return List.generate(labels.length, (_) => false);
-// });
 
 // ラベルごとに仕分けたタスクのリスト
 final labelsTasksProvider = Provider<Map<Label, List<Task>>>((ref) {
@@ -160,16 +79,6 @@ final todayTasksProvider = Provider<List<Task>>((ref) {
   List<Task> result = tasks.toSet().toList();
 
   return result;
-
-  // return ref.watch(tasksProvider);
-
-  // final allTasks = ref.watch(tasksProvider);
-  // final today = DateTime.now()
-  //     .toString()
-  //     .substring(5, 10)
-  //     .replaceAll('-', '/')
-  //     .padLeft(2, '0'); //どのような形式で日付が保存されるのかわからない
-  // return allTasks.where((task) => task.date == today).toList();
 });
 
 // 明日のタスク
@@ -187,7 +96,6 @@ final tomorrowTasksProvider = Provider<List<Task>>((ref) {
 
   List<Task> result = tasks.toSet().toList();
   return result;
-  // return ref.watch(tasksProvider);
 });
 
 // その他のタスク
@@ -205,5 +113,4 @@ final otherTasksProvider = Provider<List<Task>>((ref) {
 
   List<Task> result = tasks.toSet().toList();
   return result;
-  // return [];
 });

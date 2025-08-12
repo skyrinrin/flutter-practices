@@ -15,32 +15,14 @@ import 'Infrastructure/storage_impl.dart';
 import 'core/notification/notification_service.dart';
 
 void main() async {
-  // final storage = StorageImpl();
-  // final repository = RepositoryImpl(storage: storage);
-  // final application = Application(repository);
-
   WidgetsFlutterBinding.ensureInitialized();
   await NotificationService().init(); //通知の初期化
-
-  // // 保存されているデータを読み込む
-  // final container = ProviderContainer();
-  // await container.read(tasksProvider.notifier).loadTasks;
-  // await container.read(labelsProvider.notifier).loadLabels; //今のところ解決していない
 
   final container = ProviderContainer();
   final app = container.read(applicationProvider);
   await app.init(); //初期化
 
-  runApp(
-    UncontrolledProviderScope(container: container, child: MyApp()),
-    // MultiProvider(
-    //   providers: [
-    //     Provider<Repository>.value(value: repository),
-    //     Provider<Application>.value(value: application),
-    //   ],
-    // child: MyApp(),
-  );
-  // );
+  runApp(UncontrolledProviderScope(container: container, child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {

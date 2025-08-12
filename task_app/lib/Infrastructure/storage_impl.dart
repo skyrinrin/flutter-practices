@@ -77,16 +77,13 @@ class StorageImpl implements Storage {
       loadedLabels =
           labelList
               .map((labelStr) {
-                // try {
-                //   final json = jsonDecode(labelStr);
-                //   return Label.fromJson(json);
-                // } catch (e) {
-                //   print('不正なラベルデータ: $e');
-                //   return null;
-                // }
-
-                final json = jsonDecode(labelStr);
-                return Label.fromJson(json);
+                try {
+                  final json = jsonDecode(labelStr);
+                  return Label.fromJson(json);
+                } catch (e) {
+                  print('不正なラベルデータ: $e');
+                  return null;
+                }
               })
               .whereType<Label>()
               .toList();
