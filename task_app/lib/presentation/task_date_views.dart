@@ -113,7 +113,7 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
     print('発火: ${isOpened}:${listHeight}');
   }
 
-  void _pushedMoreSeeButton(Application app) {
+  void _pushedMoreSeeButton() {
     // void _pushedMoreSeeButton(List<Task> selectedTasks, Application app) {
     isOpened = !isOpened;
     if (isOpened == true) {
@@ -170,7 +170,7 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
   // Widget _moreSeeButton(List<Task> selectedTasks, Application app) {
   Widget _moreSeeButton() {
     return GestureDetector(
-      onTap: () => {_pushedMoreSeeButton(app)},
+      onTap: () => {_pushedMoreSeeButton()},
       child: Stack(
         children: [
           Opacity(
