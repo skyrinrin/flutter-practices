@@ -42,10 +42,10 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
     listHeight = app.getDateListsHightBool(selectedTasks).$1;
     isVisibility = app.getDateListsHightBool(selectedTasks).$2;
 
-    isOpend_false();
+    isOpened_false();
   }
 
-  void isOpend_true() {
+  void isOpened_true() {
     selectedTasks = app.getDateKind(widget.number).$1;
     if (selectedTasks.isEmpty) {
       listHeight = 160;
@@ -62,7 +62,7 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
     print('発火: ${isOpened}:${listHeight}');
   }
 
-  void isOpend_false() {
+  void isOpened_false() {
     listHeight = 280;
     _icon = Icon(Icons.keyboard_arrow_down, color: Colors.black, size: 40);
     print('発火: ${isOpened}:${listHeight}');
@@ -72,11 +72,11 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
     isOpened = !isOpened;
     if (isOpened == true) {
       setState(() {
-        isOpend_true();
+        isOpened_true();
       });
     } else {
       setState(() {
-        isOpend_false();
+        isOpened_false();
       });
     }
   }
@@ -128,11 +128,17 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
     final app = ref.watch(applicationProvider);
 
     ref.listen<List<Task>>(app.getDateKindProvider(widget.number), (
+      // 8/13 ここの処理ですべて（今日、明日、その他）のlistHeightの高さを変えてしまうためエラーが起こる可能性あり...(現在はif処理で開かれているもの以外は高さを変えないようにしている)
       previous,
       next,
     ) {
-      listHeight = app.getDateListsHightBool(next).$1;
-      print('listener: $listHeight');
+      if (isOpened) {
+        listHeight = app.getDateListsHightBool(next).$1;
+        print('listener: $listHeight');
+      } else {
+        listHeight = 280;
+        print('開かれていません');
+      }
     });
 
     final (selectedTasks, listTitle) = app.getDateKind(widget.number);

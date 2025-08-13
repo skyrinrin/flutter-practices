@@ -31,6 +31,7 @@ class TaskHomeview extends ConsumerWidget {
           TaskDateViews(number: 0),
           TaskDateViews(number: 1),
           TaskDateViews(number: 2),
+          SizedBox(height: 40),
           TaskLabelViews(),
           SizedBox(height: 44),
           AddLabelButton(),
