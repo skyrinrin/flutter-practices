@@ -137,6 +137,8 @@ class Application {
       isDone: !updatedTasks[index].isDone,
     );
 
+    repository.saveTasks(updatedTasks);
+
     ref.read(tasksProvider.notifier).updateTasks(updatedTasks); //Providerに反映
     // repository.saveTasks(tasks);
     return updatedTasks[index].isDone;

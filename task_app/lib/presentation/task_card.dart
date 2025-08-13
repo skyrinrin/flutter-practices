@@ -32,14 +32,19 @@ class _TaskCardState extends ConsumerState<TaskCard> {
     label = widget.task.label;
     _date = widget.task.date;
     _time = widget.task.time;
-    // _isDone = widget.task.isDone; //もしかしたらこれかも？
+    _isDone = widget.task.isDone; //もしかしたらこれかも？
+    _colorChange();
   }
 
   // タスク未・済 ボタンが押下されたときの処理
   void _pushedToggleButton() {
-    bool result = app.toggleTask(_id);
+    _isDone = app.toggleTask(_id);
+    _colorChange();
+  }
+
+  void _colorChange() {
     setState(() {
-      if (result == true) {
+      if (_isDone) {
         _isDoneColor = Color(0xFF4484EC);
       } else {
         _isDoneColor = Color(0xFF969696);
@@ -54,7 +59,7 @@ class _TaskCardState extends ConsumerState<TaskCard> {
   late String label;
   late String _date;
   late String _time;
-  // late bool _isDone;
+  late bool _isDone;
 
   // タスクテキストウィジェット
   Widget _taskTitleText(double mediaWidth) {
