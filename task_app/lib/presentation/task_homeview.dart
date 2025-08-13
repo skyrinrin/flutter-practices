@@ -15,13 +15,13 @@ class TaskHomeview extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // タスク追加ウィンドウの表示
-    void popAddLabelWindow() {
-      showModalBottomSheet(
-        backgroundColor: Colors.white,
-        context: context,
-        builder: (context) => AddLabelWindow(),
-      );
-    }
+    // void popAddLabelWindow() {
+    //   showModalBottomSheet(
+    //     backgroundColor: Colors.white,
+    //     context: context,
+    //     builder: (context) => AddLabelWindow(),
+    //   );
+    // }
 
     Application app = ref.read(applicationProvider);
     return SingleChildScrollView(

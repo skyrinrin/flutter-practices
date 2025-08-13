@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:task_app/presentation/settings_view.dart';
 
 class Appbar extends StatelessWidget {
   @override
@@ -12,7 +13,17 @@ class Appbar extends StatelessWidget {
           Positioned(
             right: 16,
             bottom: 16,
-            child: Icon(Icons.settings, size: 32),
+            child: IconButton(
+              onPressed: () async {
+                showDialog(
+                  context: context,
+                  builder: (_) {
+                    return SettingsView();
+                  },
+                );
+              },
+              icon: Icon(Icons.more_vert, size: 32),
+            ),
           ),
 
           //必要なウィジェットがあればここから追加

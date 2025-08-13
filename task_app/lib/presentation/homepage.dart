@@ -36,8 +36,10 @@ class _HomePageState extends ConsumerState<HomePage> {
       // appBar: AppBar(title: Text('タスク管理アプリ')),
       body: TaskHomeview(),
       floatingActionButton: FloatingActionButton(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
         onPressed: popAddTaskWindow,
-        child: Icon(Icons.add),
+        backgroundColor: Color(0xFF4484EC),
+        child: Icon(Icons.add, color: Colors.white, size: 30),
         tooltip: 'タスクの追加',
       ),
     );
