@@ -1,3 +1,5 @@
+// 責務分離できてないしコードが長い...
+
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
