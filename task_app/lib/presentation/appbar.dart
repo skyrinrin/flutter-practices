@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:task_app/presentation/settings_view.dart';
+import 'package:task_app/presentation/settings_dialog.dart';
 
 class Appbar extends StatelessWidget {
   @override
