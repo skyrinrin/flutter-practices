@@ -1,4 +1,6 @@
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:task_app/domain/acount_domain.dart';
 import 'package:task_app/domain/label_domain.dart';
 import 'package:task_app/domain/task_domain.dart';
 import 'dart:convert';
@@ -11,13 +13,23 @@ class RepositoryImpl implements Repository {
 
   RepositoryImpl({required this.storage});
 
+  @override
+  Future<void> saveAcount(Acount acount) async {
+    await storage.saveAcount(acount);
+  }
+
+  @override
+  Future<Acount> loadAcount() async {
+    return await storage.loadAcount();
+  }
+
   List<Task> _cachedTasks = []; //タスクのキャッシュ
 
   //タスクの追加
   @override
   Future<void> addTask(Task task) async {
     _cachedTasks.add(task);
-    await storage.saveTasks(_cachedTasks);
+    await saveTasks(_cachedTasks); //ここ変更した(保存でエラーが出たらこれかも...)
   }
 
   //
@@ -26,13 +38,13 @@ class RepositoryImpl implements Repository {
     if (id != -1) {
       _cachedTasks[id].isDone = !_cachedTasks[id].isDone;
     }
-    storage.saveTasks(_cachedTasks);
+    saveTasks(_cachedTasks);
   }
 
   // タスクの保存
   @override
   Future<void> saveTasks(List<Task> tasks) async {
-    await storage.saveTasks(tasks);
+    await saveTasks(tasks);
   }
 
   // タスクのロード
@@ -51,7 +63,7 @@ class RepositoryImpl implements Repository {
   @override
   Future<void> addLabel(Label label) async {
     _cachedLabels.add(label);
-    await storage.saveLabels(_cachedLabels);
+    await saveLabels(_cachedLabels);
   }
 
   // ラベルの保存

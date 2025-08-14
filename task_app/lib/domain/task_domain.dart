@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-// 日付のフォーマット
+// 日付のフォーマット //ここら辺もapplicationの仕事かも...
 String formattedDate(DateTime selectedDate) {
   final month = selectedDate.month.toString().padLeft(2, '0');
   final day = selectedDate.day.toString().padLeft(2, '0');
@@ -73,13 +73,13 @@ class Task {
 
   //JSON型からMap型に変換
   factory Task.fromJson(Map<String, dynamic> json) => Task(
-    id: json['id'],
-    order: json['order'],
-    title: json['title'],
-    isDone: json['isDone'],
-    label: json['label'],
-    isNotice: json['isNotice'],
-    date: json['date'],
-    time: json['time'],
+    id: json['id'] as String,
+    order: json['order'] as int,
+    title: json['title'] as String,
+    isDone: json['isDone'] as bool,
+    label: json['label'] as String,
+    isNotice: json['isNotice'] as bool,
+    date: json['date'] as String,
+    time: json['time'] as String,
   );
 }

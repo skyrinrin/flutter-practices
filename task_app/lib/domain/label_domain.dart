@@ -21,17 +21,21 @@ class Label {
     'name': name,
     'order': order,
     // 'color': '#${color.value.toRadixString(16).padLeft(6, '0') + '00'}',
-    'color': '#${color.value.toRadixString(16).padLeft(8, '0')}',
+    'color':
+        
     'isExpanded': 'false',
   };
 
   factory Label.fromJson(Map<String, dynamic> json) => Label(
-    name: json['name'],
-    order: json['order'],
+    name: json['name'] as String,
+    order: json['order'] as int,
     // order: json['order'] ?? 10,
-    id: json['id'],
+    id: json['id'] as String,
     color: Color(
-      int.parse(json['color'].toString().replaceFirst('#', ''), radix: 16),
+      int.parse(
+        json['color'].toString().replaceFirst('#', ''),
+        radix: 16,
+      ), //ここはappかどっちかわからない
     ),
     isExpanded: json['isExpanded'] == 'true' ? true : false,
   );

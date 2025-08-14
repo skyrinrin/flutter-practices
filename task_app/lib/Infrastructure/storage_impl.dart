@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_app/application/application.dart';
+import 'package:task_app/domain/acount_domain.dart';
 import 'package:task_app/domain/label_domain.dart';
 import 'package:task_app/domain/task_domain.dart';
 import 'package:task_app/provider/provider.dart';
@@ -12,12 +13,38 @@ import 'storage.dart';
 
 class StorageImpl implements Storage {
   // データ保存
+  static const _themeColorKey = 'themeColor';
+  static const _notifiTimeKey = 'notifiTime';
   static const _taskKey = 'tasks';
   static const _labelKey = 'labels';
   // List<
   // List<Task> tasks = []; //タスクリスト！
 
   // タスク
+
+  @override
+  Future<void> saveAcount(Acount acount) async {
+    final prefs = await SharedPreferences.getInstance();
+    final hexColor =
+        '#${acount.themeColor.value.toRadixString(16).padLeft(8, '0')}';
+    final dateTime = acount.dailyNotifiTime;
+    await prefs.setString(_themeColorKey, hexColor);
+    await prefs.setString(_notifiTimeKey, dateTime); //dateTimeをStringではなくDateTimeで保持する
+  }
+
+  @override
+  Future<Acount?> loadAcount() async { //nullの場合を考慮しているためエラーが起こるかも...
+    final prefs = await SharedPreferences.getInstance();
+
+    final hexColor = prefs.getString(_themeColorKey);
+    final notifiTime = prefs.getString(_notifiTimeKey);
+
+    if(hexColor == null || notifiTime == null) {
+      return null; //データが無い場合はnullを返す
+    }
+
+    return 
+  }
 
   // タスクの保存
   @override

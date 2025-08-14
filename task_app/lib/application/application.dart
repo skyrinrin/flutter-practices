@@ -78,6 +78,18 @@ class Application {
     return tasks;
   }
 
+  //色の変換をインフラ層以外で使う場合はつかうかも...
+  // String getHexCode(Color color) {
+  //   String result = '#${color.value.toRadixString(16).padLeft(8, '0')}';
+  //   return result;
+  // }
+
+  // Color parseHexCode(String hexCode) {
+  //   int parsedCode = int.parse(hexCode.toString().replaceFirst('#', ''));
+  //   Color result = Color(parsedCode);
+  //   return result;
+  // }
+
   Future<void> addTask(
     // int id,
     String title,
