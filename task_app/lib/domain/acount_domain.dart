@@ -1,7 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class Acount {
-  final DateTime dailyNotifiTime;
+  final TimeOfDay dailyNotifiTime;
   final Color themeColor;
 
   Acount({required this.dailyNotifiTime, required this.themeColor});
@@ -13,7 +14,7 @@ class Acount {
   };
 
   factory Acount.fromJson(Map<String, dynamic> json) => Acount(
-    dailyNotifiTime: json['dailyNotifiTime'] as DateTime,
+    dailyNotifiTime: json['dailyNotifiTime'] as TimeOfDay,
     themeColor: json['themeColor'] as Color,
   );
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:task_app/Infrastructure/convert.dart';
 import 'package:task_app/application/application.dart';
 import 'package:task_app/domain/acount_domain.dart';
 import 'package:task_app/domain/label_domain.dart';
@@ -17,33 +18,44 @@ class StorageImpl implements Storage {
   static const _notifiTimeKey = 'notifiTime';
   static const _taskKey = 'tasks';
   static const _labelKey = 'labels';
-  // List<
-  // List<Task> tasks = []; //タスクリスト！
 
-  // タスク
+  ConvertSomeThing _converter = ConvertSomeThing();
 
   @override
   Future<void> saveAcount(Acount acount) async {
     final prefs = await SharedPreferences.getInstance();
-    final hexColor =
-        '#${acount.themeColor.value.toRadixString(16).padLeft(8, '0')}';
-    final dateTime = acount.dailyNotifiTime;
+    final hexColor = _converter.ColorToHex(acount.themeColor);
+    final dateTime = _converter.timeOfDayToString(acount.dailyNotifiTime);
     await prefs.setString(_themeColorKey, hexColor);
-    await prefs.setString(_notifiTimeKey, dateTime); //dateTimeをStringではなくDateTimeで保持する
+    await prefs.setString(
+      _notifiTimeKey,
+      dateTime,
+    ); //dateTimeをStringではなくDateTimeで保持する
   }
 
   @override
-  Future<Acount?> loadAcount() async { //nullの場合を考慮しているためエラーが起こるかも...
+  Future<Acount> loadAcount() async {
+    final sample = Acount(
+      dailyNotifiTime: TimeOfDay(hour: 9, minute: 0),
+      themeColor: const Color.fromARGB(66, 63, 147, 216),
+    );
+
     final prefs = await SharedPreferences.getInstance();
 
     final hexColor = prefs.getString(_themeColorKey);
-    final notifiTime = prefs.getString(_notifiTimeKey);
+    final notifiTimeStr = prefs.getString(_notifiTimeKey);
+    final notifiTime =
+        notifiTimeStr != null
+            ? _converter.stringToTimeOFDay(notifiTimeStr)
+            : const TimeOfDay(hour: 9, minute: 0);
 
-    if(hexColor == null || notifiTime == null) {
-      return null; //データが無い場合はnullを返す
+    if (hexColor == null) {
+      return sample;
     }
 
-    return 
+    final color = _converter.hexToColor(hexColor);
+
+    return Acount(dailyNotifiTime: notifiTime, themeColor: color);
   }
 
   // タスクの保存

@@ -21,8 +21,8 @@ class Label {
     'name': name,
     'order': order,
     // 'color': '#${color.value.toRadixString(16).padLeft(6, '0') + '00'}',
-    'color':
-        
+    'color': '#${color.value.toRadixString(16).padLeft(8, '0')}',
+
     'isExpanded': 'false',
   };
 
