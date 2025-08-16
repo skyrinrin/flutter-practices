@@ -28,7 +28,8 @@ class RepositoryImpl implements Repository {
   //タスクの追加
   @override
   Future<void> addTask(Task task) async {
-    _cachedTasks.add(task);
+    print('ここまで来たrepository');
+    // _cachedTasks.add(task);
     await saveTasks(_cachedTasks); //ここ変更した(保存でエラーが出たらこれかも...)
   }
 
@@ -44,7 +45,7 @@ class RepositoryImpl implements Repository {
   // タスクの保存
   @override
   Future<void> saveTasks(List<Task> tasks) async {
-    await saveTasks(tasks);
+    await storage.saveTasks(tasks);
   }
 
   // タスクのロード
@@ -63,6 +64,7 @@ class RepositoryImpl implements Repository {
   @override
   Future<void> addLabel(Label label) async {
     _cachedLabels.add(label);
+    print('ここまでできてるRepository');
     await saveLabels(_cachedLabels);
   }
 

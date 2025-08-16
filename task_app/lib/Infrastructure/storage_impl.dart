@@ -61,6 +61,7 @@ class StorageImpl implements Storage {
   // タスクの保存
   @override
   Future<void> saveTasks(List<Task> tasks) async {
+    print('saveTasks called: ${tasks.length}');
     final prefs = await SharedPreferences.getInstance();
     final List<String> taskList =
         tasks.map((task) => jsonEncode(task.toJson())).toList();

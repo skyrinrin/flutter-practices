@@ -105,9 +105,10 @@ class Application {
       date: date,
       time: time,
     );
+    print('ここまできたApplication');
     await repository.addTask(task);
 
-    // TaskNotifierの状態も更新(プロバイダーのStateも同期)
+    // // TaskNotifierの状態も更新(プロバイダーのStateも同期)
     ref.read(tasksProvider.notifier).addTask(task);
   }
 

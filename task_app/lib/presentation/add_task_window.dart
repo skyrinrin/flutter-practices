@@ -45,6 +45,7 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
 
   // 追加ボタン押下
   void _pushedAddButton(Application app) async {
+    print('押された');
     if (_controller.text == '') {
       ScaffoldMessenger.of(context).showSnackBar(Common.warningSnackBar);
     } else {
