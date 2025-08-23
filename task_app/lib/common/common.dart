@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 class Common {
+  // 初期テーマカラー
+  static Color primaryColor = Color.fromARGB(66, 63, 147, 216);
+
   // 注意書きスナックバー
   static final warningSnackBar = SnackBar(
     content: Text(

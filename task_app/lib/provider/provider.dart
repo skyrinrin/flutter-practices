@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_app/Infrastructure/storage.dart';
 import 'package:task_app/Infrastructure/storage_impl.dart';
 import 'package:task_app/application/application.dart';
+import 'package:task_app/domain/account_domain.dart';
 import 'package:task_app/domain/label_domain.dart';
 import 'package:task_app/domain/task_domain.dart';
 import 'package:task_app/repository/repository.dart';
@@ -27,6 +28,34 @@ final applicationProvider = Provider<Application>((ref) {
 
   return Application(ref, repository);
 });
+
+// アカウント
+final accountUseCaseProvider = Provider(
+  (ref) => AccountUseCase(ref.read(repositoryProvider)),
+);
+
+final accountNotifierProvider = AsyncNotifierProvider<AccountNotifier, Account>(
+  AccountNotifier.new,
+);
+
+class AccountNotifier extends AsyncNotifier<Account> {
+  @override
+  Future<Account> build() async {
+    final useCase = ref.read(accountUseCaseProvider);
+    return await useCase.getAccount();
+  }
+
+  Future<void> updateNotificationTime(TimeOfDay time) async {
+    final useCase = ref.read(accountUseCaseProvider);
+    await useCase.updateNotificationTime(time);
+    state = AsyncData(
+      Account(
+        dailyNotifiTime: time,
+        themeColor: state.value?.themeColor ?? Common.primaryColor,
+      ),
+    );
+  }
+}
 
 // タスクリスト (状態管理（UI表示用）)
 final tasksProvider = StateNotifierProvider<TaskNotifier, List<Task>>((ref) {

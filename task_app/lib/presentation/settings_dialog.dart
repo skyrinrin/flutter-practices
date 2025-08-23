@@ -3,28 +3,52 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:task_app/presentation/help_alertdialogs.dart';
 import 'package:task_app/presentation/notifi_settings_dialog.dart';
+import 'package:task_app/provider/provider.dart';
 
-class SettingsView extends StatefulWidget {
+class SettingsView extends ConsumerStatefulWidget {
   @override
-  _SettingsViewState createState() => _SettingsViewState();
+  ConsumerState<SettingsView> createState() => _SettingsViewState();
 }
 
-class _SettingsViewState extends State<SettingsView> {
+class _SettingsViewState extends ConsumerState<SettingsView> {
   //
   Future<void> _selectNotifiTime(BuildContext context) async {
+    // TimeOfDay _selectedTime = TimeOfDay.now();
     final TimeOfDay? picked = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.now(),
     );
-    if (picked != null) {}
+    if (picked != null) {
+      await ref
+          .read(accountNotifierProvider.notifier)
+          .updateNotificationTime(picked);
+    }
   }
   //
 
+  String convertTime(TimeOfDay time) {
+    return time.toString().substring(10, 15);
+  }
+
+  Widget notifiTimeText() {
+    final account = ref.watch(accountNotifierProvider);
+    return account.when(
+      data:
+          (account) => Text('通知時刻:   ${convertTime(account.dailyNotifiTime)}'),
+      loading: () => const CircularProgressIndicator(),
+      error: (e, _) => Text('error: $e'),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    TimeOfDay _selectedTime = TimeOfDay.now();
+    // final account = ref.watch(accountNotifierProvider);
+    // final selectedTime = account.
+    // final _selectedTime = ref.watch(notifiTimeProvider);
+    // TimeOfDay _selectedTime = TimeOfDay.now();
     return SimpleDialog(
       backgroundColor: Colors.white,
       // title: Text('設定', style: TextStyle(fontSize: 24)),
@@ -43,9 +67,10 @@ class _SettingsViewState extends State<SettingsView> {
           //
           child: ListTile(
             onTap: () => _selectNotifiTime(context),
-            // tileColor: Colors.amber,
-            title: Text('通知時刻:   $_selectedTime'),
 
+            // tileColor: Colors.amber,
+            // title: Text('通知時刻:   ${convertTime(_selectedTime)}'),
+            title: notifiTimeText(),
             trailing: Container(
               // color: Colors.amber,
               width: 70,

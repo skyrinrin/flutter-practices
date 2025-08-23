@@ -1,6 +1,6 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:task_app/domain/acount_domain.dart';
+import 'package:task_app/domain/account_domain.dart';
 import 'package:task_app/domain/label_domain.dart';
 import 'package:task_app/domain/task_domain.dart';
 import 'dart:convert';
@@ -14,13 +14,13 @@ class RepositoryImpl implements Repository {
   RepositoryImpl({required this.storage});
 
   @override
-  Future<void> saveAcount(Acount acount) async {
-    await storage.saveAcount(acount);
+  Future<void> saveAccount(Account account) async {
+    await storage.saveAccount(account);
   }
 
   @override
-  Future<Acount> loadAcount() async {
-    return await storage.loadAcount();
+  Future<Account> loadAccount() async {
+    return await storage.loadAccount();
   }
 
   List<Task> _cachedTasks = []; //タスクのキャッシュ

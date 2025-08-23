@@ -44,7 +44,8 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
   String _selectedLabel = '未選択';
 
   // 追加ボタン押下
-  void _pushedAddButton(Application app) async {
+  void _pushedAddButton() async {
+    final app = ref.read(applicationProvider);
     print('押された');
     if (_controller.text == '') {
       ScaffoldMessenger.of(context).showSnackBar(Common.warningSnackBar);
@@ -194,7 +195,7 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
             top: 28,
             right: 24,
             child: GestureDetector(
-              onTap: () => _pushedAddButton(app),
+              onTap: () => _pushedAddButton(),
               child: Container(
                 height: 35,
                 width: 75,

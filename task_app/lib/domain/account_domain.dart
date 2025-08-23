@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class Acount {
+class Account {
   final TimeOfDay dailyNotifiTime;
   final Color themeColor;
 
-  Acount({required this.dailyNotifiTime, required this.themeColor});
+  Account({required this.dailyNotifiTime, required this.themeColor});
 
   //JSON変換
   Map<String, dynamic> toJson() => {
@@ -13,7 +13,7 @@ class Acount {
     'themeColor': themeColor,
   };
 
-  factory Acount.fromJson(Map<String, dynamic> json) => Acount(
+  factory Account.fromJson(Map<String, dynamic> json) => Account(
     dailyNotifiTime: json['dailyNotifiTime'] as TimeOfDay,
     themeColor: json['themeColor'] as Color,
   );

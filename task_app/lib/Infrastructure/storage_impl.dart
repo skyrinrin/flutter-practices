@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_app/Infrastructure/convert.dart';
 import 'package:task_app/application/application.dart';
-import 'package:task_app/domain/acount_domain.dart';
+import 'package:task_app/domain/account_domain.dart';
 import 'package:task_app/domain/label_domain.dart';
 import 'package:task_app/domain/task_domain.dart';
 import 'package:task_app/provider/provider.dart';
@@ -22,20 +22,20 @@ class StorageImpl implements Storage {
   ConvertSomeThing _converter = ConvertSomeThing();
 
   @override
-  Future<void> saveAcount(Acount acount) async {
+  Future<void> saveAccount(Account account) async {
     final prefs = await SharedPreferences.getInstance();
-    final hexColor = _converter.ColorToHex(acount.themeColor);
-    final dateTime = _converter.timeOfDayToString(acount.dailyNotifiTime);
+    final hexColor = _converter.ColorToHex(account.themeColor);
+    final time = _converter.timeOfDayToString(account.dailyNotifiTime);
     await prefs.setString(_themeColorKey, hexColor);
     await prefs.setString(
       _notifiTimeKey,
-      dateTime,
+      time,
     ); //dateTimeをStringではなくDateTimeで保持する
   }
 
   @override
-  Future<Acount> loadAcount() async {
-    final sample = Acount(
+  Future<Account> loadAccount() async {
+    final sample = Account(
       dailyNotifiTime: TimeOfDay(hour: 9, minute: 0),
       themeColor: const Color.fromARGB(66, 63, 147, 216),
     );
@@ -55,7 +55,7 @@ class StorageImpl implements Storage {
 
     final color = _converter.hexToColor(hexColor);
 
-    return Acount(dailyNotifiTime: notifiTime, themeColor: color);
+    return Account(dailyNotifiTime: notifiTime, themeColor: color);
   }
 
   // タスクの保存

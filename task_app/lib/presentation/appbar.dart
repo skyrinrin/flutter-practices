@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:task_app/common/common.dart';
 import 'package:task_app/presentation/settings_dialog.dart';
 
 class Appbar extends StatelessWidget {
@@ -7,7 +8,7 @@ class Appbar extends StatelessWidget {
     return Container(
       height: 120,
 
-      color: const Color.fromARGB(66, 63, 147, 216),
+      color: Common.primaryColor,
       child: Stack(
         children: [
           Positioned(

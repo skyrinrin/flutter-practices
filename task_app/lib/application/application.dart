@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_app/Infrastructure/storage.dart';
+import 'package:task_app/Infrastructure/storage_impl.dart';
 import 'package:task_app/core/notification/notification_service.dart';
+import 'package:task_app/domain/account_domain.dart';
 import 'package:task_app/domain/label_domain.dart';
 import 'package:task_app/provider/provider.dart';
 import 'package:task_app/repository/repository.dart';
@@ -209,6 +211,27 @@ class Application {
     } else {
       return ((tasks.length + 1.5) * 104, false);
     }
+  }
+}
+
+// ここだけでなく他のProviderも責務分離すべき
+// 毎日の通知時刻ProviderのUseCase
+class AccountUseCase {
+  final Repository repository;
+
+  AccountUseCase(this.repository);
+
+  Future<Account> getAccount() async {
+    return await repository.loadAccount();
+  }
+
+  Future<void> updateNotificationTime(TimeOfDay time) async {
+    final account = await repository.loadAccount();
+    final updated = Account(
+      dailyNotifiTime: time,
+      themeColor: account.themeColor,
+    );
+    await repository.saveAccount(updated);
   }
 }
 
