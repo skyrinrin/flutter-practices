@@ -55,6 +55,18 @@ class AccountNotifier extends AsyncNotifier<Account> {
       ),
     );
   }
+
+  Future<void> updateThemeColor(Color color) async {
+    final useCase = ref.read(accountUseCaseProvider);
+    await useCase.updateThemeColor(color);
+    state = AsyncData(
+      Account(
+        dailyNotifiTime:
+            state.value?.dailyNotifiTime ?? TimeOfDay(hour: 9, minute: 0),
+        themeColor: color,
+      ),
+    );
+  }
 }
 
 // タスクリスト (状態管理（UI表示用）)

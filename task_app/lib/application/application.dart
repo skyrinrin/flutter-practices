@@ -233,6 +233,15 @@ class AccountUseCase {
     );
     await repository.saveAccount(updated);
   }
+
+  Future<void> updateThemeColor(Color color) async {
+    final account = await repository.loadAccount();
+    final updated = Account(
+      dailyNotifiTime: account.dailyNotifiTime,
+      themeColor: color,
+    );
+    await repository.saveAccount(updated);
+  }
 }
 
 // アプリケーション層にnotifier系を入れる

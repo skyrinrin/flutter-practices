@@ -4,9 +4,11 @@ import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:task_app/domain/account_domain.dart';
 import 'package:task_app/presentation/help_alertdialogs.dart';
 import 'package:task_app/presentation/notifi_settings_dialog.dart';
 import 'package:task_app/provider/provider.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 class SettingsView extends ConsumerStatefulWidget {
   @override
@@ -14,6 +16,23 @@ class SettingsView extends ConsumerStatefulWidget {
 }
 
 class _SettingsViewState extends ConsumerState<SettingsView> {
+  // late Color _selectedColor = Colors.white;
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   initColorSet();
+  // final account = ref.watch(accountNotifierProvider.notifier);
+  // }
+
+  // void initColorSet() async {
+  //   final useCase = ref.read(accountUseCaseProvider);
+  //   Account account = await useCase.getAccount();
+
+  //   _selectedColor = account.themeColor;
+  //   print('テーマカラー: $account');
+  // }
+
   //
   Future<void> _selectNotifiTime(BuildContext context) async {
     // TimeOfDay _selectedTime = TimeOfDay.now();
@@ -40,6 +59,82 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
           (account) => Text('通知時刻:   ${convertTime(account.dailyNotifiTime)}'),
       loading: () => const CircularProgressIndicator(),
       error: (e, _) => Text('error: $e'),
+    );
+  }
+
+  // addLabelWindowと被っているため再利用すべきかも
+  // あとレイアウトがキモイ
+
+  // カラーピッカー
+  Widget _colorPicker() {
+    final accountAsync = ref.watch(accountNotifierProvider);
+    return accountAsync.when(
+      data:
+          (account) => BlockPicker(
+            pickerColor: account.themeColor,
+            onColorChanged: (Color color) async {
+              // setState(() async {
+              await ref
+                  .read(accountNotifierProvider.notifier)
+                  .updateThemeColor(color);
+              // });
+            },
+          ),
+      loading: () => CircularProgressIndicator(),
+      error: (e, _) => Text('Error: $e'),
+    );
+  }
+
+  // カラー選択ダイアログ
+  void _showColorPickerDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('色を選択してください'),
+          content: SingleChildScrollView(child: _colorPicker()),
+        );
+      },
+    );
+  }
+
+  Widget _selectColorWidget() {
+    final accountAync = ref.watch(accountNotifierProvider);
+    return accountAync.when(
+      data:
+          (account) => Container(
+            // color: Colors.amber,
+            width: 70,
+            // height: 80,
+            child: Stack(
+              children: [
+                Positioned(
+                  top: 0,
+                  child: Row(
+                    children: [
+                      IconButton(
+                        icon: Icon(Icons.palette, size: 18),
+                        onPressed: () => _showColorPickerDialog(),
+                      ),
+                      GestureDetector(
+                        onTap: () => _showColorPickerDialog(),
+                        child: Container(
+                          height: 20,
+                          width: 20,
+                          decoration: BoxDecoration(
+                            color: account.themeColor,
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+      loading: () => CircularProgressIndicator(),
+      error: (e, _) => Text('Error: $e'),
     );
   }
 
@@ -117,7 +212,12 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
         ),
 
         //
-        SimpleDialogOption(child: ListTile(title: Text('テーマカラー'))),
+        SimpleDialogOption(
+          child: ListTile(
+            title: Text('テーマカラー'),
+            trailing: _selectColorWidget(),
+          ),
+        ),
       ],
     );
   }
