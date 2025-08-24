@@ -123,8 +123,9 @@ class Application {
       isExpanded: false,
     ); //ここのcolorのところを変更する
     final labelsIds = ref.read(labelIdProvider);
+    final labelsNames = ref.read(labelsNameProvider);
 
-    if (!labelsIds.contains(label.id)) {
+    if (!labelsIds.contains(label.id) && !labelsNames.contains(label.name)) {
       await repository.addLabel(label);
 
       // LabelNotifierの状態も更新(プロバイダーのStateも同期)

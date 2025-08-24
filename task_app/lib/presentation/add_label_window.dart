@@ -16,13 +16,25 @@ class _AddLabelWindowState extends ConsumerState<AddLabelWindow> {
 
   // 追加ボタン押下
   void _pushedAddButton(Application app) async {
+    final labelsNames = ref.read(labelsNameProvider);
     if (_controller.text == '') {
       ScaffoldMessenger.of(context).showSnackBar(Common.warningSnackBar);
     } else {
       await app.addLabel(_controller.text, _selectedColor);
+      if (labelsNames.contains(_controller.text)) {
+        ScaffoldMessenger.of(context).showSnackBar(_warningSnackBar);
+      }
     }
     Navigator.pop(context);
   }
+
+  final _warningSnackBar = SnackBar(
+    content: Text(
+      '既に同じ名前のラベルが存在します',
+      style: TextStyle(fontSize: 20),
+      selectionColor: Color.fromARGB(0, 218, 50, 50),
+    ),
+  );
 
   // カラーピッカー
   Widget _colorPicker() {
