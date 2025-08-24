@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:task_app/provider/provider.dart';
 import 'package:task_app/repository/repository.dart';
@@ -28,6 +29,16 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(debugShowCheckedModeBanner: false, home: HomePage());
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+
+      theme: ThemeData(
+        textTheme: GoogleFonts.ibmPlexSansJpTextTheme(
+          Theme.of(context).textTheme,
+        ),
+      ),
+
+      home: HomePage(),
+    );
   }
 }
