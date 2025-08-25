@@ -77,7 +77,7 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
       context: context,
       // 初期日付
       initialDate: selectedDate,
-      firstDate: DateTime(2000),
+      firstDate: DateTime.now(),
       lastDate: DateTime(2100),
     );
     if (picked != null) {
