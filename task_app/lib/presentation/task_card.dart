@@ -5,6 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:task_app/application/application.dart';
 import 'package:task_app/domain/label_domain.dart';
 import 'package:task_app/domain/task_domain.dart';
+import 'package:task_app/presentation/toggle_button.dart';
 import 'package:task_app/provider/provider.dart';
 
 class TaskCard extends ConsumerStatefulWidget {
@@ -33,24 +34,24 @@ class _TaskCardState extends ConsumerState<TaskCard> {
     _date = widget.task.date;
     _time = widget.task.time;
     _isDone = widget.task.isDone; //もしかしたらこれかも？
-    _colorChange();
+    // _colorChange();
   }
 
-  // タスク未・済 ボタンが押下されたときの処理
-  void _pushedToggleButton() {
-    _isDone = app.toggleTask(_id);
-    _colorChange();
-  }
+  // // タスク未・済 ボタンが押下されたときの処理
+  // void _pushedToggleButton() {
+  //   _isDone = app.toggleTask(_id);
+  //   _colorChange();
+  // }
 
-  void _colorChange() {
-    setState(() {
-      if (_isDone) {
-        _isDoneColor = Color(0xFF4484EC);
-      } else {
-        _isDoneColor = Color(0xFF969696);
-      }
-    });
-  }
+  // void _colorChange() {
+  //   setState(() {
+  //     if (_isDone) {
+  //       _isDoneColor = Color(0xFF4484EC);
+  //     } else {
+  //       _isDoneColor = Color(0xFF969696);
+  //     }
+  //   });
+  // }
 
   // カード要素の変数群
   late String _id;
@@ -98,22 +99,22 @@ class _TaskCardState extends ConsumerState<TaskCard> {
     );
   }
 
-  // タスクの未・済 変更ボタン
-  Color _isDoneColor = Color(0xFF969696);
-  Widget _isTaskButton() {
-    return InkWell(
-      onTap: () => _pushedToggleButton(),
-      child: Container(
-        height: 60,
-        width: 60,
-        decoration: BoxDecoration(
-          color: _isDoneColor,
-          borderRadius: BorderRadius.circular(100),
-        ),
-        child: Icon(Icons.check, color: Colors.white, size: 38),
-      ),
-    );
-  }
+  // // タスクの未・済 変更ボタン
+  // Color _isDoneColor = Color(0xFF969696);
+  // Widget _isTaskButton() {
+  //   return InkWell(
+  //     onTap: () => _pushedToggleButton(),
+  //     child: Container(
+  //       height: 60,
+  //       width: 60,
+  //       decoration: BoxDecoration(
+  //         color: _isDoneColor,
+  //         borderRadius: BorderRadius.circular(100),
+  //       ),
+  //       child: Icon(Icons.check, color: Colors.white, size: 38),
+  //     ),
+  //   );
+  // }
 
   // タスクカードの中身ウィジェット
   Widget _taskCardScreen(double mediaWidth) {
@@ -141,7 +142,8 @@ class _TaskCardState extends ConsumerState<TaskCard> {
           Positioned(bottom: 12, left: 12, child: _dateTimeLabelText()),
 
           // タスク未・済
-          Positioned(right: 12, child: _isTaskButton()),
+          Positioned(right: 12, child: ToggleButton(_id, app)),
+          // Positioned(right: 12, child: _isTaskButton()),
         ],
       ),
     );
