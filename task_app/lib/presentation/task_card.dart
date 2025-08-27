@@ -142,7 +142,8 @@ class _TaskCardState extends ConsumerState<TaskCard> {
           Positioned(bottom: 12, left: 12, child: _dateTimeLabelText()),
 
           // タスク未・済
-          Positioned(right: 12, child: ToggleButton(_id, app)),
+          // Positioned(right: 12, child: ToggleButton(_id, app)),
+          Positioned(right: 12, child: ToggleButton(_id)),
           // Positioned(right: 12, child: _isTaskButton()),
         ],
       ),

@@ -107,7 +107,7 @@ class Application {
       date: date,
       time: time,
     );
-    print('ここまできたApplication');
+    // print('ここまできたApplication');
     await repository.addTask(task);
 
     // // TaskNotifierの状態も更新(プロバイダーのStateも同期)
@@ -180,43 +180,105 @@ class Application {
   // }
 
   // 日付ごとリストの日付を判別する
-  (List<Task>, String) getDateKind(int number) {
-    if (number == 0) {
-      List<Task> tasks = ref.watch(todayTasksProvider);
-      return (tasks, '今日(${tasks.length})');
+  // (List<Task>, List<Task>, String) getDateKind(int number) {
+  //   if (number == 0) {
+  //     // ref.watch(todayTasksProvider).where((task) => task.isDone ? isDoneTasks.add(task) : isNotDoneTasks.add(task));
+  //     List<Task> tasks = ref.watch(todayTasksProvider);
+  //     List<Task> isDoneTasks = [];
+  //     List<Task> isNotDoneTasks = [];
+  //     tasks.forEach(
+  //       (task) =>
+  //           task.isDone ? isDoneTasks.add(task) : isNotDoneTasks.add(task),
+  //     );
+  //     String title = '今日(${isNotDoneTasks.length})';
+
+  //     return (isDoneTasks, isNotDoneTasks, title);
+  //   }
+  //   if (number == 1) {
+  //     List<Task> tasks = ref.watch(tomorrowTasksProvider);
+  //     List<Task> isDoneTasks = [];
+  //     List<Task> isNotDoneTasks = [];
+  //     tasks.forEach(
+  //       (task) =>
+  //           task.isDone ? isDoneTasks.add(task) : isNotDoneTasks.add(task),
+  //     );
+  //     String title = '明日(${isNotDoneTasks.length})';
+  //     return (isDoneTasks, isNotDoneTasks, title);
+  //   }
+  //   if (number == 2) {
+  //     List<Task> tasks = ref.watch(otherTasksProvider);
+  //     List<Task> isDoneTasks = [];
+  //     List<Task> isNotDoneTasks = [];
+  //     tasks.forEach(
+  //       (task) =>
+  //           task.isDone ? isDoneTasks.add(task) : isNotDoneTasks.add(task),
+  //     );
+  //     String title = 'その他(${isNotDoneTasks.length})';
+
+  //     return (isDoneTasks, isNotDoneTasks, title);
+  //   }
+  //   return ([], [], 'Error');
+  // }
+
+  (List<Task>, List<Task>, String) getDateKind(int number) {
+    final _provider = switch (number) {
+      0 => todayTasksProvider,
+      1 => tomorrowTasksProvider,
+      2 => otherTasksProvider,
+      _ => null,
+    };
+    if (_provider == null) return ([], [], 'Error');
+
+    final tasks = ref.watch(_provider);
+
+    final doneTasks = <Task>[];
+    final notDoneTasks = <Task>[];
+    for (final task in tasks) {
+      (task.isDone ? doneTasks : notDoneTasks).add(task);
     }
-    if (number == 1) {
-      List<Task> tasks = ref.watch(tomorrowTasksProvider);
-      return (tasks, '明日(${tasks.length})');
-    }
-    if (number == 2) {
-      List<Task> tasks = ref.watch(otherTasksProvider);
-      return (tasks, 'その他(${tasks.length})');
-    }
-    return ([], 'Error');
+
+    final title = switch (number) {
+      0 => '今日 (${notDoneTasks.length})',
+      1 => '昨日 (${notDoneTasks.length})',
+      2 => 'その他 (${notDoneTasks.length})',
+      _ => 'Error',
+    };
+    return (doneTasks, notDoneTasks, title);
   }
 
   // 日付ごとリストの日付を判別する
   Provider<List<Task>> getDateKindProvider(int number) {
-    if (number == 0) {
-      return todayTasksProvider;
-    }
-    if (number == 1) {
-      return tomorrowTasksProvider;
-    }
-    if (number == 2) {
-      return otherTasksProvider;
-    }
+    return switch (number) {
+      0 => todayTasksProvider,
+      1 => tomorrowTasksProvider,
+      2 => otherTasksProvider,
+      _ => todayTasksProvider, //ここはダミーを入れるかエラー処理を作るべき
+    };
+    // if (number == 0) {
+    //   return todayTasksProvider;
+    // }
+    // if (number == 1) {
+    //   return tomorrowTasksProvider;
+    // }
+    // if (number == 2) {
+    //   return otherTasksProvider;
+    // }
 
-    return todayTasksProvider; //ここにエラー時のダミーを作るべきかも...（というか0,1,2で管理するのが良くないかも...）
+    // return todayTasksProvider; //ここにエラー時のダミーを作るべきかも...（というか0,1,2で管理するのが良くないかも...）
   }
 
   //タスクの数からリストの高さとリストビューの拡大縮小を管理・取得
-  (double, bool) getDateListsHightBool(List<Task> tasks) {
-    if (tasks.isEmpty) {
+  (double, bool) getDateListsHightBool(
+    List<Task> doneTasks,
+    List<Task> notDoneTasks,
+  ) {
+    if (doneTasks.isEmpty && notDoneTasks.isEmpty) {
       return (160, false);
     } else {
-      return ((tasks.length + 1.5) * 104, false);
+      return (
+        (doneTasks.length + notDoneTasks.length + 1.5) * 104,
+        false,
+      ); //ここに他の高さも加わる
     }
   }
 }
@@ -260,13 +322,13 @@ class TaskNotifier extends StateNotifier<List<Task>> {
   void loadTasks() async {
     List<Task> _loadedData = await repository.loadTasks();
     state = _loadedData;
-    print('タスク一覧(本家): ${state}');
+    // print('タスク一覧(本家): ${state}');
   }
 
   // タスクの追加
   void addTask(Task task) {
     state = [...state, task]; //もともとのリストにtaskを追加
-    print('タスク一覧(本家): ${state}');
+    // print('タスク一覧(本家): ${state}');
   }
 
   // リストのアップデート

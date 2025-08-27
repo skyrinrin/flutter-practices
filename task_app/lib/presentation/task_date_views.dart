@@ -21,7 +21,9 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
   late Application app;
   late final removeListener;
   late double listWidth;
-  late List<Task> selectedTasks;
+  // late List<Task> selectedTasks;
+  late List<Task> doneTasks;
+  late List<Task> notDoneTasks;
   late String listTitle;
   double listHeight = 280;
   Icon _icon = Icon(Icons.keyboard_arrow_down, color: Colors.black, size: 40);
@@ -36,36 +38,40 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
 
     app = ref.watch(applicationProvider);
     int number = widget.number;
-    selectedTasks = app.getDateKind(widget.number).$1;
-    listTitle = app.getDateKind(number).$2;
+    doneTasks = app.getDateKind(widget.number).$1;
+    notDoneTasks = app.getDateKind(widget.number).$2;
+    listTitle = app.getDateKind(number).$3;
 
-    listHeight = app.getDateListsHightBool(selectedTasks).$1;
-    isVisibility = app.getDateListsHightBool(selectedTasks).$2;
+    listHeight = app.getDateListsHightBool(doneTasks, notDoneTasks).$1;
+    isVisibility = app.getDateListsHightBool(doneTasks, notDoneTasks).$2;
 
     isOpened_false();
   }
 
   void isOpened_true() {
-    selectedTasks = app.getDateKind(widget.number).$1;
-    if (selectedTasks.isEmpty) {
+    // selectedTasks = app.getDateKind(widget.number).$1;
+    doneTasks = app.getDateKind(widget.number).$1;
+    notDoneTasks = app.getDateKind(widget.number).$2;
+    if (doneTasks.isEmpty && notDoneTasks.isEmpty) {
       listHeight = 160;
       isVisibility = true;
     } else {
       isVisibility = false;
-      listHeight = app.getDateListsHightBool(selectedTasks).$1;
+      listHeight = app.getDateListsHightBool(doneTasks, notDoneTasks).$1;
       if (listHeight <= 280) {
+        //ここの280という数値も見直すべき
         listHeight = 280;
-        print('小さい');
+        // print('小さい');
       }
     }
     _icon = Icon(Icons.keyboard_arrow_up, color: Colors.black, size: 40);
-    print('発火: ${isOpened}:${listHeight}');
+    // print('発火: ${isOpened}:${listHeight}');
   }
 
   void isOpened_false() {
     listHeight = 280;
     _icon = Icon(Icons.keyboard_arrow_down, color: Colors.black, size: 40);
-    print('発火: ${isOpened}:${listHeight}');
+    // print('発火: ${isOpened}:${listHeight}');
   }
 
   void _pushedMoreSeeButton() {
@@ -132,25 +138,36 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
       previous,
       next,
     ) {
+      // if (isOpened) {
+      //   listHeight = app.getDateListsHightBool(next).$1;
+      //   print('listener: $listHeight');
+      // } else {
+      //   listHeight = 280;
+      //   print('開かれていません');
+      // }
       if (isOpened) {
-        listHeight = app.getDateListsHightBool(next).$1;
-        print('listener: $listHeight');
+        List<Task> nextDoneTasks = app.getDateKind(widget.number).$1;
+        List<Task> nextNotDoneTasks = app.getDateKind(widget.number).$2;
+
+        listHeight =
+            app.getDateListsHightBool(nextDoneTasks, nextNotDoneTasks).$1;
+        // print('listener: $listHeight');
       } else {
         listHeight = 280;
-        print('開かれていません');
+        // print('開かれていません');
       }
     });
 
-    final (selectedTasks, listTitle) = app.getDateKind(widget.number);
+    final (doneTasks, notDoneTasks, listTitle) = app.getDateKind(widget.number);
 
-    isVisibility = app.getDateListsHightBool(selectedTasks).$2;
+    isVisibility = app.getDateListsHightBool(doneTasks, notDoneTasks).$2;
 
-    if (selectedTasks.isEmpty) {
+    if (doneTasks.isEmpty && notDoneTasks.isEmpty) {
       isVisibility = true;
       listHeight = 100;
     }
 
-    return selectedTasks.isEmpty
+    return (doneTasks.isEmpty && notDoneTasks.isEmpty)
         ? Container(
           height: 140,
 
@@ -179,7 +196,13 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
               SizedBox(height: 16),
               Stack(
                 children: [
-                  _cardsView(context, selectedTasks),
+                  Column(
+                    children: [
+                      _cardsView(context, notDoneTasks),
+                      Text('完了済み(${doneTasks.length})'),
+                      _cardsView(context, doneTasks),
+                    ],
+                  ),
                   Positioned(bottom: 0, child: _moreSeeButton()),
                 ],
               ),

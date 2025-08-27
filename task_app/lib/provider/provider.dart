@@ -119,11 +119,11 @@ final todayTasksProvider = Provider<List<Task>>((ref) {
   final today = Common.today;
   List<Task> tasks = allTasks.where((task) => task.date == today).toList();
   if (tasks.isNotEmpty) {
-    print("今日のタスク一覧: ${tasks[0].date} ${tasks.length}");
-    print("タスク一覧: ${allTasks} ${allTasks.length}");
+    // print("今日のタスク一覧: ${tasks[0].date} ${tasks.length}");
+    // print("タスク一覧: ${allTasks} ${allTasks.length}");
   } else {
-    print("今日のタスク一覧: null");
-    print("タスク一覧: ${allTasks} ${allTasks.length}");
+    // print("今日のタスク一覧: null");
+    // print("タスク一覧: ${allTasks} ${allTasks.length}");
   }
 
   List<Task> result = tasks.toSet().toList();
@@ -137,11 +137,11 @@ final tomorrowTasksProvider = Provider<List<Task>>((ref) {
   final tomorrow = Common.tomorrow;
   List<Task> tasks = allTasks.where((task) => task.date == tomorrow).toList();
   if (tasks.isNotEmpty) {
-    print("明日のタスク一覧: ${tasks[0].date} ${tasks.length}");
-    print("タスク一覧: ${allTasks} ${allTasks.length}");
+    // print("明日のタスク一覧: ${tasks[0].date} ${tasks.length}");
+    // print("タスク一覧: ${allTasks} ${allTasks.length}");
   } else {
-    print("明日のタスク一覧: null");
-    print("タスク一覧: ${allTasks} ${allTasks.length}");
+    // print("明日のタスク一覧: null");
+    // print("タスク一覧: ${allTasks} ${allTasks.length}");
   }
 
   List<Task> result = tasks.toSet().toList();
@@ -158,8 +158,8 @@ final otherTasksProvider = Provider<List<Task>>((ref) {
   final tomorrow = Common.tomorrow;
 
   tasks.removeWhere((task) => task.date == tomorrow || task.date == today);
-  print('その他のタスク: $tasks');
-  print("タスク一覧: ${allTasks} ${tasks.length}");
+  // print('その他のタスク: $tasks');
+  // print("タスク一覧: ${allTasks} ${tasks.length}");
 
   List<Task> result = tasks.toSet().toList();
   return result;
