@@ -38,7 +38,8 @@ class _ToggleButtonState extends State<ToggleButton>
       TweenSequenceItem(tween: Tween(begin: 1.1, end: 1.0), weight: 30),
       // ]).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutBack));
     ]).animate(_controller);
-    _isClaered();
+    isDone = app.getToggle(id);
+    _isCleard();
   }
 
   @override
@@ -50,9 +51,10 @@ class _ToggleButtonState extends State<ToggleButton>
   void _onTap() {
     // ref.watch()
     isDone = app.toggleTask(id);
+    // isDone = app.getToggle(id);
 
-    isDone = !isDone;
-    _isClaered();
+    // isDone = !isDone;
+    _isCleard();
     // _clear_motion();
   }
 
@@ -61,10 +63,11 @@ class _ToggleButtonState extends State<ToggleButton>
     // app.toggleTask(id);
   }
 
-  void _isClaered() {
+  void _isCleard() {
     if (isDone) {
       setState(() {
-        _clear_motion();
+        // _clear_motion();
+        _controller.forward(from: 0.0);
       });
     } else {
       print('タスクがミカンです');

@@ -140,6 +140,12 @@ class Application {
   // タスクをラベル分けする
 
   // タスクの達成状態を管理する
+
+  bool getToggle(String id) {
+    final allTasks = ref.watch(tasksProvider);
+    return allTasks.where((task) => task.id == id).first.isDone;
+  }
+
   bool toggleTask(String id) {
     //List<Task> tasks, tasksをグローバルに取得する
     final updatedTasks = [...tasks];

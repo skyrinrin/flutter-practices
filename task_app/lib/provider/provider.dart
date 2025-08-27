@@ -76,6 +76,15 @@ final tasksProvider = StateNotifierProvider<TaskNotifier, List<Task>>((ref) {
   return TaskNotifier(repository);
 });
 
+// final togglesProvider = Provider<List<bool>>((ref) {
+//   final allTasks = ref.watch(tasksProvider);
+//   List<bool> toggles = [];
+//   for (int i = 0; i < allTasks.length; i++) {
+//     toggles.add(allTasks[i].isDone);
+//   }
+//   return toggles;
+// });
+
 // ラベルリスト
 final labelsProvider = StateNotifierProvider<LabelsTasksNotifier, List<Label>>((
   ref,
