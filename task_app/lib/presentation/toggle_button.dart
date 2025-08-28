@@ -125,6 +125,8 @@ class _ToggleButtonState extends ConsumerState<ToggleButton>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
+  // late bool wIsDone;
+  late bool isDone;
 
   @override
   void initState() {
@@ -139,6 +141,7 @@ class _ToggleButtonState extends ConsumerState<ToggleButton>
       TweenSequenceItem(tween: Tween(begin: 0.85, end: 1.1), weight: 40),
       TweenSequenceItem(tween: Tween(begin: 1.1, end: 1.0), weight: 30),
     ]).animate(_controller);
+    isDone = ref.read(applicationProvider).getToggle(widget._id);
   }
 
   @override
@@ -150,18 +153,36 @@ class _ToggleButtonState extends ConsumerState<ToggleButton>
   void _onTap() {
     final app = ref.read(applicationProvider);
     print('onTap ${widget._id}');
-    final isDone = app.toggleTask(widget._id);
+    // _isDone = app.getToggle(widget._id);
+    // wIsDone = !wIsDone;
+    setState(() {
+      isDone = !isDone;
+    });
+    print('isDone : $isDone');
 
-    if (isDone) {
-      _controller.forward(from: 0.0);
-    }
+    // if (_isDone) {
+    //   print('_isDone : $_isDone');
+    //   _controller.forward(from: 0.0);
+    // } else {
+    //   print("_isDone : $_isDone");
+    // }
+    _controller.forward(from: 0.0);
+
+    Future.delayed(Duration(milliseconds: 1500)).then((_) {
+      print('２秒たち経ちました');
+
+      // final isDone = app.toggleTask(widget._id);
+      app.toggleTask(widget._id);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     print('toggleButton: ${widget._id}');
     final app = ref.watch(applicationProvider);
-    final isDone = app.getToggle(widget._id);
+    final providerIsDone = app.getToggle(widget._id);
+    final effectIsDone = isDone ?? providerIsDone;
+    // final  = app.getToggle(widget._id);
 
     return GestureDetector(
       onTap: _onTap,
@@ -176,7 +197,7 @@ class _ToggleButtonState extends ConsumerState<ToggleButton>
               width: 60,
               height: 60,
               decoration: BoxDecoration(
-                color: isDone ? Colors.blue : Colors.grey,
+                color: effectIsDone ? Colors.blue : Colors.grey,
                 shape: BoxShape.circle,
               ),
               child: const Icon(Icons.check, color: Colors.white, size: 35),
