@@ -63,7 +63,8 @@ class _TaskLabelViewsState extends ConsumerState<TaskLabelViews> {
                               labelTasks.map((task) {
                                 return Container(
                                   margin: EdgeInsets.symmetric(vertical: 4),
-                                  child: TaskCard(task: task),
+                                  child: null, //ここは絶対あとから追加する
+                                  // TaskCard(task: task),
                                 );
                               }).toList(),
                         ),

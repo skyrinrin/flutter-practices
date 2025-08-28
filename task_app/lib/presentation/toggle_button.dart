@@ -114,8 +114,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:task_app/provider/provider.dart';
 
 class ToggleButton extends ConsumerStatefulWidget {
-  final String id;
-  const ToggleButton(this.id, {super.key});
+  final String _id;
+  const ToggleButton(this._id, {super.key});
 
   @override
   ConsumerState<ToggleButton> createState() => _ToggleButtonState();
@@ -141,9 +141,16 @@ class _ToggleButtonState extends ConsumerState<ToggleButton>
     ]).animate(_controller);
   }
 
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   void _onTap() {
     final app = ref.read(applicationProvider);
-    final isDone = app.toggleTask(widget.id);
+    print('onTap ${widget._id}');
+    final isDone = app.toggleTask(widget._id);
 
     if (isDone) {
       _controller.forward(from: 0.0);
@@ -152,8 +159,9 @@ class _ToggleButtonState extends ConsumerState<ToggleButton>
 
   @override
   Widget build(BuildContext context) {
+    print('toggleButton: ${widget._id}');
     final app = ref.watch(applicationProvider);
-    final isDone = app.getToggle(widget.id);
+    final isDone = app.getToggle(widget._id);
 
     return GestureDetector(
       onTap: _onTap,
