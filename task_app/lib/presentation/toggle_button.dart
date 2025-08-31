@@ -168,11 +168,21 @@ class _ToggleButtonState extends ConsumerState<ToggleButton>
     // }
     _controller.forward(from: 0.0);
 
-    Future.delayed(Duration(milliseconds: 1500)).then((_) {
-      print('２秒たち経ちました');
+    // Future.delayed(Duration(milliseconds: 1500)).then((_) {
+    //   print('２秒たち経ちました');
+    //   if (!mounted) return; //widgetがdisposeされたらなにもしない
+    //   // ref.read(applicationProvider).toggleTask(widget._id);
 
-      // final isDone = app.toggleTask(widget._id);
-      app.toggleTask(widget._id);
+    //   // final isDone = app.toggleTask(widget._id);
+    //   app.toggleTask(widget._id);
+    // });
+
+    _controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        if (mounted) {
+          ref.read(applicationProvider).toggleTask(widget._id);
+        }
+      }
     });
   }
 
