@@ -142,32 +142,17 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
 
     final app = ref.watch(applicationProvider);
 
-    // ここのコードを消すことでrefを描画前に呼び出すエラーが直るが他が動かなくなるかも...
-
-    // ref.listen<List<Task>>(app.getDateKindProvider(widget.number), (
-    //   // 8/13 ここの処理ですべて（今日、明日、その他）のlistHeightの高さを変えてしまうためエラーが起こる可能性あり...(現在はif処理で開かれているもの以外は高さを変えないようにしている)
-    //   previous,
-    //   next,
-    // ) {
-    //   // if (isOpened) {
-    //   //   listHeight = app.getDateListsHightBool(next).$1;
-    //   //   print('listener: $listHeight');
-    //   // } else {
-    //   //   listHeight = 280;
-    //   //   print('開かれていません');
-    //   // }
-    //   if (isOpened) {
-    //     List<Task> nextDoneTasks = app.getDateKind(widget.number).$1;
-    //     List<Task> nextNotDoneTasks = app.getDateKind(widget.number).$2;
-
-    //     listHeight =
-    //         app.getDateListsHightBool(nextDoneTasks, nextNotDoneTasks).$1;
-    //     // print('listener: $listHeight');
-    //   } else {
-    //     listHeight = 280;
-    //     // print('開かれていません');
-    //   }
-    // });
+    ref.listen<List<Task>>(app.getDateKindProvider(widget.number), (
+      // 8/13 ここの処理ですべて（今日、明日、その他）のlistHeightの高さを変えてしまうためエラーが起こる可能性あり...(現在はif処理で開かれているもの以外は高さを変えないようにしている)
+      previous,
+      next,
+    ) {
+      if (isOpened) {
+        listHeight = (next.length + 1.5) * 104;
+      } else {
+        listHeight = 280;
+      }
+    });
 
     final (doneTasks, notDoneTasks, listTitle) = app.getDateKind(widget.number);
 
