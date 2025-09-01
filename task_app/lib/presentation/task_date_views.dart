@@ -25,11 +25,12 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
   late List<Task> doneTasks;
   late List<Task> notDoneTasks;
   late String listTitle;
-  double listHeight = 280;
+  double donelistHeight = 280;
+  double notDonelistHeight = 280;
   Icon _icon = Icon(Icons.keyboard_arrow_down, color: Colors.black, size: 40);
 
   bool isOpened = false;
-  bool isVisibility = false;
+  // bool isVisibility = false;
   bool isListening = false;
 
   @override
@@ -42,10 +43,15 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
     notDoneTasks = app.getDateKind(widget.number).$2;
     listTitle = app.getDateKind(number).$3;
 
-    listHeight = app.getDateListsHightBool(doneTasks, notDoneTasks).$1;
-    isVisibility = app.getDateListsHightBool(doneTasks, notDoneTasks).$2;
+    donelistHeight = getListHeight(doneTasks);
+    notDonelistHeight = getListHeight(notDoneTasks);
+    // isVisibility = false;
 
     isOpened_false();
+  }
+
+  double getListHeight(List<Task> task) {
+    return (task.length + 1.5) * 104;
   }
 
   void isOpened_true() {
@@ -57,15 +63,20 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
     // });
 
     if (doneTasks.isEmpty && notDoneTasks.isEmpty) {
-      listHeight = 160;
-      isVisibility = true;
+      donelistHeight = 160;
+      notDonelistHeight = 160;
+      // isVisibility = true;
     } else {
-      isVisibility = false;
-      listHeight = app.getDateListsHightBool(doneTasks, notDoneTasks).$1;
-      if (listHeight <= 280) {
+      // isVisibility = false;
+      donelistHeight = getListHeight(doneTasks);
+      notDonelistHeight = getListHeight(notDoneTasks);
+      if (donelistHeight <= 280) {
         //ここの280という数値も見直すべき
-        listHeight = 280;
+        donelistHeight = 280;
         // print('小さい');
+      }
+      if (notDonelistHeight <= 280) {
+        notDonelistHeight = 280;
       }
     }
     _icon = Icon(Icons.keyboard_arrow_up, color: Colors.black, size: 40);
@@ -75,7 +86,17 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
   }
 
   void isOpened_false() {
-    listHeight = 280;
+    donelistHeight = getListHeight(doneTasks);
+    notDonelistHeight = getListHeight(notDoneTasks);
+    if (donelistHeight >= 280) {
+      donelistHeight = 280;
+    }
+    if (notDonelistHeight >= 280) {
+      notDonelistHeight = 280;
+    }
+
+    // donelistHeight = 280;
+    // notDonelistHeight = 280;
     _icon = Icon(Icons.keyboard_arrow_down, color: Colors.black, size: 40);
     // print('発火: ${isOpened}:${listHeight}');
   }
@@ -118,10 +139,10 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
   }
 
   // カードのリストビューウィジェット
-  Widget _cardsView(BuildContext context, List<Task> tasks) {
+  Widget _cardsView(BuildContext context, List<Task> tasks, double height) {
     return Container(
       // color: Colors.amber,
-      height: listHeight,
+      height: height,
 
       width: listWidth,
       child: ListView.builder(
@@ -148,19 +169,26 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
       next,
     ) {
       if (isOpened) {
-        listHeight = (next.length + 1.5) * 104;
+        final doneTasks = next.where((task) => task.isDone).toList();
+        final notDoneTasks =
+            next.where((task) => task.isDone == false).toList();
+        donelistHeight = getListHeight(doneTasks);
+        notDonelistHeight = getListHeight(notDoneTasks);
       } else {
-        listHeight = 280;
+        donelistHeight = 280;
+        notDonelistHeight = 280;
       }
     });
 
     final (doneTasks, notDoneTasks, listTitle) = app.getDateKind(widget.number);
 
-    isVisibility = app.getDateListsHightBool(doneTasks, notDoneTasks).$2;
+    // isVisibility = app.getDateListsHightBool(doneTasks, notDoneTasks).$2;
+    // isVisibility = false;
 
     if (doneTasks.isEmpty && notDoneTasks.isEmpty) {
-      isVisibility = true;
-      listHeight = 100;
+      // isVisibility = true;
+      donelistHeight = 100;
+      notDonelistHeight = 100;
     }
 
     return (doneTasks.isEmpty && notDoneTasks.isEmpty)
@@ -194,9 +222,9 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
                 children: [
                   Column(
                     children: [
-                      _cardsView(context, notDoneTasks),
+                      _cardsView(context, notDoneTasks, notDonelistHeight),
                       Text('完了済み(${doneTasks.length})'),
-                      _cardsView(context, doneTasks),
+                      _cardsView(context, doneTasks, donelistHeight),
                     ],
                   ),
                   Positioned(bottom: 0, child: _moreSeeButton()),

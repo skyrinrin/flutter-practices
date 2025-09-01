@@ -268,19 +268,19 @@ class Application {
   }
 
   //タスクの数からリストの高さとリストビューの拡大縮小を管理・取得
-  (double, bool) getDateListsHightBool(
-    List<Task> doneTasks,
-    List<Task> notDoneTasks,
-  ) {
-    if (doneTasks.isEmpty && notDoneTasks.isEmpty) {
-      return (160, false);
-    } else {
-      return (
-        (doneTasks.length + notDoneTasks.length + 1.5) * 104,
-        false,
-      ); //ここに他の高さも加わる
-    }
-  }
+  // (double, bool) getDateListsHightBool(
+  //   List<Task> doneTasks,
+  //   List<Task> notDoneTasks,
+  // ) {
+  //   if (doneTasks.isEmpty && notDoneTasks.isEmpty) {
+  //     return (160, false);
+  //   } else {
+  //     return (
+  //       (doneTasks.length + notDoneTasks.length + 1.5) * 104,
+  //       false,
+  //     ); //ここに他の高さも加わる
+  //   }
+  // }
 }
 
 // ここだけでなく他のProviderも責務分離すべき
