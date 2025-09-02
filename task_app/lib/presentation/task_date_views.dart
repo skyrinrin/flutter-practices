@@ -1,4 +1,5 @@
 import 'dart:io';
+// import 'dart:nativewrappers/_internal/vm/lib/math_patch.dart';
 // import 'dart:nativewrappers/_internal/vm/lib/ffi_patch.dart';
 
 import 'package:flutter/material.dart';
@@ -158,6 +159,21 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
     );
   }
 
+  // 達成、未達成テーマウィジェット
+  Widget _clearTitle(List<Task> tasks, bool isClear) {
+    return Container(
+      alignment: Alignment.centerLeft,
+      height: 40,
+      width: double.infinity,
+      padding: EdgeInsets.only(left: 8),
+      color: Color.fromARGB(255, 126, 196, 236),
+      child: Text(
+        isClear ? '未達成(${tasks.length})' : '達成済み(${tasks.length})',
+        style: TextStyle(fontSize: 16, color: Colors.white),
+      ),
+    );
+  }
+
   Widget build(BuildContext context) {
     listWidth = MediaQuery.of(context).size.width - 32;
 
@@ -221,9 +237,13 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
               Stack(
                 children: [
                   Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      SizedBox(height: 50),
+                      _clearTitle(notDoneTasks, false),
                       _cardsView(context, notDoneTasks, notDonelistHeight),
-                      Text('完了済み(${doneTasks.length})'),
+                      SizedBox(height: 24),
+                      _clearTitle(doneTasks, true),
                       _cardsView(context, doneTasks, donelistHeight),
                     ],
                   ),
