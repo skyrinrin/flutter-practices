@@ -141,7 +141,7 @@ class _AddLabelWindowState extends ConsumerState<AddLabelWindow> {
           color: Color(0xFFD9D9D9),
           borderRadius: BorderRadius.circular(100),
         ),
-        child: Text("追加", style: TextStyle(fontSize: 18)),
+        child: Text("追加", style: TextStyle(fontSize: 16)),
       ),
     );
   }

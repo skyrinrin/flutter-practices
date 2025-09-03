@@ -28,7 +28,11 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
   late String listTitle;
   double donelistHeight = 280;
   double notDonelistHeight = 280;
-  Icon _icon = Icon(Icons.keyboard_arrow_down, color: Colors.black, size: 40);
+  Icon _icon = Icon(
+    Icons.keyboard_arrow_down,
+    color: const Color.fromARGB(255, 92, 91, 91),
+    size: 40,
+  );
 
   bool isOpened = false;
   // bool isVisibility = false;
@@ -52,7 +56,7 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
   }
 
   double getListHeight(List<Task> task) {
-    return (task.length + 1.5) * 104;
+    return (task.length) * 104 + 40;
   }
 
   void isOpened_true() {
@@ -80,7 +84,11 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
         notDonelistHeight = 280;
       }
     }
-    _icon = Icon(Icons.keyboard_arrow_up, color: Colors.black, size: 40);
+    _icon = Icon(
+      Icons.keyboard_arrow_up,
+      color: const Color.fromARGB(255, 92, 91, 91),
+      size: 40,
+    );
 
     // listHeight = 500;
     // print('発火: ${isOpened}:${listHeight}');
@@ -89,16 +97,20 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
   void isOpened_false() {
     donelistHeight = getListHeight(doneTasks);
     notDonelistHeight = getListHeight(notDoneTasks);
-    if (donelistHeight >= 280) {
+    if (donelistHeight >= 280 || donelistHeight <= 280) {
       donelistHeight = 280;
     }
-    if (notDonelistHeight >= 280) {
+    if (notDonelistHeight >= 280 || notDonelistHeight <= 280) {
       notDonelistHeight = 280;
     }
 
     // donelistHeight = 280;
     // notDonelistHeight = 280;
-    _icon = Icon(Icons.keyboard_arrow_down, color: Colors.black, size: 40);
+    _icon = Icon(
+      Icons.keyboard_arrow_down,
+      color: Color.fromARGB(255, 92, 91, 91),
+      size: 40,
+    );
     // print('発火: ${isOpened}:${listHeight}');
   }
 
@@ -145,8 +157,10 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
       // color: Colors.amber,
       height: height,
 
+      // color: Colors.amber,
       width: listWidth,
       child: ListView.builder(
+        padding: EdgeInsets.only(top: 16),
         physics: NeverScrollableScrollPhysics(),
         itemCount: tasks.length,
         itemBuilder: (BuildContext context, int index) {
@@ -222,7 +236,7 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
               Positioned(
                 left: 5,
                 top: 40,
-                child: Container(child: Text('挑戦できるタスクはありません')),
+                child: Container(child: Text('挑戦できるタスクがありません')),
               ),
               Positioned(bottom: 0, child: _moreSeeButton()),
             ],
@@ -241,13 +255,77 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
                     children: [
                       SizedBox(height: 50),
                       _clearTitle(notDoneTasks, false),
-                      _cardsView(context, notDoneTasks, notDonelistHeight),
+
+                      Stack(
+                        children: [
+                          Positioned(
+                            top: 16,
+                            child: Text(
+                              '挑戦できるタスクがありません',
+                              style: TextStyle(
+                                color: Color.fromARGB(255, 92, 91, 91),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            child: _cardsView(
+                              context,
+                              notDoneTasks,
+                              notDonelistHeight,
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            child: Visibility(
+                              visible: !isOpened,
+
+                              child: Opacity(
+                                opacity: 0.5,
+                                child: Container(
+                                  width: listWidth,
+                                  height: 100,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+
                       SizedBox(height: 24),
                       _clearTitle(doneTasks, true),
-                      _cardsView(context, doneTasks, donelistHeight),
+                      Stack(
+                        children: [
+                          Positioned(
+                            top: 16,
+                            child: Text(
+                              '達成していないタスクに挑戦しましょう！',
+                              style: TextStyle(
+                                color: Color.fromARGB(255, 92, 91, 91),
+                              ),
+                            ),
+                          ),
+                          _cardsView(context, doneTasks, donelistHeight),
+                          Positioned(
+                            bottom: 0,
+                            child: Visibility(
+                              visible: !isOpened,
+                              child: Opacity(
+                                opacity: 0.5,
+                                child: Container(
+                                  width: listWidth,
+                                  height: 100,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      _moreSeeButton(),
                     ],
                   ),
-                  Positioned(bottom: 0, child: _moreSeeButton()),
+                  // Positioned(bottom: 0, child: _moreSeeButton()),
                 ],
               ),
             ],
