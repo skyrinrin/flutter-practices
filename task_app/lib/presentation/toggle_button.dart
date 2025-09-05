@@ -108,6 +108,7 @@
 //   }
 // }
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -125,6 +126,7 @@ class _ToggleButtonState extends ConsumerState<ToggleButton>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
+  final _player = AudioPlayer();
   // late bool wIsDone;
   late bool isDone;
 
@@ -150,7 +152,12 @@ class _ToggleButtonState extends ConsumerState<ToggleButton>
     super.dispose();
   }
 
+  Future<void> _playSound() async {
+    await _player.play(AssetSource('assets/clearsound.mp3'));
+  }
+
   void _onTap() {
+    _playSound();
     final app = ref.read(applicationProvider);
     print('onTap ${widget._id}');
     // _isDone = app.getToggle(widget._id);

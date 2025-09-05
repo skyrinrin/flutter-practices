@@ -238,9 +238,9 @@ class Application {
     }
 
     final title = switch (number) {
-      0 => '今日 (${notDoneTasks.length})',
-      1 => '昨日 (${notDoneTasks.length})',
-      2 => 'その他 (${notDoneTasks.length})',
+      0 => '今日 (${tasks.length})',
+      1 => '昨日 (${tasks.length})',
+      2 => 'その他 (${tasks.length})',
       _ => 'Error',
     };
     return (doneTasks, notDoneTasks, title);
