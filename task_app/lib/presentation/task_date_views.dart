@@ -26,8 +26,8 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
   late List<Task> doneTasks;
   late List<Task> notDoneTasks;
   late String listTitle;
-  double donelistHeight = 280;
-  double notDonelistHeight = 280;
+  double donelistHeight = 150;
+  double notDonelistHeight = 150;
   Icon _icon = Icon(
     Icons.keyboard_arrow_down,
     color: const Color.fromARGB(255, 92, 91, 91),
@@ -72,6 +72,7 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
       notDonelistHeight = 160;
       // isVisibility = true;
     } else {
+      print('ここまで来たよ');
       // isVisibility = false;
       donelistHeight = getListHeight(doneTasks);
       notDonelistHeight = getListHeight(notDoneTasks);
@@ -97,11 +98,11 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
   void isOpened_false() {
     donelistHeight = getListHeight(doneTasks);
     notDonelistHeight = getListHeight(notDoneTasks);
-    if (donelistHeight >= 280 || donelistHeight <= 280) {
-      donelistHeight = 280;
+    if (donelistHeight >= 150 || donelistHeight <= 150) {
+      donelistHeight = 150;
     }
-    if (notDonelistHeight >= 280 || notDonelistHeight <= 280) {
-      notDonelistHeight = 280;
+    if (notDonelistHeight >= 150 || notDonelistHeight <= 150) {
+      notDonelistHeight = 150;
     }
 
     // donelistHeight = 280;
@@ -114,7 +115,7 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
     // print('発火: ${isOpened}:${listHeight}');
   }
 
-  void _pushedMoreSeeButton() {
+  toggleIsOpened() {
     isOpened = !isOpened;
     if (isOpened == true) {
       setState(() {
@@ -125,6 +126,10 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
         isOpened_false();
       });
     }
+  }
+
+  void _pushedMoreSeeButton() {
+    toggleIsOpened();
   }
 
   Widget _moreSeeButton() {
@@ -182,8 +187,23 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
       padding: EdgeInsets.only(left: 8),
       color: Color.fromARGB(255, 126, 196, 236),
       child: Text(
-        isClear ? '未達成(${tasks.length})' : '達成済み(${tasks.length})',
+        isClear ? '達成済み(${tasks.length})' : '未達成(${tasks.length})',
         style: TextStyle(fontSize: 16, color: Colors.white),
+      ),
+    );
+  }
+
+  Widget opacityCon() {
+    return Visibility(
+      visible: !isOpened,
+      child: InkWell(
+        onTap: () {
+          toggleIsOpened();
+        },
+        child: Opacity(
+          opacity: 0.5,
+          child: Container(width: listWidth, height: 80, color: Colors.white),
+        ),
       ),
     );
   }
@@ -204,9 +224,15 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
             next.where((task) => task.isDone == false).toList();
         donelistHeight = getListHeight(doneTasks);
         notDonelistHeight = getListHeight(notDoneTasks);
+        if (donelistHeight <= 280) {
+          donelistHeight = 280;
+        }
+        if (notDonelistHeight <= 280) {
+          notDonelistHeight = 280;
+        }
       } else {
-        donelistHeight = 280;
-        notDonelistHeight = 280;
+        donelistHeight = 150;
+        notDonelistHeight = 150;
       }
     });
 
@@ -274,21 +300,7 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
                               notDonelistHeight,
                             ),
                           ),
-                          Positioned(
-                            bottom: 0,
-                            child: Visibility(
-                              visible: !isOpened,
-
-                              child: Opacity(
-                                opacity: 0.5,
-                                child: Container(
-                                  width: listWidth,
-                                  height: 100,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ),
+                          Positioned(bottom: 0, child: opacityCon()),
                         ],
                       ),
 
@@ -306,20 +318,7 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
                             ),
                           ),
                           _cardsView(context, doneTasks, donelistHeight),
-                          Positioned(
-                            bottom: 0,
-                            child: Visibility(
-                              visible: !isOpened,
-                              child: Opacity(
-                                opacity: 0.5,
-                                child: Container(
-                                  width: listWidth,
-                                  height: 100,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ),
+                          Positioned(bottom: 0, child: opacityCon()),
                         ],
                       ),
                       _moreSeeButton(),
