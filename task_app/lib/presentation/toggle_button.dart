@@ -153,7 +153,7 @@ class _ToggleButtonState extends ConsumerState<ToggleButton>
   }
 
   Future<void> _playSound() async {
-    await _player.play(AssetSource('assets/clearsound.mp3'));
+    await _player.play(AssetSource('clearsound.mp3'));
   }
 
   void _onTap() {
