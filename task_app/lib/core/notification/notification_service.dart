@@ -69,7 +69,7 @@ class NotificationService {
       0,
       'scheduled title',
       'scheduled body',
-      _scheduledDateAtHour(9),
+      _scheduledDateAtHourMinute(3, 44),
       const NotificationDetails(
         android: AndroidNotificationDetails('main_channel', 'Main Channel'),
         iOS: DarwinNotificationDetails(),
@@ -79,7 +79,7 @@ class NotificationService {
     );
   }
 
-  tz.TZDateTime _scheduledDateAtHour(int hour) {
+  tz.TZDateTime _scheduledDateAtHourMinute(int hour, int minute) {
     final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
     tz.TZDateTime scheduledDate = tz.TZDateTime(
       tz.local,
@@ -87,6 +87,7 @@ class NotificationService {
       now.month,
       now.day,
       hour,
+      minute,
     );
     if (scheduledDate.isBefore(now)) {
       scheduledDate = scheduledDate.add(const Duration(days: 1));
