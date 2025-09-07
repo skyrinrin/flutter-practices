@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -39,11 +41,11 @@ class Application {
 
   // 通知を送信する 実験なので後で消す
   void sendNotifi() {
-    NotificationService().showScheduledNotification(
+    NotificationService().scheduleDaily(
       id: 1,
       title: 'サンプル',
       body: 'あああああああああああああああああああああああああああああああああああああああああああああああ',
-      scheduledTime: DateTime.now().add(Duration(minutes: 1)), //1分後に通知を送信
+      time: TimeOfDay(hour: 2, minute: 55),
     );
     print('通知を送信しました');
   }
