@@ -58,6 +58,29 @@ class NotificationService {
 
   // ここから
 
+  // 通知ごとに送る通知
+  Future<void> tasksSchedule({
+    required int id,
+    required String title,
+    required String body,
+    required DateTime scheduledTime,
+  }) async {
+    await _flutterLocalNotificationsPlugin.zonedSchedule(
+      id,
+      title,
+      body,
+      tz.TZDateTime.from(scheduledTime, tz.local), // 必ずtzで包む
+      const NotificationDetails(
+        android: AndroidNotificationDetails('main_channel', 'Main Channel'),
+        iOS: DarwinNotificationDetails(),
+      ),
+      androidScheduleMode:
+          AndroidScheduleMode.inexact, //通知時刻はアバウトで省電力アイドリングモードでは動作しない
+      matchDateTimeComponents: DateTimeComponents.time, // 毎日同じ時刻にも可能
+    );
+  }
+
+  //毎日決まった時間に送信する通知
   Future<void> scheduleDaily({
     required int id, // 通知ID (ユニーク)
     required String title,
@@ -69,12 +92,14 @@ class NotificationService {
       0,
       'scheduled title',
       'scheduled body',
-      _scheduledDateAtHourMinute(3, 44),
+      _scheduledDateAtHourMinute(0, 50), //ここを設定した値になるように代入する
       const NotificationDetails(
         android: AndroidNotificationDetails('main_channel', 'Main Channel'),
         iOS: DarwinNotificationDetails(),
       ),
-      androidScheduleMode: AndroidScheduleMode.inexact,
+      androidScheduleMode:
+          AndroidScheduleMode
+              .inexact, //permission許可の問題からalearmclock(SCHEDULE_EXACT_ALARMが必要)ではなくinexactにした //通知が正しく送られなかったら変える
       matchDateTimeComponents: DateTimeComponents.time,
     );
   }
@@ -97,6 +122,11 @@ class NotificationService {
 
   void cancelAllNotifications() async {
     await _flutterLocalNotificationsPlugin.cancelAll();
+  }
+
+  tz.TZDateTime getTzTime(int year, int month, int day, int hour, int minute) {
+    final ans = tz.TZDateTime(tz.local, year, month, day, hour, minute);
+    return ans;
   }
 
   //

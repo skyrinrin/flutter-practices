@@ -3,6 +3,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:task_app/application/application.dart';
 import 'package:task_app/domain/label_domain.dart';
+import 'package:task_app/domain/task_domain.dart';
 import 'package:task_app/presentation/add_label_button.dart';
 import 'package:task_app/presentation/add_label_window.dart';
 import 'package:task_app/presentation/appbar.dart';
@@ -47,6 +48,14 @@ class TaskHomeview extends ConsumerWidget {
               app.sendNotifi();
             },
             child: Text('サンプル'),
+          ),
+
+          ElevatedButton(
+            onPressed: () {
+              final tasks = ref.watch(tasksProvider);
+              app.convertDateTime(tasks.first.date, tasks.first.time);
+            },
+            child: Text('convert'),
           ),
 
           SizedBox(height: 100),

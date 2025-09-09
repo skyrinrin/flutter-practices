@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -48,6 +49,59 @@ class Application {
       time: TimeOfDay(hour: 2, minute: 55),
     );
     print('通知を送信しました');
+  }
+
+  (int year, List<int> intDate, int hour, int minute) convertDateTime(
+    String date,
+    String time,
+  ) {
+    final now = DateTime.now();
+    int year = now.year;
+    int hour = int.parse(time.substring(0, 2));
+    int minute = int.parse(time.substring(3, 5));
+    List<String> strDate = date.split('/');
+    List<int> intDate = [];
+    for (var value in strDate) {
+      if (value.startsWith('0')) {
+        intDate.add(int.parse(value.replaceFirst('0', '')));
+      } else {
+        intDate.add(int.parse(value));
+      }
+      if (intDate[0] < now.month) {
+        year++;
+        print('年をまたぐ');
+      }
+    }
+    print('これが答え $hour $minute $intDate');
+    return (year, intDate, hour, minute);
+  }
+
+  // タスクに設定された時間に通知を送る
+  void sendTasksNotifi(Task task) {
+    final _title = 'タスク管理アプリ';
+    final _body = '${task.title}の制限時間まで残り〇分になりました';
+    // final _time =
+    final _details = convertDateTime(task.date, task.time);
+    final _year = _details.$1;
+    final _month = _details.$2[0];
+    final _day = _details.$2[1];
+    final _hour = _details.$3;
+    final _minute = _details.$4;
+    final _notifiTime = NotificationService().getTzTime(
+      _year,
+      _month,
+      _day,
+      _hour,
+      _minute,
+    );
+
+    NotificationService().tasksSchedule(
+      id: 1,
+      title: _title,
+      body: _body,
+      scheduledTime: _notifiTime,
+    );
+    print('通知を送信しました ${task.title} ${_notifiTime}');
   }
 
   // データ全消し スタックしたときだけ使う！
@@ -114,6 +168,7 @@ class Application {
 
     // // TaskNotifierの状態も更新(プロバイダーのStateも同期)
     ref.read(tasksProvider.notifier).addTask(task);
+    sendTasksNotifi(task);
   }
 
   Future<void> addLabel(String name, Color color) async {
