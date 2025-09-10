@@ -124,6 +124,10 @@ class NotificationService {
     await _flutterLocalNotificationsPlugin.cancelAll();
   }
 
+  void cancelTaskNotifi(int id) async {
+    await _flutterLocalNotificationsPlugin.cancel(id);
+  }
+
   tz.TZDateTime getTzTime(int year, int month, int day, int hour, int minute) {
     final ans = tz.TZDateTime(tz.local, year, month, day, hour, minute);
     return ans;

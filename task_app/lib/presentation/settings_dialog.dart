@@ -35,10 +35,16 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
 
   //
   Future<void> _selectNotifiTime(BuildContext context) async {
+    final _account = ref.read(accountNotifierProvider);
+    TimeOfDay _notifiTime =
+        _account.value?.dailyNotifiTime ?? TimeOfDay(hour: 9, minute: 0);
     // TimeOfDay _selectedTime = TimeOfDay.now();
     final TimeOfDay? picked = await showTimePicker(
       context: context,
-      initialTime: TimeOfDay.now(),
+      initialTime:
+          _notifiTime == TimeOfDay(hour: 9, minute: 0)
+              ? TimeOfDay(hour: 9, minute: 0)
+              : _notifiTime,
     );
     if (picked != null) {
       await ref

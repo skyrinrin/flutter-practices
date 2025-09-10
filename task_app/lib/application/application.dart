@@ -126,6 +126,10 @@ class Application {
     return newUuid;
   }
 
+  int getNotifiId(String uuid) {
+    return uuid.hashCode;
+  }
+
   int getOrder(List<Task> tasks) {
     int order = tasks.length * 10;
     return order;
@@ -155,8 +159,10 @@ class Application {
     String date,
     String time,
   ) async {
+    final _id = getUUID();
     final task = Task(
-      id: getUUID(),
+      id: _id,
+      notifiId: getNotifiId(_id),
       order: getOrder(tasks),
       title: title,
       label: label,
