@@ -72,7 +72,7 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
       notDonelistHeight = 160;
       // isVisibility = true;
     } else {
-      print('ここまで来たよ');
+      // print('ここまで来たよ');
       // isVisibility = false;
       donelistHeight = getListHeight(doneTasks);
       notDonelistHeight = getListHeight(notDoneTasks);
@@ -169,9 +169,9 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
         physics: NeverScrollableScrollPhysics(),
         itemCount: tasks.length,
         itemBuilder: (BuildContext context, int index) {
-          print(
-            'cardsViewが呼び出された ${tasks[index].id}, ${tasks.length} : $index ',
-          );
+          // print(
+          //   'cardsViewが呼び出された ${tasks[index].id}, ${tasks.length} : $index ',
+          // );
           return TaskCard(task: tasks[index], key: ValueKey(tasks[index].id));
         },
       ),

@@ -112,6 +112,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:task_app/application/application.dart';
 import 'package:task_app/provider/provider.dart';
 
 class ToggleButton extends ConsumerStatefulWidget {
@@ -129,6 +130,7 @@ class _ToggleButtonState extends ConsumerState<ToggleButton>
   final _player = AudioPlayer();
   // late bool wIsDone;
   late bool isDone;
+  late Application app;
 
   @override
   void initState() {
@@ -143,26 +145,8 @@ class _ToggleButtonState extends ConsumerState<ToggleButton>
       TweenSequenceItem(tween: Tween(begin: 0.85, end: 1.1), weight: 40),
       TweenSequenceItem(tween: Tween(begin: 1.1, end: 1.0), weight: 30),
     ]).animate(_controller);
-    isDone = ref.read(applicationProvider).getToggle(widget._id);
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  Future<void> _playSound() async {
-    await _player.play(AssetSource('clearsound.mp3'));
-  }
-
-  void _onTap() {
-    _playSound();
-    final app = ref.read(applicationProvider);
-    setState(() {
-      isDone = !isDone;
-    });
-    _controller.forward(from: 0.0);
+    app = ref.read(applicationProvider);
+    isDone = app.getToggle(widget._id);
 
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
@@ -186,8 +170,29 @@ class _ToggleButtonState extends ConsumerState<ToggleButton>
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  Future<void> _playSound() async {
+    await _player.play(AssetSource('clearsound.mp3'));
+  }
+
+  void _onTap() {
+    _playSound();
+    // final app = ref.read(applicationProvider);
+    setState(() {
+      isDone = !isDone;
+    });
+    _controller.forward(from: 0.0);
+
+    // final app = ref.read(applicationProvider);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    print('toggleButton: ${widget._id}');
+    // print('toggleButton: ${widget._id}');
     final app = ref.watch(applicationProvider);
     final providerIsDone = app.getToggle(widget._id);
     final effectIsDone = isDone ?? providerIsDone;

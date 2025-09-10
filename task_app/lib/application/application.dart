@@ -72,7 +72,7 @@ class Application {
         print('年をまたぐ');
       }
     }
-    print('これが答え $hour $minute $intDate');
+    // print('これが答え $hour $minute $intDate');
     return (year, intDate, hour, minute);
   }
 

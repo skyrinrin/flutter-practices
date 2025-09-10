@@ -118,7 +118,7 @@ class _TaskCardState extends ConsumerState<TaskCard> {
 
   // タスクカードの中身ウィジェット
   Widget _taskCardScreen(double mediaWidth) {
-    print('タスクカードの中身 ${_id}');
+    // print('タスクカードの中身 ${_id}');
     return Container(
       height: 92 - 16,
       width: mediaWidth - 44, //両端 16・2 + 青線 12
@@ -154,7 +154,7 @@ class _TaskCardState extends ConsumerState<TaskCard> {
 
   @override
   Widget build(BuildContext context) {
-    print('タスクカード $_id');
+    // print('タスクカード $_id');
     List<Label> labels = ref.watch(labelsProvider);
     Label label = labels.where((label) => label.name == task.label).first;
     final double mediaWidth = MediaQuery.of(context).size.width;
