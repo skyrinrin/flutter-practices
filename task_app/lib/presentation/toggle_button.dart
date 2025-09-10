@@ -159,35 +159,27 @@ class _ToggleButtonState extends ConsumerState<ToggleButton>
   void _onTap() {
     _playSound();
     final app = ref.read(applicationProvider);
-    print('onTap ${widget._id}');
-    // _isDone = app.getToggle(widget._id);
-    // wIsDone = !wIsDone;
     setState(() {
       isDone = !isDone;
     });
-    print('isDone : $isDone');
-
-    // if (_isDone) {
-    //   print('_isDone : $_isDone');
-    //   _controller.forward(from: 0.0);
-    // } else {
-    //   print("_isDone : $_isDone");
-    // }
     _controller.forward(from: 0.0);
-
-    // Future.delayed(Duration(milliseconds: 1500)).then((_) {
-    //   print('２秒たち経ちました');
-    //   if (!mounted) return; //widgetがdisposeされたらなにもしない
-    //   // ref.read(applicationProvider).toggleTask(widget._id);
-
-    //   // final isDone = app.toggleTask(widget._id);
-    //   app.toggleTask(widget._id);
-    // });
 
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         if (mounted) {
-          ref.read(applicationProvider).toggleTask(widget._id);
+          // final app = ref.read(applicationProvider);
+          final _originIsDone = app.toggleTask(widget._id);
+          final _task =
+              ref
+                  .read(tasksProvider)
+                  .where((task) => task.id == widget._id)
+                  .first;
+          final _notifiId = _task.notifiId;
+          if (_originIsDone) {
+            app.cancelTaskNotifi(_notifiId);
+          } else {
+            app.sendTasksNotifi(_task);
+          }
         }
       }
     });

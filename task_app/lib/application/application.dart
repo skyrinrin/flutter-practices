@@ -43,7 +43,7 @@ class Application {
   // 通知を送信する 実験なので後で消す
   void sendNotifi() {
     NotificationService().scheduleDaily(
-      id: 1,
+      id: 0,
       title: 'サンプル',
       body: 'あああああああああああああああああああああああああああああああああああああああああああああああ',
       time: TimeOfDay(hour: 2, minute: 55),
@@ -96,12 +96,18 @@ class Application {
     );
 
     NotificationService().tasksSchedule(
-      id: 1,
+      id: task.notifiId,
       title: _title,
       body: _body,
       scheduledTime: _notifiTime,
     );
-    print('通知を送信しました ${task.title} ${_notifiTime}');
+    print('通知を送信しました ${task.title} ${_notifiTime} ${task.notifiId}');
+  }
+
+  void cancelTaskNotifi(int notifiId) {
+    NotificationService notificationService = NotificationService();
+    notificationService.cancelTaskNotifi(notifiId);
+    print('通知を削除しました $notifiId');
   }
 
   // データ全消し スタックしたときだけ使う！
