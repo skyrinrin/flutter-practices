@@ -131,25 +131,25 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
       child: Stack(
         children: [
           Positioned(
-            top: 0,
-            child: Text('日時設定', style: TextStyle(fontSize: 18)),
+            top: 4,
+            child: Text('日時設定', style: TextStyle(fontSize: 16)),
           ),
           Positioned(
-            top: 30,
+            top: 32,
             child: InkWell(
               onTap: () => selectDate(context, ref),
               child: Container(
-                child: Text(strSelectedDate, style: TextStyle(fontSize: 22)),
+                child: Text(strSelectedDate, style: TextStyle(fontSize: 20)),
               ),
             ),
           ),
           Positioned(
-            top: 30,
+            top: 32,
             left: 70,
             child: InkWell(
               onTap: () => _selectTime(context, ref),
               child: Container(
-                child: Text(strSelectedTime, style: TextStyle(fontSize: 22)),
+                child: Text(strSelectedTime, style: TextStyle(fontSize: 20)),
               ),
             ),
           ),
@@ -246,8 +246,9 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
                     ),
                   ),
                   Positioned(
+                    top: 4,
                     left: 30,
-                    child: Text('通知', style: TextStyle(fontSize: 20)),
+                    child: Text('通知', style: TextStyle(fontSize: 18)),
                   ),
                   Positioned(
                     top: -1,
