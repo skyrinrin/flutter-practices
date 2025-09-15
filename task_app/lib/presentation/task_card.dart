@@ -5,6 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:task_app/application/application.dart';
 import 'package:task_app/domain/label_domain.dart';
 import 'package:task_app/domain/task_domain.dart';
+import 'package:task_app/presentation/task_detail.dart';
 import 'package:task_app/presentation/toggle_button.dart';
 import 'package:task_app/provider/provider.dart';
 
@@ -152,47 +153,55 @@ class _TaskCardState extends ConsumerState<TaskCard> {
     );
   }
 
+  // 付箋が触れられたときに拡大画面を展開する
+  void _tapTaskCard(BuildContext context) {
+    showDialog(context: context, builder: (context) => TaskDetail());
+  }
+
   @override
   Widget build(BuildContext context) {
     // print('タスクカード $_id');
     List<Label> labels = ref.watch(labelsProvider);
     Label label = labels.where((label) => label.name == task.label).first;
     final double mediaWidth = MediaQuery.of(context).size.width;
-    return Container(
-      margin: EdgeInsets.only(bottom: 12),
-      height: 92,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: const Color.fromARGB(100, 0, 0, 0),
-            offset: Offset(5, 5),
-            blurRadius: 10,
-            spreadRadius: 1,
-          ),
-        ],
-      ),
+    return GestureDetector(
+      onTap: () => _tapTaskCard(context),
+      child: Container(
+        margin: EdgeInsets.only(bottom: 12),
+        height: 92,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: const Color.fromARGB(100, 0, 0, 0),
+              offset: Offset(5, 5),
+              blurRadius: 10,
+              spreadRadius: 1,
+            ),
+          ],
+        ),
 
-      child: Stack(
-        children: [
-          // 横の青線
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
-              width: 12,
-              decoration: BoxDecoration(
-                color: label.color, //ここがカラー
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(8),
-                  bottomLeft: Radius.circular(8),
+        child: Stack(
+          children: [
+            // 横の青線
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Container(
+                width: 12,
+                decoration: BoxDecoration(
+                  color: label.color, //ここがカラー
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(8),
+                    bottomLeft: Radius.circular(8),
+                  ),
                 ),
               ),
             ),
-          ),
-          // ここから要素
-          Positioned(top: 16, left: 12, child: _taskCardScreen(mediaWidth)),
-        ],
+            // ここから要素
+            Positioned(top: 16, left: 12, child: _taskCardScreen(mediaWidth)),
+          ],
+        ),
       ),
     );
   }
