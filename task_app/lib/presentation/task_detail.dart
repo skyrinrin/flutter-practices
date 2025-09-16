@@ -8,19 +8,50 @@ class TaskDetail extends StatefulWidget {
 }
 
 class _TaskDetailState extends State<TaskDetail> {
+  Widget _cardFrame() {
+    return Container(
+      height: 280,
+      width: 280,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Row(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: Color(0xFF8FC3FF),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(10),
+                bottomLeft: Radius.circular(10),
+              ),
+            ), //ここの色は各自変更
+            height: 280,
+            width: 20,
+          ),
+          _cardValue(),
+        ],
+      ),
+    );
+  }
+
+  Widget _cardValue() {
+    return Stack(children: [Positioned(child: Text('サンプル'))]);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SimpleDialog(
-      // backgroundColor: Colors.white,
-      children: [
-        Container(
-          // height: 100,
-          // width: 100,
-          margin: EdgeInsets.all(100),
-          color: Colors.white,
-          child: Text('サンプル'),
-        ),
-      ],
+    // return SimpleDialog(
+    // backgroundColor: Colors.white,
+    // children: [
+    return Center(
+      // height: 300,
+      // width: 500
+      // margin: EdgeInsets.all(50),
+      // color: Colors.amber,
+      child: _cardFrame(),
     );
+    //   ],
+    // );
   }
 }
