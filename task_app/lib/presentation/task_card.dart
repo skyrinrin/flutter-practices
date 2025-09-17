@@ -13,7 +13,7 @@ class TaskCard extends ConsumerStatefulWidget {
   Task task;
   TaskCard({super.key, required this.task});
   @override
-  ConsumerState<TaskCard> createState() => _TaskCardState(task: task);
+  ConsumerState<TaskCard> createState() => _TaskCardState(task: this.task);
 }
 
 class _TaskCardState extends ConsumerState<TaskCard> {
@@ -28,13 +28,13 @@ class _TaskCardState extends ConsumerState<TaskCard> {
   void initState() {
     super.initState();
     app = ref.read(applicationProvider);
-    _id = widget.task.id;
-    _order = widget.task.order;
-    _taskTitle = widget.task.title;
-    label = widget.task.label;
-    _date = widget.task.date;
-    _time = widget.task.time;
-    _isDone = widget.task.isDone; //もしかしたらこれかも？
+    _id = task.id;
+    _order = task.order;
+    _taskTitle = task.title;
+    label = task.label;
+    _date = task.date;
+    _time = task.time;
+    _isDone = task.isDone; //もしかしたらこれかも？
     // _colorChange();
   }
 
@@ -90,11 +90,14 @@ class _TaskCardState extends ConsumerState<TaskCard> {
         SizedBox(width: 8),
         Text(_time),
         SizedBox(width: 12),
-        Text(
-          label,
-          style: TextStyle(color: Color(0xFF6bde89)),
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
+        Container(
+          width: 160,
+          child: Text(
+            label,
+            style: TextStyle(color: Color(0xFF6bde89)),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
       ],
     );
@@ -154,8 +157,11 @@ class _TaskCardState extends ConsumerState<TaskCard> {
   }
 
   // 付箋が触れられたときに拡大画面を展開する
-  void _tapTaskCard(BuildContext context) {
-    showDialog(context: context, builder: (context) => TaskDetail());
+  void _tapTaskCard(BuildContext context, Color sideColor) {
+    showDialog(
+      context: context,
+      builder: (context) => TaskDetail(task: task, sideColor: sideColor),
+    );
   }
 
   @override
@@ -163,9 +169,10 @@ class _TaskCardState extends ConsumerState<TaskCard> {
     // print('タスクカード $_id');
     List<Label> labels = ref.watch(labelsProvider);
     Label label = labels.where((label) => label.name == task.label).first;
+    Color sideColor = label.color;
     final double mediaWidth = MediaQuery.of(context).size.width;
     return GestureDetector(
-      onTap: () => _tapTaskCard(context),
+      onTap: () => _tapTaskCard(context, sideColor),
       child: Container(
         margin: EdgeInsets.only(bottom: 12),
         height: 92,
@@ -190,7 +197,7 @@ class _TaskCardState extends ConsumerState<TaskCard> {
               child: Container(
                 width: 12,
                 decoration: BoxDecoration(
-                  color: label.color, //ここがカラー
+                  color: sideColor, //ここがカラー
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(8),
                     bottomLeft: Radius.circular(8),

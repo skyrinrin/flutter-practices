@@ -1,17 +1,25 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:task_app/domain/label_domain.dart';
 import 'package:task_app/domain/task_domain.dart';
 import 'dart:math';
 
 class TaskDetail extends StatefulWidget {
-  TaskDetail({super.key, task});
+  Task task;
+  Color sideColor;
+  TaskDetail({super.key, required this.task, required this.sideColor});
   @override
-  _TaskDetailState createState() => _TaskDetailState();
+  _TaskDetailState createState() =>
+      _TaskDetailState(task: this.task, sideColor: this.sideColor);
 }
 
 class _TaskDetailState extends State<TaskDetail> {
-  Widget _cardFrame() {
+  Task task;
+  Color sideColor;
+  _TaskDetailState({required this.task, required this.sideColor});
+
+  Widget _taskDetailCard() {
     return Container(
       height: 320,
       width: 320,
@@ -25,7 +33,7 @@ class _TaskDetailState extends State<TaskDetail> {
             alignment: Alignment.topLeft,
             child: Container(
               decoration: BoxDecoration(
-                color: Color(0xFF8FC3FF),
+                color: sideColor,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(10),
                   bottomLeft: Radius.circular(10),
@@ -42,7 +50,7 @@ class _TaskDetailState extends State<TaskDetail> {
               onPressed: () {
                 //ここに関数
               },
-              icon: Icon(Icons.delete, color: Color(0xFF969696), size: 26),
+              icon: Icon(Icons.settings, color: Color(0xFF969696), size: 28),
             ),
           ),
           Align(alignment: Alignment.center, child: _cardValue()),
@@ -71,12 +79,18 @@ class _TaskDetailState extends State<TaskDetail> {
           Positioned(bottom: 12, child: _taskDetailValues()),
           Positioned(
             top: 8,
-            child: Text(
-              'タイトル', //長くなってしまった場合の処理も考えておく 三点リーダー
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold, //太字に
-                color: Color(0xFF6B6868),
+            child: Container(
+              // color: Colors.amber,
+              width: 172,
+              child: Text(
+                task.title, //長くなってしまった場合の処理も考えておく 三点リーダー
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold, //太字に
+                  color: Color(0xFF6B6868),
+                ),
               ),
             ),
           ),
@@ -133,14 +147,20 @@ class _TaskDetailState extends State<TaskDetail> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '  期限     :  09/17 15:22',
+            '  期限     :  ${task.date}  ${task.time}',
+            maxLines: 1,
             style: TextStyle(fontSize: 16, color: Color(0xFF6B6868)),
           ),
           SizedBox(height: 6),
 
-          Text(
-            '  ラベル  :  未選択',
-            style: TextStyle(fontSize: 16, color: Color(0xFF6B6868)),
+          Container(
+            width: 200,
+            child: Text(
+              '  ラベル  :  ${task.label}',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(fontSize: 16, color: Color(0xFF6B6868)),
+            ),
           ),
           SizedBox(height: 4),
 
@@ -208,6 +228,8 @@ class _TaskDetailState extends State<TaskDetail> {
 
   @override
   Widget build(BuildContext context) {
+    // final _task = widget.task;
+    // final _sideColor = widget.sideColor; //
     // return SimpleDialog(
     // backgroundColor: Colors.white,
     // children: [
@@ -216,7 +238,7 @@ class _TaskDetailState extends State<TaskDetail> {
       // width: 500
       // margin: EdgeInsets.all(50),
       // color: Colors.amber,
-      child: _cardFrame(),
+      child: _taskDetailCard(),
     );
     //   ],
     // );
