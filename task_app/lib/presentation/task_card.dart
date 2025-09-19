@@ -32,8 +32,8 @@ class _TaskCardState extends ConsumerState<TaskCard> {
     _order = task.order;
     _taskTitle = task.title;
     label = task.label;
-    _date = task.date;
-    _time = task.time;
+    _deadLineDate = task.deadLineDate;
+    _deadLineTime = task.deadLineTime;
     _isDone = task.isDone; //もしかしたらこれかも？
     // _colorChange();
   }
@@ -59,8 +59,8 @@ class _TaskCardState extends ConsumerState<TaskCard> {
   late int _order;
   late String _taskTitle;
   late String label;
-  late String _date;
-  late String _time;
+  late String _deadLineDate;
+  late String _deadLineTime;
   late bool _isDone;
 
   // タスクテキストウィジェット
@@ -80,7 +80,7 @@ class _TaskCardState extends ConsumerState<TaskCard> {
   Widget _dateTimeLabelText() {
     return Row(
       children: [
-        Text(_date),
+        Text(_deadLineDate),
         SizedBox(width: 8),
         Container(
           height: 12,
@@ -88,7 +88,7 @@ class _TaskCardState extends ConsumerState<TaskCard> {
           decoration: BoxDecoration(color: Colors.black),
         ),
         SizedBox(width: 8),
-        Text(_time),
+        Text(_deadLineTime),
         SizedBox(width: 12),
         Container(
           width: 160,

@@ -53,7 +53,10 @@ class TaskHomeview extends ConsumerWidget {
           ElevatedButton(
             onPressed: () {
               final tasks = ref.watch(tasksProvider);
-              app.convertDateTime(tasks.first.date, tasks.first.time);
+              app.convertDateTime(
+                tasks.first.deadLineDate,
+                tasks.first.deadLineTime,
+              );
             },
             child: Text('convert'),
           ),

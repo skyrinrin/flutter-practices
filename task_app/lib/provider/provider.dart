@@ -117,7 +117,8 @@ final labelsTasksProvider = Provider<Map<Label, List<Task>>>((ref) {
 final todayTasksProvider = Provider<List<Task>>((ref) {
   final allTasks = ref.watch(tasksProvider);
   final today = Common.today;
-  List<Task> tasks = allTasks.where((task) => task.date == today).toList();
+  List<Task> tasks =
+      allTasks.where((task) => task.deadLineDate == today).toList();
   if (tasks.isNotEmpty) {
     // print("今日のタスク一覧: ${tasks[0].date} ${tasks.length}");
     // print("タスク一覧: ${allTasks} ${allTasks.length}");
@@ -135,7 +136,8 @@ final todayTasksProvider = Provider<List<Task>>((ref) {
 final tomorrowTasksProvider = Provider<List<Task>>((ref) {
   final allTasks = ref.watch(tasksProvider);
   final tomorrow = Common.tomorrow;
-  List<Task> tasks = allTasks.where((task) => task.date == tomorrow).toList();
+  List<Task> tasks =
+      allTasks.where((task) => task.deadLineDate == tomorrow).toList();
   if (tasks.isNotEmpty) {
     // print("明日のタスク一覧: ${tasks[0].date} ${tasks.length}");
     // print("タスク一覧: ${allTasks} ${allTasks.length}");
@@ -157,7 +159,9 @@ final otherTasksProvider = Provider<List<Task>>((ref) {
   final today = Common.today;
   final tomorrow = Common.tomorrow;
 
-  tasks.removeWhere((task) => task.date == tomorrow || task.date == today);
+  tasks.removeWhere(
+    (task) => task.deadLineDate == tomorrow || task.deadLineDate == today,
+  );
   // print('その他のタスク: $tasks');
   // print("タスク一覧: ${allTasks} ${tasks.length}");
 

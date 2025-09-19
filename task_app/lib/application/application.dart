@@ -81,7 +81,7 @@ class Application {
     final _title = 'タスク管理アプリ';
     final _body = '${task.title}の制限時間まで残り〇分になりました';
     // final _time =
-    final _details = convertDateTime(task.date, task.time);
+    final _details = convertDateTime(task.deadLineDate, task.deadLineTime);
     final _year = _details.$1;
     final _month = _details.$2[0];
     final _day = _details.$2[1];
@@ -162,8 +162,10 @@ class Application {
     // int id,
     String title,
     String label,
-    String date,
-    String time,
+    String deadLineDate,
+    String deadLineTime,
+    String nowDate,
+    String nowTime,
   ) async {
     final _id = getUUID();
     final task = Task(
@@ -172,8 +174,10 @@ class Application {
       order: getOrder(tasks),
       title: title,
       label: label,
-      date: date,
-      time: time,
+      deadLineDate: deadLineDate,
+      deadLineTime: deadLineTime,
+      madeDate: nowDate,
+      madeTime: nowTime,
     );
     // print('ここまできたApplication');
     await repository.addTask(task);

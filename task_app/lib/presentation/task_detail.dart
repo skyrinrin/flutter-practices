@@ -147,7 +147,7 @@ class _TaskDetailState extends State<TaskDetail> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '  期限     :  ${task.date}  ${task.time}',
+            '  期限     :  ${task.deadLineDate}  ${task.deadLineTime}',
             maxLines: 1,
             style: TextStyle(fontSize: 16, color: Color(0xFF6B6868)),
           ),
@@ -167,6 +167,19 @@ class _TaskDetailState extends State<TaskDetail> {
           Text(
             '  メモ      : ',
             style: TextStyle(fontSize: 16, color: Color(0xFF6B6868)),
+          ),
+          SizedBox(height: 4),
+          Row(
+            children: [
+              Text(
+                '  最終変更 :  ',
+                style: TextStyle(fontSize: 14, color: Color(0xFF6B6868)),
+              ),
+              Text(
+                '${task.madeDate}  ${task.madeTime}',
+                style: TextStyle(fontSize: 16, color: Color(0xFF6B6868)),
+              ),
+            ],
           ),
         ],
       ),

@@ -30,15 +30,22 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
   }
 
   // 日付、時間を格納する変数
-  TimeOfDay selectedTime = TimeOfDay.now();
-  DateTime selectedDate = DateTime.now();
+  DateTime _selectedDate = DateTime.now();
+  TimeOfDay _selectedTime = TimeOfDay.now();
 
-  String strSelectedDate = DateTime.now()
+  String _strSelectedDate = DateTime.now()
+      .toString()
+      .substring(5, 10)
+      .replaceAll('-', '/')
+      .padLeft(2, '0'); //ここから タスク発行時の時間をタスクのプロパティに組み込む
+  String _strSelectedTime = '09:00';
+  // String _strSelectedTime = TimeOfDay.now().toString().substring(10, 15);
+  String _strNowDate = DateTime.now()
       .toString()
       .substring(5, 10)
       .replaceAll('-', '/')
       .padLeft(2, '0');
-  String strSelectedTime = TimeOfDay.now().toString().substring(10, 15);
+  String _strNowTime = TimeOfDay.now().toString().substring(10, 15);
 
   // ラベルを格納する変数
   String _selectedLabel = '未選択';
@@ -53,37 +60,39 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
       await app.addTask(
         _controller.text,
         _selectedLabel,
-        strSelectedDate,
-        strSelectedTime,
+        _strSelectedDate,
+        _strSelectedTime,
+        _strNowDate,
+        _strNowTime,
       );
       print(
-        '現在保存したタスク: ${_controller.text} $_selectedLabel $strSelectedDate $strSelectedTime',
+        '現在保存したタスク: ${_controller.text} $_selectedLabel $_strSelectedDate $_strSelectedTime',
       );
     }
     Navigator.pop(context);
   }
 
-  // テスト用ダミーデータ
-  void _testPushedAddButton(Application app) async {
-    for (int i = 0; i < 10; i++) {
-      await app.addTask('このタスクはサンプルです。', 'Sample', '06/08', '11:41');
-    }
-    Navigator.pop(context);
-  }
+  // // テスト用ダミーデータ
+  // void _testPushedAddButton(Application app) async {
+  //   for (int i = 0; i < 10; i++) {
+  //     await app.addTask('このタスクはサンプルです。', 'Sample', '06/08', '11:41');
+  //   }
+  //   Navigator.pop(context);
+  // }
 
   // 日付選択ウィジェット
   Future<void> selectDate(BuildContext context, WidgetRef ref) async {
     DateTime? picked = await showDatePicker(
       context: context,
       // 初期日付
-      initialDate: selectedDate,
+      initialDate: _selectedDate,
       firstDate: DateTime.now(),
       lastDate: DateTime(2100),
     );
     if (picked != null) {
       setState(() {
-        selectedDate = picked;
-        strSelectedDate = formattedDate(selectedDate);
+        _selectedDate = picked;
+        _strSelectedDate = formatDate(_selectedDate);
       });
     }
   }
@@ -92,13 +101,13 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
   Future<void> _selectTime(BuildContext context, WidgetRef ref) async {
     TimeOfDay? picked = await showTimePicker(
       context: context,
-      initialTime: selectedTime,
+      initialTime: _selectedTime,
     );
 
     if (picked != null) {
       setState(() {
-        selectedTime = picked;
-        strSelectedTime = formattedTime(selectedTime);
+        _selectedTime = picked;
+        _strSelectedTime = formatTime(_selectedTime);
       });
     }
   }
@@ -139,7 +148,7 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
             child: InkWell(
               onTap: () => selectDate(context, ref),
               child: Container(
-                child: Text(strSelectedDate, style: TextStyle(fontSize: 20)),
+                child: Text(_strSelectedDate, style: TextStyle(fontSize: 20)),
               ),
             ),
           ),
@@ -149,7 +158,7 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
             child: InkWell(
               onTap: () => _selectTime(context, ref),
               child: Container(
-                child: Text(strSelectedTime, style: TextStyle(fontSize: 20)),
+                child: Text(_strSelectedTime, style: TextStyle(fontSize: 20)),
               ),
             ),
           ),
