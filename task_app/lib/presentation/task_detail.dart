@@ -50,7 +50,7 @@ class _TaskDetailState extends State<TaskDetail> {
               onPressed: () {
                 //ここに関数
               },
-              icon: Icon(Icons.settings, color: Color(0xFF969696), size: 28),
+              icon: Icon(Icons.delete, color: Color(0xFF969696), size: 28),
             ),
           ),
           Align(alignment: Alignment.center, child: _cardValue()),
@@ -79,21 +79,26 @@ class _TaskDetailState extends State<TaskDetail> {
           Positioned(bottom: 12, child: _taskDetailValues()),
           Positioned(
             top: 8,
-            child: Container(
-              // color: Colors.amber,
-              width: 172,
-              child: Text(
-                task.title, //長くなってしまった場合の処理も考えておく 三点リーダー
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold, //太字に
-                  color: Color(0xFF6B6868),
+            child: GestureDetector(
+              onLongPress: () => _showTitleOverlay(),
+              onLongPressEnd: (details) => _hideTitleOverlay(),
+              child: Container(
+                // color: Colors.amber,
+                width: 172,
+                child: Text(
+                  task.title, //長くなってしまった場合の処理も考えておく 三点リーダー
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold, //太字に
+                    color: Color(0xFF6B6868),
+                  ),
                 ),
               ),
             ),
           ),
+          _titleMore(),
 
           // ここから
           // Positioned(
@@ -237,6 +242,49 @@ class _TaskDetailState extends State<TaskDetail> {
 
   Widget _cardFold() {
     return Container(color: Color(0xFFD9D9D9), height: 60, width: 60);
+  }
+
+  final OverlayPortalController _overlayPortalController =
+      OverlayPortalController();
+
+  void _showTitleOverlay() {
+    _overlayPortalController.toggle();
+    // Future.delayed(
+    //   const Duration(seconds: 3),
+    // ).then((_) => _overlayPortalController.hide());
+  }
+
+  void _hideTitleOverlay() {
+    _overlayPortalController.toggle();
+  }
+
+  Widget _titleMore() {
+    return OverlayPortal(
+      controller: _overlayPortalController,
+      overlayChildBuilder: (context) {
+        return Positioned(
+          top: 322,
+          left: 86,
+
+          child: Material(
+            elevation: 4.0,
+            child: Container(
+              width: 240,
+              padding: EdgeInsets.all(8),
+              color: Colors.white,
+              child: Text(
+                '${task.title}',
+                style: TextStyle(
+                  fontSize: 22,
+                  color: Color(0xFF6B6868),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 
   @override
