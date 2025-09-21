@@ -18,6 +18,7 @@ class _TaskDetailState extends State<TaskDetail> {
   Task task;
   Color sideColor;
   _TaskDetailState({required this.task, required this.sideColor});
+  Offset _titlePosition = Offset(0, 0);
 
   Widget _taskDetailCard() {
     return Container(
@@ -69,6 +70,14 @@ class _TaskDetailState extends State<TaskDetail> {
     );
   }
 
+  final GlobalKey _titleKey = GlobalKey();
+
+  void _getTitlePosition() {
+    final renderBox = _titleKey.currentContext!.findRenderObject() as RenderBox;
+    _titlePosition = renderBox.localToGlobal(Offset.zero); //画面上の位置
+    print('Widgetの場所: $_titlePosition');
+  }
+
   Widget _cardValue() {
     return Container(
       // color: Colors.blueAccent,
@@ -86,7 +95,8 @@ class _TaskDetailState extends State<TaskDetail> {
                 // color: Colors.amber,
                 width: 172,
                 child: Text(
-                  task.title, //長くなってしまった場合の処理も考えておく 三点リーダー
+                  key: _titleKey,
+                  task.title,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
@@ -248,6 +258,7 @@ class _TaskDetailState extends State<TaskDetail> {
       OverlayPortalController();
 
   void _showTitleOverlay() {
+    _getTitlePosition();
     _overlayPortalController.toggle();
     // Future.delayed(
     //   const Duration(seconds: 3),
@@ -263,8 +274,8 @@ class _TaskDetailState extends State<TaskDetail> {
       controller: _overlayPortalController,
       overlayChildBuilder: (context) {
         return Positioned(
-          top: 322,
-          left: 86,
+          top: _titlePosition.dx,
+          left: _titlePosition.dy,
 
           child: Material(
             elevation: 4.0,
