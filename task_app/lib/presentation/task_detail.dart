@@ -74,7 +74,11 @@ class _TaskDetailState extends State<TaskDetail> {
 
   void _getTitlePosition() {
     final renderBox = _titleKey.currentContext!.findRenderObject() as RenderBox;
-    _titlePosition = renderBox.localToGlobal(Offset.zero); //画面上の位置
+    final overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
+    _titlePosition = renderBox.localToGlobal(
+      Offset.zero,
+      ancestor: overlay,
+    ); //画面上の位置
     print('Widgetの場所: $_titlePosition');
   }
 
@@ -88,6 +92,7 @@ class _TaskDetailState extends State<TaskDetail> {
           Positioned(bottom: 12, child: _taskDetailValues()),
           Positioned(
             top: 8,
+            key: _titleKey,
             child: GestureDetector(
               onLongPress: () => _showTitleOverlay(),
               onLongPressEnd: (details) => _hideTitleOverlay(),
@@ -95,7 +100,6 @@ class _TaskDetailState extends State<TaskDetail> {
                 // color: Colors.amber,
                 width: 172,
                 child: Text(
-                  key: _titleKey,
                   task.title,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -274,8 +278,8 @@ class _TaskDetailState extends State<TaskDetail> {
       controller: _overlayPortalController,
       overlayChildBuilder: (context) {
         return Positioned(
-          top: _titlePosition.dx,
-          left: _titlePosition.dy,
+          top: _titlePosition.dy,
+          left: _titlePosition.dx,
 
           child: Material(
             elevation: 4.0,
