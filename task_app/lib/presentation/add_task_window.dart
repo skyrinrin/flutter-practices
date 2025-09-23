@@ -11,6 +11,7 @@ import 'package:task_app/common/common.dart';
 import 'package:task_app/domain/label_domain.dart';
 import 'package:task_app/main.dart';
 import 'package:task_app/domain/task_domain.dart';
+import 'package:task_app/presentation/selects.dart';
 import 'package:task_app/provider/provider.dart';
 
 class AddTaskWindow extends ConsumerStatefulWidget {
@@ -22,6 +23,7 @@ class AddTaskWindow extends ConsumerStatefulWidget {
 
 class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
   final TextEditingController _controller = TextEditingController();
+  Selects _selects = Selects();
 
   @override
   void dispose() {
@@ -80,36 +82,46 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
   //   Navigator.pop(context);
   // }
 
-  // 日付選択ウィジェット
-  Future<void> selectDate(BuildContext context, WidgetRef ref) async {
-    DateTime? picked = await showDatePicker(
-      context: context,
-      // 初期日付
-      initialDate: _selectedDate,
-      firstDate: DateTime.now(),
-      lastDate: DateTime(2100),
-    );
-    if (picked != null) {
-      setState(() {
-        _selectedDate = picked;
-        _strSelectedDate = formatDate(_selectedDate);
-      });
-    }
+  // // 日付選択ウィジェット
+  // Future<void> selectDate(BuildContext context, WidgetRef ref) async {
+  //   DateTime? picked = await showDatePicker(
+  //     context: context,
+  //     // 初期日付
+  //     initialDate: _selectedDate,
+  //     firstDate: DateTime.now(),
+  //     lastDate: DateTime(2100),
+  //   );
+  //   if (picked != null) {
+  //     setState(() {
+  //       _selectedDate = picked;
+  //       _strSelectedDate = formatDate(_selectedDate);
+  //     });
+  //   }
+  // }
+
+  // // 時間選択ウィジェット
+  // Future<void> _selectTime(BuildContext context) async {
+  //   TimeOfDay? picked = await showTimePicker(
+  //     context: context,
+  //     initialTime: _selectedTime,
+  //   );
+
+  //   if (picked != null) {
+  //     setState(() {
+  //       _selectedTime = picked;
+  //       _strSelectedTime = formatTime(_selectedTime);
+  //     });
+  //   }
+  // }
+
+  Future<void> _editDate() async {
+    _selectedDate = await _selects.selectDate(context, DateTime.now());
+    _strSelectedDate = formatDate(_selectedDate);
   }
 
-  // 時間選択ウィジェット
-  Future<void> _selectTime(BuildContext context, WidgetRef ref) async {
-    TimeOfDay? picked = await showTimePicker(
-      context: context,
-      initialTime: _selectedTime,
-    );
-
-    if (picked != null) {
-      setState(() {
-        _selectedTime = picked;
-        _strSelectedTime = formatTime(_selectedTime);
-      });
-    }
+  Future<void> _editTime() async {
+    _selectedTime = await _selects.selectTime(context, TimeOfDay.now());
+    _strSelectedTime = formatTime(_selectedTime);
   }
 
   // ラベル選択ウィジェット
@@ -146,7 +158,11 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
           Positioned(
             top: 32,
             child: InkWell(
-              onTap: () => selectDate(context, ref),
+              onTap: () {
+                setState(() {
+                  _editDate();
+                });
+              },
               child: Container(
                 child: Text(_strSelectedDate, style: TextStyle(fontSize: 20)),
               ),
@@ -156,7 +172,11 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
             top: 32,
             left: 70,
             child: InkWell(
-              onTap: () => _selectTime(context, ref),
+              onTap: () async {
+                setState(() {
+                  _editTime();
+                });
+              },
               child: Container(
                 child: Text(_strSelectedTime, style: TextStyle(fontSize: 20)),
               ),
