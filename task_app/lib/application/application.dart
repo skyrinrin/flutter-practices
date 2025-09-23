@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ffi';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -144,6 +145,12 @@ class Application {
   List<Task> sortTasks(List<Task> tasks) {
     tasks.sort((a, b) => a.order.compareTo(b.order));
     return tasks;
+  }
+
+  DateTime fromStrToDate(String dateStr) {
+    final _now = DateTime.now();
+    final _dateInt = int.parse(dateStr);
+    return DateTime(_now.year, _now.month, _dateInt);
   }
 
   //色の変換をインフラ層以外で使う場合はつかうかも...

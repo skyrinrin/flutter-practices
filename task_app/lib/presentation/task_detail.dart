@@ -1,24 +1,29 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:task_app/domain/label_domain.dart';
 import 'package:task_app/domain/task_domain.dart';
 import 'dart:math';
 
-class TaskDetail extends StatefulWidget {
+import 'package:task_app/presentation/selects.dart';
+import 'package:task_app/provider/provider.dart';
+
+class TaskDetail extends ConsumerStatefulWidget {
   Task task;
   Color sideColor;
   TaskDetail({super.key, required this.task, required this.sideColor});
   @override
-  _TaskDetailState createState() =>
+  ConsumerState<TaskDetail> createState() =>
       _TaskDetailState(task: this.task, sideColor: this.sideColor);
 }
 
-class _TaskDetailState extends State<TaskDetail> {
+class _TaskDetailState extends ConsumerState<TaskDetail> {
   Task task;
   Color sideColor;
   _TaskDetailState({required this.task, required this.sideColor});
   Offset _titlePosition = Offset(0, 0);
+  Selects _selects = Selects();
 
   Widget _taskDetailCard() {
     return Container(
@@ -165,10 +170,29 @@ class _TaskDetailState extends State<TaskDetail> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            '  期限     :  ${task.deadLineDate}  ${task.deadLineTime}',
-            maxLines: 1,
-            style: TextStyle(fontSize: 16, color: Color(0xFF6B6868)),
+          Row(
+            children: [
+              Text(
+                '  期限     :  ',
+                maxLines: 1,
+                style: TextStyle(fontSize: 16, color: Color(0xFF6B6868)),
+              ),
+              GestureDetector(
+                onTap: () => _editTaskDate(),
+                child: Text(
+                  '${task.deadLineDate} ',
+                  maxLines: 1,
+                  style: TextStyle(fontSize: 16, color: Color(0xFF6B6868)),
+                ),
+              ),
+              GestureDetector(
+                child: Text(
+                  ' ${task.deadLineTime}',
+                  maxLines: 1,
+                  style: TextStyle(fontSize: 16, color: Color(0xFF6B6868)),
+                ),
+              ),
+            ],
           ),
           SizedBox(height: 6),
 
@@ -271,6 +295,12 @@ class _TaskDetailState extends State<TaskDetail> {
 
   void _hideTitleOverlay() {
     _overlayPortalController.toggle();
+  }
+
+  void _editTaskDate() {
+    final app = ref.read(applicationProvider);
+    final _nowDate = app.fromStrToDate(task.deadLineDate);
+    _selects.selectDate(context, _nowDate);
   }
 
   Widget _titleMore() {

@@ -116,12 +116,17 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
 
   Future<void> _editDate() async {
     _selectedDate = await _selects.selectDate(context, DateTime.now());
-    _strSelectedDate = formatDate(_selectedDate);
+
+    setState(() {
+      _strSelectedDate = formatDate(_selectedDate);
+    });
   }
 
   Future<void> _editTime() async {
     _selectedTime = await _selects.selectTime(context, TimeOfDay.now());
-    _strSelectedTime = formatTime(_selectedTime);
+    setState(() {
+      _strSelectedTime = formatTime(_selectedTime);
+    });
   }
 
   // ラベル選択ウィジェット
@@ -159,9 +164,7 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
             top: 32,
             child: InkWell(
               onTap: () {
-                setState(() {
-                  _editDate();
-                });
+                _editDate();
               },
               child: Container(
                 child: Text(_strSelectedDate, style: TextStyle(fontSize: 20)),
@@ -172,10 +175,8 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
             top: 32,
             left: 70,
             child: InkWell(
-              onTap: () async {
-                setState(() {
-                  _editTime();
-                });
+              onTap: () {
+                _editTime();
               },
               child: Container(
                 child: Text(_strSelectedTime, style: TextStyle(fontSize: 20)),
