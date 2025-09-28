@@ -181,11 +181,22 @@ class Application {
       madeTime: nowTime,
     );
     // print('ここまできたApplication');
-    await repository.addTask(task);
 
     // // TaskNotifierの状態も更新(プロバイダーのStateも同期)
     ref.read(tasksProvider.notifier).addTask(task);
+    await repository.addTask(task);
     sendTasksNotifi(task);
+  }
+
+  Future<void> updateTasks(Task task) async {
+    // final _tasks = ref.watch(tasksProvider);
+    // final _tasksNotifi = ref.watch(tasksProvider.notifier);
+    // final
+    final _tasks = [...tasks];
+    final index = _tasks.indexWhere((value) => value.id == task.id);
+    _tasks[index] = task;
+    repository.saveTasks(_tasks);
+    ref.read(tasksProvider.notifier).updateTasks(_tasks);
   }
 
   Future<void> addLabel(String name, Color color) async {

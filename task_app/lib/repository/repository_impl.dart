@@ -25,12 +25,16 @@ class RepositoryImpl implements Repository {
 
   List<Task> _cachedTasks = []; //タスクのキャッシュ
 
-  //タスクの追加
+  // タスクの追加
   @override
   Future<void> addTask(Task task) async {
-    print('ここまで来たrepository');
-    // _cachedTasks.add(task);
+    _cachedTasks.add(task);
     await saveTasks(_cachedTasks); //ここ変更した(保存でエラーが出たらこれかも...)
+  }
+
+  @override
+  Future<void> updateTasks() async {
+    await saveTasks(_cachedTasks);
   }
 
   //

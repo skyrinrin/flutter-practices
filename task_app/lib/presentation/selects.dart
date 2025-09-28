@@ -2,16 +2,20 @@ import 'package:flutter/material.dart';
 
 class Selects {
   // 日付選択ウィジェット
-  Future<DateTime> selectDate(BuildContext context, DateTime nowDate) async {
+  Future<DateTime> selectDate(
+    BuildContext context,
+    DateTime nowDeadLineDate,
+  ) async {
+    final _nowDate = DateTime.now();
     DateTime? picked = await showDatePicker(
       context: context,
-      firstDate: nowDate,
+      firstDate: _nowDate,
       lastDate: DateTime(2100),
     );
     if (picked != null) {
       return picked;
     } else {
-      return nowDate;
+      return nowDeadLineDate;
     }
   }
 

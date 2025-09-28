@@ -297,7 +297,7 @@ class _TaskDetailState extends ConsumerState<TaskDetail> {
     _overlayPortalController.toggle();
   }
 
-  void _editTaskDate() {
+  void _editTaskDate() async {
     final app = ref.read(applicationProvider);
     final _nowDateStr = app.convertDateTime(
       task.deadLineDate,
@@ -311,7 +311,31 @@ class _TaskDetailState extends ConsumerState<TaskDetail> {
       _nowDateStr.$4,
     );
     print('タスク詳細: nowDate : $_nowDate');
-    _selects.selectDate(context, _nowDate);
+
+    // final _tasks = ref.watch(tasksProvider);
+    // final _tasksNotifi = ref.watch(tasksProvider.notifier);
+    // final _thisTask = _tasks.where((_task) => _task == task);
+
+    final _editedDate = await _selects.selectDate(context, _nowDate);
+    // _thisTask.first.deadLineDate = _editedDate.toString().substring(5, 10);
+    final _updatedDate = _editedDate
+        .toString()
+        .substring(5, 10)
+        .replaceAll('-', '/');
+    // _thisTask.first.deadLineDate = _editedDate
+    //     .toString()
+    //     .substring(5, 10)
+    //     .replaceAll('-', '/');
+
+    await app.updateTasks(task.copyWith(deadLineDate: _updatedDate));
+    setState(() {
+      task.deadLineDate = _updatedDate;
+    });
+
+    //全体的にコードが汚い気がする
+    // task.copyWith(deadLineDate: _updatedDate);
+
+    // print('変換後: ${_thisTask.first.deadLineDate}, $_editedDate');
   }
 
   Widget _titleMore() {
