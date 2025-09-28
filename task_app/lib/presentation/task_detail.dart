@@ -299,7 +299,18 @@ class _TaskDetailState extends ConsumerState<TaskDetail> {
 
   void _editTaskDate() {
     final app = ref.read(applicationProvider);
-    final _nowDate = app.fromStrToDate(task.deadLineDate);
+    final _nowDateStr = app.convertDateTime(
+      task.deadLineDate,
+      task.deadLineTime,
+    );
+    final _nowDate = DateTime(
+      _nowDateStr.$1,
+      _nowDateStr.$2[0],
+      _nowDateStr.$2[1],
+      _nowDateStr.$3,
+      _nowDateStr.$4,
+    );
+    print('タスク詳細: nowDate : $_nowDate');
     _selects.selectDate(context, _nowDate);
   }
 
