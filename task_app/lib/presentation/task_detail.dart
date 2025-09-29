@@ -178,7 +178,10 @@ class _TaskDetailState extends ConsumerState<TaskDetail> {
                 style: TextStyle(fontSize: 16, color: Color(0xFF6B6868)),
               ),
               GestureDetector(
-                onTap: () => _editTaskDate(),
+                onTap: () {
+                  _editTaskDate();
+                  _updateMadeDateTime();
+                },
                 child: Text(
                   '${task.deadLineDate} ',
                   maxLines: 1,
@@ -186,6 +189,10 @@ class _TaskDetailState extends ConsumerState<TaskDetail> {
                 ),
               ),
               GestureDetector(
+                onTap: () {
+                  _editTaskTime();
+                  _updateMadeDateTime();
+                },
                 child: Text(
                   ' ${task.deadLineTime}',
                   maxLines: 1,
@@ -297,6 +304,29 @@ class _TaskDetailState extends ConsumerState<TaskDetail> {
     _overlayPortalController.toggle();
   }
 
+  String _fromDateTimeToString(DateTime date) {
+    return date.toString().substring(5, 10).replaceAll('-', '/');
+  }
+
+  String _fromTimeOfDayToString(TimeOfDay time) {
+    return time.toString().substring(10, 15);
+  }
+
+  void _updateMadeDateTime() async {
+    final app = ref.read(applicationProvider);
+    final _nowDate = DateTime.now();
+    final _nowDateStr = _fromDateTimeToString(_nowDate);
+    final _nowTime = TimeOfDay.now();
+    final _nowTimeStr = _fromTimeOfDayToString(_nowTime);
+    await app.updateTasks(
+      task.copyWith(madeDate: _nowDateStr, madeTime: _nowTimeStr),
+    );
+    setState(() {
+      task.madeDate = _nowDateStr;
+      task.madeTime = _nowTimeStr;
+    });
+  }
+
   void _editTaskDate() async {
     final app = ref.read(applicationProvider);
     final _nowDateStr = app.convertDateTime(
@@ -318,10 +348,7 @@ class _TaskDetailState extends ConsumerState<TaskDetail> {
 
     final _editedDate = await _selects.selectDate(context, _nowDate);
     // _thisTask.first.deadLineDate = _editedDate.toString().substring(5, 10);
-    final _updatedDate = _editedDate
-        .toString()
-        .substring(5, 10)
-        .replaceAll('-', '/');
+    final _updatedDate = _fromDateTimeToString(_editedDate);
     // _thisTask.first.deadLineDate = _editedDate
     //     .toString()
     //     .substring(5, 10)
@@ -336,6 +363,21 @@ class _TaskDetailState extends ConsumerState<TaskDetail> {
     // task.copyWith(deadLineDate: _updatedDate);
 
     // print('変換後: ${_thisTask.first.deadLineDate}, $_editedDate');
+  }
+
+  void _editTaskTime() async {
+    final app = ref.read(applicationProvider);
+    final _nowTimeStr = app.convertDateTime(
+      task.deadLineDate,
+      task.deadLineTime,
+    );
+    final _nowTime = TimeOfDay(hour: _nowTimeStr.$3, minute: _nowTimeStr.$4);
+    final _editTime = await _selects.selectTime(context, _nowTime);
+    final _updateTime = _fromTimeOfDayToString(_editTime);
+    await app.updateTasks(task.copyWith(deadLineTime: _updateTime));
+    setState(() {
+      task.deadLineTime = _updateTime;
+    });
   }
 
   Widget _titleMore() {
