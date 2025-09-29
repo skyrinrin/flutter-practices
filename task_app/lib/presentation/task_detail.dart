@@ -342,27 +342,17 @@ class _TaskDetailState extends ConsumerState<TaskDetail> {
     );
     print('タスク詳細: nowDate : $_nowDate');
 
-    // final _tasks = ref.watch(tasksProvider);
-    // final _tasksNotifi = ref.watch(tasksProvider.notifier);
-    // final _thisTask = _tasks.where((_task) => _task == task);
-
     final _editedDate = await _selects.selectDate(context, _nowDate);
     // _thisTask.first.deadLineDate = _editedDate.toString().substring(5, 10);
     final _updatedDate = _fromDateTimeToString(_editedDate);
-    // _thisTask.first.deadLineDate = _editedDate
-    //     .toString()
-    //     .substring(5, 10)
-    //     .replaceAll('-', '/');
 
     await app.updateTasks(task.copyWith(deadLineDate: _updatedDate));
     setState(() {
       task.deadLineDate = _updatedDate;
     });
+    app.sendTasksNotifi(task);
 
     //全体的にコードが汚い気がする
-    // task.copyWith(deadLineDate: _updatedDate);
-
-    // print('変換後: ${_thisTask.first.deadLineDate}, $_editedDate');
   }
 
   void _editTaskTime() async {
@@ -378,6 +368,7 @@ class _TaskDetailState extends ConsumerState<TaskDetail> {
     setState(() {
       task.deadLineTime = _updateTime;
     });
+    app.sendTasksNotifi(task);
   }
 
   Widget _titleMore() {

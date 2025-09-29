@@ -77,7 +77,7 @@ class Application {
     return (year, intDate, hour, minute);
   }
 
-  // タスクに設定された時間に通知を送る
+  // タスクに設定された時間に通知を送る notifiIDの関係から毎日特定の時間に送る通知は違う処理で実装
   void sendTasksNotifi(Task task) {
     final _title = 'タスク管理アプリ';
     final _body = '${task.title}の制限時間まで残り〇分になりました';
