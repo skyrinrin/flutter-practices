@@ -130,7 +130,7 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
   }
 
   // ラベル選択ウィジェット
-  DropdownButton _selectLabel(BuildContext context, WidgetRef ref) {
+  DropdownButton _selectLabel() {
     List<String> labelsNames = ref.watch(labelsNameProvider);
 
     return DropdownButton<String>(
@@ -200,7 +200,7 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
             height: 50,
             width: 200,
             color: Color(0xFFEBEBEB),
-            child: _selectLabel(context, ref),
+            child: _selectLabel(),
           ),
         ),
       ],

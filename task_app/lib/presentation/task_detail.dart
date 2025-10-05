@@ -161,6 +161,27 @@ class _TaskDetailState extends ConsumerState<TaskDetail> {
     );
   }
 
+  DropdownButton _selectLabel() {
+    print('起動 select');
+    List<String> labelsNames = ref.watch(labelsNameProvider);
+
+    return DropdownButton<String>(
+      items:
+          labelsNames.map((String item) {
+            return DropdownMenuItem<String>(value: item, child: Text(item));
+          }).toList(),
+      onChanged: (String? value) async {
+        //ここから
+        final app = ref.read(applicationProvider);
+        await app.updateTasks(task.copyWith(label: value ?? task.label));
+        setState(() {
+          task.label = value ?? task.label;
+        });
+      },
+      value: task.label,
+    );
+  }
+
   Widget _texts() {
     return Container(
       // color: Colors.amber,
@@ -205,11 +226,20 @@ class _TaskDetailState extends ConsumerState<TaskDetail> {
 
           Container(
             width: 200,
-            child: Text(
-              '  ラベル  :  ${task.label}',
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontSize: 16, color: Color(0xFF6B6868)),
+            child: GestureDetector(
+              onTap: () {
+                //
+                print('起動Gesture');
+                _selectLabel();
+                _updateMadeDateTime();
+                //
+              },
+              child: Text(
+                '  ラベル  :  ${task.label}',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(fontSize: 16, color: Color(0xFF6B6868)),
+              ),
             ),
           ),
           SizedBox(height: 4),
@@ -382,7 +412,8 @@ class _TaskDetailState extends ConsumerState<TaskDetail> {
           child: Material(
             elevation: 4.0,
             child: Container(
-              width: 240,
+              width: 180, //ここの長さも検討が必要
+              // height: 60, //ここの高さも検討が必要
               padding: EdgeInsets.all(8),
               color: Colors.white,
               child: Text(
