@@ -220,8 +220,9 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
     ) {
       if (isOpened) {
         final doneTasks = next.where((task) => task.isDone).toList();
-        final notDoneTasks =
-            next.where((task) => task.isDone == false).toList();
+        final notDoneTasks = next
+            .where((task) => task.isDone == false)
+            .toList();
         donelistHeight = getListHeight(doneTasks);
         notDonelistHeight = getListHeight(notDoneTasks);
         if (donelistHeight <= 280) {
@@ -249,86 +250,89 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
 
     return (doneTasks.isEmpty && notDoneTasks.isEmpty)
         ? Container(
-          height: 140,
+            height: 140,
 
-          margin: EdgeInsets.only(top: 24, left: 16, right: 16),
-          child: Stack(
-            children: [
-              Align(
-                alignment: Alignment.topLeft,
-                child: Text(listTitle, style: TextStyle(fontSize: 20)),
-              ),
-              SizedBox(height: 16),
-              Positioned(
-                left: 5,
-                top: 40,
-                child: Container(child: Text('挑戦できるタスクがありません')),
-              ),
-              Positioned(bottom: 0, child: _moreSeeButton()),
-            ],
-          ),
-        )
-        : Container(
-          margin: EdgeInsets.only(top: 24, left: 16, right: 16),
-          child: Stack(
-            children: [
-              Text(listTitle, style: TextStyle(fontSize: 20)),
-              SizedBox(height: 16),
-              Stack(
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: 50),
-                      _clearTitle(notDoneTasks, false),
-
-                      Stack(
-                        children: [
-                          Positioned(
-                            top: 16,
-                            child: Text(
-                              '挑戦できるタスクがありません',
-                              style: TextStyle(
-                                color: Color.fromARGB(255, 92, 91, 91),
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            child: _cardsView(
-                              context,
-                              notDoneTasks,
-                              notDonelistHeight,
-                            ),
-                          ),
-                          Positioned(bottom: 0, child: opacityCon()),
-                        ],
-                      ),
-
-                      SizedBox(height: 24),
-                      _clearTitle(doneTasks, true),
-                      Stack(
-                        children: [
-                          Positioned(
-                            top: 16,
-                            child: Text(
-                              '達成していないタスクに挑戦しましょう！',
-                              style: TextStyle(
-                                color: Color.fromARGB(255, 92, 91, 91),
-                              ),
-                            ),
-                          ),
-                          _cardsView(context, doneTasks, donelistHeight),
-                          Positioned(bottom: 0, child: opacityCon()),
-                        ],
-                      ),
-                      _moreSeeButton(),
-                    ],
+            margin: EdgeInsets.only(top: 24, left: 16, right: 16),
+            child: Stack(
+              children: [
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    listTitle,
+                    style: TextStyle(fontSize: 20, color: Color(0xFF6B6868)),
                   ),
-                  // Positioned(bottom: 0, child: _moreSeeButton()),
-                ],
-              ),
-            ],
-          ),
-        );
+                ),
+                SizedBox(height: 16),
+                Positioned(
+                  left: 5,
+                  top: 40,
+                  child: Container(child: Text('挑戦できるタスクがありません')),
+                ),
+                Positioned(bottom: 0, child: _moreSeeButton()),
+              ],
+            ),
+          )
+        : Container(
+            margin: EdgeInsets.only(top: 24, left: 16, right: 16),
+            child: Stack(
+              children: [
+                Text(listTitle, style: TextStyle(fontSize: 20)),
+                SizedBox(height: 16),
+                Stack(
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 50),
+                        _clearTitle(notDoneTasks, false),
+
+                        Stack(
+                          children: [
+                            Positioned(
+                              top: 16,
+                              child: Text(
+                                '挑戦できるタスクがありません',
+                                style: TextStyle(
+                                  color: Color.fromARGB(255, 92, 91, 91),
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              child: _cardsView(
+                                context,
+                                notDoneTasks,
+                                notDonelistHeight,
+                              ),
+                            ),
+                            Positioned(bottom: 0, child: opacityCon()),
+                          ],
+                        ),
+
+                        SizedBox(height: 24),
+                        _clearTitle(doneTasks, true),
+                        Stack(
+                          children: [
+                            Positioned(
+                              top: 16,
+                              child: Text(
+                                '達成していないタスクに挑戦しましょう！',
+                                style: TextStyle(
+                                  color: Color.fromARGB(255, 92, 91, 91),
+                                ),
+                              ),
+                            ),
+                            _cardsView(context, doneTasks, donelistHeight),
+                            Positioned(bottom: 0, child: opacityCon()),
+                          ],
+                        ),
+                        _moreSeeButton(),
+                      ],
+                    ),
+                    // Positioned(bottom: 0, child: _moreSeeButton()),
+                  ],
+                ),
+              ],
+            ),
+          );
   }
 }

@@ -134,10 +134,9 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
     List<String> labelsNames = ref.watch(labelsNameProvider);
 
     return DropdownButton<String>(
-      items:
-          labelsNames.map((String item) {
-            return DropdownMenuItem<String>(value: item, child: Text(item));
-          }).toList(),
+      items: labelsNames.map((String item) {
+        return DropdownMenuItem<String>(value: item, child: Text(item));
+      }).toList(),
       onChanged: (String? value) {
         setState(() {
           _selectedLabel = value ?? '未選択';
@@ -212,7 +211,8 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
     final app = ref.read(applicationProvider);
 
     return Container(
-      height: 320,
+      height: 360,
+      // height: 320,
       width: double.infinity,
       child: Stack(
         children: [

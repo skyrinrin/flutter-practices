@@ -24,6 +24,21 @@ class _TaskDetailState extends ConsumerState<TaskDetail> {
   _TaskDetailState({required this.task, required this.sideColor});
   Offset _titlePosition = Offset(0, 0);
   Selects _selects = Selects();
+  String _isDoneText = 'Error';
+
+  String _getIsDoneText() {
+    if (task.isDone) {
+      return '達成済み';
+    } else {
+      return '未達成';
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _isDoneText = _getIsDoneText();
+  }
 
   Widget _taskDetailCard() {
     return Container(
@@ -286,11 +301,20 @@ class _TaskDetailState extends ConsumerState<TaskDetail> {
           ),
           SizedBox(height: 4),
 
-          Text(
-            '  メモ      : ',
-            style: TextStyle(fontSize: 16, color: Color(0xFF6B6868)),
+          Row(
+            children: [
+              Text(
+                '  達成状況 :  ',
+                style: TextStyle(fontSize: 14, color: Color(0xFF6B6868)),
+              ),
+              Text(
+                _isDoneText,
+                style: TextStyle(fontSize: 15, color: Color(0xFF6B6868)),
+              ),
+            ],
           ),
-          SizedBox(height: 4),
+
+          SizedBox(height: 6),
           Row(
             children: [
               Text(

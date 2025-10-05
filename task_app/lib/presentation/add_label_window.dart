@@ -150,7 +150,7 @@ class _AddLabelWindowState extends ConsumerState<AddLabelWindow> {
   Widget build(BuildContext context) {
     Application app = ref.read(applicationProvider);
     return Container(
-      height: 300,
+      height: 340,
       width: double.infinity,
       // width: 300,
       child: Stack(
