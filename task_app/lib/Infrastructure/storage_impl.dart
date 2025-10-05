@@ -44,10 +44,9 @@ class StorageImpl implements Storage {
 
     final hexColor = prefs.getString(_themeColorKey);
     final notifiTimeStr = prefs.getString(_notifiTimeKey);
-    final notifiTime =
-        notifiTimeStr != null
-            ? _converter.stringToTimeOFDay(notifiTimeStr)
-            : const TimeOfDay(hour: 9, minute: 0);
+    final notifiTime = notifiTimeStr != null
+        ? _converter.stringToTimeOFDay(notifiTimeStr)
+        : const TimeOfDay(hour: 9, minute: 0);
 
     if (hexColor == null) {
       return sample;
@@ -63,8 +62,9 @@ class StorageImpl implements Storage {
   Future<void> saveTasks(List<Task> tasks) async {
     print('saveTasks called: ${tasks.length}');
     final prefs = await SharedPreferences.getInstance();
-    final List<String> taskList =
-        tasks.map((task) => jsonEncode(task.toJson())).toList();
+    final List<String> taskList = tasks
+        .map((task) => jsonEncode(task.toJson()))
+        .toList();
     await prefs.setStringList(_taskKey, taskList);
 
     // データ確認用 必ず消す
@@ -100,8 +100,9 @@ class StorageImpl implements Storage {
   @override
   Future<void> saveLabels(List<Label> labels) async {
     final prefs = await SharedPreferences.getInstance();
-    final List<String> labelList =
-        labels.map((label) => jsonEncode(label.toJson())).toList();
+    final List<String> labelList = labels
+        .map((label) => jsonEncode(label.toJson()))
+        .toList();
     await prefs.setStringList(_labelKey, labelList);
   }
 
@@ -114,19 +115,18 @@ class StorageImpl implements Storage {
     List<Label> loadedLabels = [];
 
     if (labelList != null) {
-      loadedLabels =
-          labelList
-              .map((labelStr) {
-                try {
-                  final json = jsonDecode(labelStr);
-                  return Label.fromJson(json);
-                } catch (e) {
-                  print('不正なラベルデータ: $e');
-                  return null;
-                }
-              })
-              .whereType<Label>()
-              .toList();
+      loadedLabels = labelList
+          .map((labelStr) {
+            try {
+              final json = jsonDecode(labelStr);
+              return Label.fromJson(json);
+            } catch (e) {
+              print('不正なラベルデータ: $e');
+              return null;
+            }
+          })
+          .whereType<Label>()
+          .toList();
     }
 
     // "未選択"ラベルが存在しないならば追加

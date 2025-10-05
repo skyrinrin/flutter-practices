@@ -156,7 +156,10 @@ class _TaskDetailState extends ConsumerState<TaskDetail> {
       width: 204,
       // color: Colors.amber,
       child: Stack(
-        children: [Positioned(top: 4, child: _texts()), _textBorders()],
+        children: [
+          Positioned(top: 4, child: _texts()),
+          _textBorders(),
+        ],
       ),
     );
   }
@@ -166,19 +169,30 @@ class _TaskDetailState extends ConsumerState<TaskDetail> {
     List<String> labelsNames = ref.watch(labelsNameProvider);
 
     return DropdownButton<String>(
-      items:
-          labelsNames.map((String item) {
-            return DropdownMenuItem<String>(value: item, child: Text(item));
-          }).toList(),
+      // menuWidth: 200,
+      style: TextStyle(fontSize: 15, color: Color(0xFF6B6868)),
+
+      items: labelsNames.map((String item) {
+        return DropdownMenuItem<String>(value: item, child: Text(item));
+      }).toList(),
       onChanged: (String? value) async {
         //ここから
         final app = ref.read(applicationProvider);
+        final labels = ref.watch(labelsProvider);
         await app.updateTasks(task.copyWith(label: value ?? task.label));
         setState(() {
           task.label = value ?? task.label;
         });
+        sideColor = labels
+            .where((label) => label.name == task.label)
+            .first
+            .color;
+
+        _updateMadeDateTime();
       },
       value: task.label,
+      isExpanded: true,
+      underline: SizedBox(),
     );
   }
 
@@ -194,7 +208,7 @@ class _TaskDetailState extends ConsumerState<TaskDetail> {
           Row(
             children: [
               Text(
-                '  期限     :  ',
+                '  期限      :  ',
                 maxLines: 1,
                 style: TextStyle(fontSize: 16, color: Color(0xFF6B6868)),
               ),
@@ -226,21 +240,49 @@ class _TaskDetailState extends ConsumerState<TaskDetail> {
 
           Container(
             width: 200,
-            child: GestureDetector(
-              onTap: () {
-                //
-                print('起動Gesture');
-                _selectLabel();
-                _updateMadeDateTime();
-                //
-              },
-              child: Text(
-                '  ラベル  :  ${task.label}',
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(fontSize: 16, color: Color(0xFF6B6868)),
-              ),
+            // height: 25,
+            child: Stack(
+              children: [
+                Text(
+                  '  ラベル  :  ',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(fontSize: 16, color: Color(0xFF6B6868)),
+                ),
+                Positioned(
+                  left: 82,
+                  top: -2,
+                  child: Container(
+                    width: 200,
+                    height: 22,
+                    child: Material(
+                      color: Colors.transparent,
+                      child: _selectLabel(),
+                    ),
+                  ),
+                ),
+              ],
             ),
+
+            //
+
+            //
+
+            // GestureDetector(
+            //   onTap: () {
+            //     //
+            //     print('起動Gesture');
+            //     _selectLabel();
+            //     _updateMadeDateTime();
+            //     //
+            //   },
+            //   child: Text(
+            //     '  ラベル  :  ${task.label}',
+            //     maxLines: 1,
+            //     overflow: TextOverflow.ellipsis,
+            //     style: TextStyle(fontSize: 16, color: Color(0xFF6B6868)),
+            //   ),
+            // ),
           ),
           SizedBox(height: 4),
 
