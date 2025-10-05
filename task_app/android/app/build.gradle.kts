@@ -25,7 +25,7 @@ android {
         applicationId = "com.example.task_app"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = 21 //変更
+        minSdk = flutter.minSdkVersion //変更
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
