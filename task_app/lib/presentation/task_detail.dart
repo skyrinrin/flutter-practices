@@ -111,28 +111,28 @@ class _TaskDetailState extends ConsumerState<TaskDetail> {
         children: [
           Positioned(bottom: 12, child: _taskDetailValues()),
           Positioned(
-            top: 8,
+            // left: -12,
+            top: 6,
             key: _titleKey,
-            child: GestureDetector(
-              onLongPress: () => _showTitleOverlay(),
-              onLongPressEnd: (details) => _hideTitleOverlay(),
-              child: Container(
-                // color: Colors.amber,
-                width: 172,
-                child: Text(
-                  task.title,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold, //太字に
-                    color: Color(0xFF6B6868),
-                  ),
-                ),
-              ),
-            ),
+            child: _titleTextField(),
+            // GestureDetector(
+            //   onLongPress: () => _showTitleOverlay(),
+            //   onLongPressEnd: (details) => _hideTitleOverlay(),
+            //   child: _titleTextField(),
+
+            //   // Text(
+            //   //   task.title,
+            //   //   maxLines: 1,
+            //   //   overflow: TextOverflow.ellipsis,
+            //   //   style: TextStyle(
+            //   //     fontSize: 22,
+            //   //     fontWeight: FontWeight.bold, //太字に
+            //   //     color: Color(0xFF6B6868),
+            //   //   ),
+            //   // ),
+            // ),
           ),
-          _titleMore(),
+          // _titleMore(),
 
           // ここから
           // Positioned(
@@ -191,7 +191,6 @@ class _TaskDetailState extends ConsumerState<TaskDetail> {
         return DropdownMenuItem<String>(value: item, child: Text(item));
       }).toList(),
       onChanged: (String? value) async {
-        //ここから
         final app = ref.read(applicationProvider);
         final labels = ref.watch(labelsProvider);
         await app.updateTasks(task.copyWith(label: value ?? task.label));
@@ -385,20 +384,20 @@ class _TaskDetailState extends ConsumerState<TaskDetail> {
     return Container(color: Color(0xFFD9D9D9), height: 60, width: 60);
   }
 
-  final OverlayPortalController _overlayPortalController =
-      OverlayPortalController();
+  // final OverlayPortalController _overlayPortalController =
+  //     OverlayPortalController();
 
-  void _showTitleOverlay() {
-    _getTitlePosition();
-    _overlayPortalController.toggle();
-    // Future.delayed(
-    //   const Duration(seconds: 3),
-    // ).then((_) => _overlayPortalController.hide());
-  }
+  // void _showTitleOverlay() {
+  //   _getTitlePosition();
+  //   _overlayPortalController.toggle();
+  //   // Future.delayed(
+  //   //   const Duration(seconds: 3),
+  //   // ).then((_) => _overlayPortalController.hide());
+  // }
 
-  void _hideTitleOverlay() {
-    _overlayPortalController.toggle();
-  }
+  // void _hideTitleOverlay() {
+  //   _overlayPortalController.toggle();
+  // }
 
   String _fromDateTimeToString(DateTime date) {
     return date.toString().substring(5, 10).replaceAll('-', '/');
@@ -467,33 +466,72 @@ class _TaskDetailState extends ConsumerState<TaskDetail> {
     app.sendTasksNotifi(task);
   }
 
-  Widget _titleMore() {
-    return OverlayPortal(
-      controller: _overlayPortalController,
-      overlayChildBuilder: (context) {
-        return Positioned(
-          top: _titlePosition.dy,
-          left: _titlePosition.dx,
+  // Widget _titleMore() {
+  //   return OverlayPortal(
+  //     controller: _overlayPortalController,
+  //     overlayChildBuilder: (context) {
+  //       return Positioned(
+  //         top: _titlePosition.dy,
+  //         left: _titlePosition.dx,
 
-          child: Material(
-            elevation: 4.0,
-            child: Container(
-              width: 180, //ここの長さも検討が必要
-              // height: 60, //ここの高さも検討が必要
-              padding: EdgeInsets.all(8),
-              color: Colors.white,
-              child: Text(
-                '${task.title}',
-                style: TextStyle(
-                  fontSize: 22,
-                  color: Color(0xFF6B6868),
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
+  //         child: Material(
+  //           elevation: 4.0,
+  //           child: Container(
+  //             width: 180, //ここの長さも検討が必要
+  //             // height: 60, //ここの高さも検討が必要
+  //             padding: EdgeInsets.all(8),
+  //             color: Colors.white,
+  //             child: Text(
+  //               '${task.title}',
+  //               style: TextStyle(
+  //                 fontSize: 22,
+  //                 color: Color(0xFF6B6868),
+  //                 fontWeight: FontWeight.bold,
+  //               ),
+  //             ),
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
+
+  Widget _titleTextField() {
+    return Container(
+      // height: 32,
+      // width: double.infinity,
+      width: 172,
+      child: Material(
+        // child: Expanded(
+        child: TextFormField(
+          // cursorColor: Colors.white,
+          maxLines: 1,
+          textAlignVertical: TextAlignVertical.center,
+          initialValue: task.title,
+          decoration: InputDecoration(
+            isDense: true,
+            contentPadding: EdgeInsets.symmetric(vertical: 4, horizontal: 0),
+            border: InputBorder.none,
+            fillColor: Colors.white, //これが色
+            filled: true,
           ),
-        );
-      },
+          style: TextStyle(
+            overflow: TextOverflow.ellipsis,
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF6B6868),
+          ),
+          onChanged: (value) async {
+            final app = ref.read(applicationProvider);
+            await app.updateTasks(task.copyWith(title: value));
+            setState(() {
+              task.title = value;
+            });
+            _updateMadeDateTime();
+          },
+        ),
+      ),
+      // ),
     );
   }
 

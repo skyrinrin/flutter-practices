@@ -28,13 +28,13 @@ class _TaskCardState extends ConsumerState<TaskCard> {
   void initState() {
     super.initState();
     app = ref.read(applicationProvider);
-    _id = task.id;
-    _order = task.order;
-    _taskTitle = task.title;
-    label = task.label;
-    _deadLineDate = task.deadLineDate;
-    _deadLineTime = task.deadLineTime;
-    _isDone = task.isDone; //もしかしたらこれかも？
+    // _id = task.id;
+    // _order = task.order;
+    // _taskTitle = task.title;
+    // label = task.label;
+    // _deadLineDate = task.deadLineDate;
+    // _deadLineTime = task.deadLineTime;
+    // _isDone = task.isDone; //もしかしたらこれかも？
     // _colorChange();
   }
 
@@ -55,23 +55,20 @@ class _TaskCardState extends ConsumerState<TaskCard> {
   // }
 
   // カード要素の変数群
-  late String _id;
-  late int _order;
-  late String _taskTitle;
-  late String label;
-  late String _deadLineDate;
-  late String _deadLineTime;
-  late bool _isDone;
 
   // タスクテキストウィジェット
   Widget _taskTitleText(double mediaWidth) {
     return Container(
       width: mediaWidth - 168,
       child: Text(
-        _taskTitle,
+        task.title,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
-        style: TextStyle(fontSize: 20),
+        style: TextStyle(
+          fontSize: 20,
+          // fontWeight: FontWeight.bold,
+          color: Color.fromARGB(255, 61, 59, 59),
+        ),
       ),
     );
   }
@@ -80,7 +77,7 @@ class _TaskCardState extends ConsumerState<TaskCard> {
   Widget _dateTimeLabelText() {
     return Row(
       children: [
-        Text(_deadLineDate),
+        Text(task.deadLineDate, style: TextStyle(color: Color(0xFF6B6868))),
         SizedBox(width: 8),
         Container(
           height: 12,
@@ -88,12 +85,12 @@ class _TaskCardState extends ConsumerState<TaskCard> {
           decoration: BoxDecoration(color: Colors.black),
         ),
         SizedBox(width: 8),
-        Text(_deadLineTime),
+        Text(task.deadLineTime, style: TextStyle(color: Color(0xFF6B6868))),
         SizedBox(width: 12),
         Container(
           width: 160,
           child: Text(
-            label,
+            task.label,
             style: TextStyle(color: Color(0xFF6bde89)),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
@@ -148,7 +145,7 @@ class _TaskCardState extends ConsumerState<TaskCard> {
 
           // タスク未・済
           // Positioned(right: 12, child: ToggleButton(_id, app)),
-          Positioned(right: 12, child: ToggleButton(_id)),
+          Positioned(right: 12, child: ToggleButton(task.id)),
           // Positioned(right: 12, child: ToggleButton(_id, key: ValueKey(_id))),
           // Positioned(right: 12, child: _isTaskButton()),
         ],
