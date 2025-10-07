@@ -72,12 +72,16 @@ class _AddLabelWindowState extends ConsumerState<AddLabelWindow> {
           Positioned(
             top: 42,
             child: Container(
-              height: 40,
+              // height: 40,
               width: 205,
 
               child: TextField(
                 controller: _controller,
                 decoration: InputDecoration(
+                  contentPadding: EdgeInsets.symmetric(
+                    vertical: 0,
+                    horizontal: 4,
+                  ),
                   labelText: 'ラベル名',
                   filled: true,
                   fillColor: Color(0xFFebebeb),
@@ -86,6 +90,7 @@ class _AddLabelWindowState extends ConsumerState<AddLabelWindow> {
                     borderSide: BorderSide.none,
                   ),
                 ),
+                style: TextStyle(fontSize: 20),
               ),
             ),
           ),

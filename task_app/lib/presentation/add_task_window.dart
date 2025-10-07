@@ -134,6 +134,7 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
     List<String> labelsNames = ref.watch(labelsNameProvider);
 
     return DropdownButton<String>(
+      underline: Container(),
       items: labelsNames.map((String item) {
         return DropdownMenuItem<String>(value: item, child: Text(item));
       }).toList(),
@@ -242,12 +243,16 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
             top: 74,
             left: 32,
             child: Container(
-              height: 40,
+              // height: 40,
               width: 240,
               child: TextField(
                 controller: _controller,
                 decoration: InputDecoration(
-                  labelText: 'タスク名',
+                  contentPadding: EdgeInsets.symmetric(
+                    vertical: 0,
+                    horizontal: 4,
+                  ),
+                  labelText: '  タスク名',
                   filled: true,
                   fillColor: Color(0xFFebebeb),
                   border: OutlineInputBorder(
@@ -255,6 +260,7 @@ class _AddTaskWindowState extends ConsumerState<AddTaskWindow> {
                     borderSide: BorderSide.none,
                   ),
                 ),
+                style: TextStyle(fontSize: 20),
               ),
             ),
           ),
