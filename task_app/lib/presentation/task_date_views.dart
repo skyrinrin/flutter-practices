@@ -23,10 +23,8 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
   late final removeListener;
   late double listWidth;
   // late List<Task> selectedTasks;
-  List<Task> doneTasks = [];
-  List<Task> notDoneTasks = [];
-  // late List<Task> doneTasks;
-  // late List<Task> notDoneTasks;
+  late List<Task> doneTasks;
+  late List<Task> notDoneTasks;
   late String listTitle;
   double donelistHeight = 150;
   double notDonelistHeight = 150;
@@ -213,15 +211,7 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
   Widget build(BuildContext context) {
     listWidth = MediaQuery.of(context).size.width - 32;
 
-    final app = ref.read(applicationProvider);
-    // final tasks = ref.watch(tasksProvider);
-
-    // ここにあった
-    // ref.listen<List<Task>>(tasksProvider, (previous, next) {
-    //   print('呼ばれました: taskDateViews');
-    //   doneTasks = app.getDateKind(widget.number).$1;
-    //   notDoneTasks = app.getDateKind(widget.number).$2;
-    // });
+    final app = ref.watch(applicationProvider);
 
     ref.listen<List<Task>>(app.getDateKindProvider(widget.number), (
       // 8/13 ここの処理ですべて（今日、明日、その他）のlistHeightの高さを変えてしまうためエラーが起こる可能性あり...(現在はif処理で開かれているもの以外は高さを変えないようにしている)
