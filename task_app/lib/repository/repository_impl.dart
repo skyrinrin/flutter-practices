@@ -33,6 +33,12 @@ class RepositoryImpl implements Repository {
   }
 
   @override
+  Future<void> removeTask(Task task) async {
+    _cachedTasks.remove(task);
+    await saveTasks(_cachedTasks);
+  }
+
+  @override
   Future<void> updateTasks() async {
     await saveTasks(_cachedTasks);
   }

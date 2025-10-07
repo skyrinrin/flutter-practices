@@ -75,7 +75,7 @@ class StorageImpl implements Storage {
   @override
   Future<List<Task>> loadTasks() async {
     final prefs = await SharedPreferences.getInstance();
-    // prefs.clear(); // 絶対消す
+    prefs.clear(); // 絶対消す
     final List<String>? taskList = prefs.getStringList(_taskKey);
     if (taskList == null) return [];
 
@@ -89,7 +89,7 @@ class StorageImpl implements Storage {
 
   // //タスクの削除
   // @override
-  // Future<void> clearTasks() async {
+  // Future<void> removeTask() async {
   //   final prefs = await SharedPreferences.getInstance();
   //   await prefs.remove(_taskKey);
   // }

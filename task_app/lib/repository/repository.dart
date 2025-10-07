@@ -4,6 +4,7 @@ import 'package:task_app/domain/task_domain.dart';
 
 abstract class Repository {
   Future<void> addTask(Task task);
+  Future<void> removeTask(Task task);
   Future<void> updateTasks();
   Future<void> addLabel(Label label);
   Future<void> saveAccount(Account account);

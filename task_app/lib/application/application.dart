@@ -188,6 +188,14 @@ class Application {
     sendTasksNotifi(task);
   }
 
+  Future<void> removeTask(Task task) async {
+    // final _tasks = [...tasks];
+    // _tasks.remove(task);
+    ref.read(tasksProvider.notifier).removeTask(task);
+    repository.removeTask(task);
+    cancelTaskNotifi(task.notifiId);
+  }
+
   Future<void> updateTasks(Task task) async {
     // final _tasks = ref.watch(tasksProvider);
     // final _tasksNotifi = ref.watch(tasksProvider.notifier);
@@ -414,6 +422,11 @@ class TaskNotifier extends StateNotifier<List<Task>> {
   void addTask(Task task) {
     state = [...state, task]; //もともとのリストにtaskを追加
     // print('タスク一覧(本家): ${state}');
+  }
+
+  // タスクの削除
+  void removeTask(Task task) {
+    state.remove(task);
   }
 
   // リストのアップデート

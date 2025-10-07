@@ -69,7 +69,8 @@ class _TaskDetailState extends ConsumerState<TaskDetail> {
             top: 40,
             child: IconButton(
               onPressed: () {
-                //ここに関数
+                _pushedDeleteIcon();
+                // print('タスクが削除されました： detail');
               },
               icon: Icon(Icons.delete, color: Color(0xFF969696), size: 28),
             ),
@@ -92,14 +93,49 @@ class _TaskDetailState extends ConsumerState<TaskDetail> {
 
   final GlobalKey _titleKey = GlobalKey();
 
-  void _getTitlePosition() {
-    final renderBox = _titleKey.currentContext!.findRenderObject() as RenderBox;
-    final overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
-    _titlePosition = renderBox.localToGlobal(
-      Offset.zero,
-      ancestor: overlay,
-    ); //画面上の位置
-    print('Widgetの場所: $_titlePosition');
+  // void _getTitlePosition() {
+  //   final renderBox = _titleKey.currentContext!.findRenderObject() as RenderBox;
+  //   final overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
+  //   _titlePosition = renderBox.localToGlobal(
+  //     Offset.zero,
+  //     ancestor: overlay,
+  //   ); //画面上の位置
+  //   print('Widgetの場所: $_titlePosition');
+  // }
+
+  Widget _removeAlertDialog() {
+    return AlertDialog(
+      backgroundColor: Colors.white,
+      title: Text('タスクを削除しますか？'),
+      content: Text('一度削除したタスクは復元することができません。'),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Text('キャンセル'),
+        ),
+        TextButton(
+          onPressed: () {
+            // ここに関数
+            final app = ref.read(applicationProvider);
+            app.removeTask(task);
+            Navigator.pop(context);
+          },
+          child: Text('削除'),
+        ),
+      ],
+    );
+  }
+
+  void _pushedDeleteIcon() async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return _removeAlertDialog();
+      },
+    );
+    Navigator.pop(context);
   }
 
   Widget _cardValue() {
