@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:task_app/application/application.dart';
 import 'package:task_app/presentation/task_card.dart';
 import 'package:task_app/domain/task_domain.dart';
@@ -23,10 +24,10 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
   late final removeListener;
   late double listWidth;
   // late List<Task> selectedTasks;
-  late List<Task> tasks;
-  late List<Task> doneTasks;
-  late List<Task> notDoneTasks;
-  late String listTitle;
+  // late List<Task> tasks;
+  // late List<Task> doneTasks;
+  // late List<Task> notDoneTasks;
+  // late String listTitle;
   double donelistHeight = 150;
   double notDonelistHeight = 150;
   Icon _icon = Icon(
@@ -39,31 +40,43 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
   // bool isVisibility = false;
   bool isListening = false;
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
 
-    app = ref.watch(applicationProvider);
-    int number = widget.number;
-    tasks = ref.watch(app.getDateKind(number).$1);
-    doneTasks = tasks.where((t) => t.isDone).toList();
-    notDoneTasks = tasks.where((t) => !t.isDone).toList();
-    // doneTasks = app.getDateKind(widget.number).$1;
-    // notDoneTasks = app.getDateKind(widget.number).$2;
-    listTitle = app.getDateKind(number).$2;
+  //   app = ref.watch(applicationProvider);
+  //   int number = widget.number;
 
-    donelistHeight = getListHeight(doneTasks);
-    notDonelistHeight = getListHeight(notDoneTasks);
-    // isVisibility = false;
+  //   // //
+  //   // tasks = ref.watch(app.getDateKind(number).$1);
+  //   // doneTasks = tasks.where((t) => t.isDone).toList();
+  //   // notDoneTasks = tasks.where((t) => !t.isDone).toList();
+  //   // //
 
-    isOpened_false();
-  }
+  //   // doneTasks = app.getDateKind(widget.number).$1;
+  //   // notDoneTasks = app.getDateKind(widget.number).$2;
+
+  //   // //
+  //   // listTitle = app.getDateKind(number).$2;
+  //   // //
+
+  //   // //
+  //   // donelistHeight = getListHeight(doneTasks);
+  //   // notDonelistHeight = getListHeight(notDoneTasks);
+  //   // //
+
+  //   // isVisibility = false;
+
+  //   // //
+  //   //     isOpened_false();
+  //   //   //
+  // }
 
   double getListHeight(List<Task> task) {
     return (task.length) * 104 + 40;
   }
 
-  void isOpened_true() {
+  void isOpened_true(List<Task> doneTasks, List<Task> notDoneTasks) {
     // selectedTasks = app.getDateKind(widget.number).$1;
 
     // WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -99,7 +112,7 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
     // print('発火: ${isOpened}:${listHeight}');
   }
 
-  void isOpened_false() {
+  void isOpened_false(List<Task> doneTasks, List<Task> notDoneTasks) {
     donelistHeight = getListHeight(doneTasks);
     notDonelistHeight = getListHeight(notDoneTasks);
     if (donelistHeight >= 150 || donelistHeight <= 150) {
@@ -119,26 +132,26 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
     // print('発火: ${isOpened}:${listHeight}');
   }
 
-  toggleIsOpened() {
+  toggleIsOpened(List<Task> doneTasks, List<Task> notDoneTasks) {
     isOpened = !isOpened;
     if (isOpened == true) {
       setState(() {
-        isOpened_true();
+        isOpened_true(doneTasks, notDoneTasks);
       });
     } else {
       setState(() {
-        isOpened_false();
+        isOpened_false(doneTasks, notDoneTasks);
       });
     }
   }
 
-  void _pushedMoreSeeButton() {
-    toggleIsOpened();
+  void _pushedMoreSeeButton(List<Task> doneTasks, List<Task> notDoneTasks) {
+    toggleIsOpened(doneTasks, notDoneTasks);
   }
 
-  Widget _moreSeeButton() {
+  Widget _moreSeeButton(List<Task> doneTasks, List<Task> notDoneTasks) {
     return GestureDetector(
-      onTap: () => {_pushedMoreSeeButton()},
+      onTap: () => {_pushedMoreSeeButton(doneTasks, notDoneTasks)},
       child: Stack(
         children: [
           Opacity(
@@ -197,12 +210,12 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
     );
   }
 
-  Widget opacityCon() {
+  Widget opacityCon(List<Task> doneTasks, List<Task> notDoneTasks) {
     return Visibility(
       visible: !isOpened,
       child: InkWell(
         onTap: () {
-          toggleIsOpened();
+          toggleIsOpened(doneTasks, notDoneTasks);
         },
         child: Opacity(
           opacity: 0.5,
@@ -215,11 +228,17 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
   Widget build(BuildContext context) {
     listWidth = MediaQuery.of(context).size.width - 32;
 
-    final app = ref.watch(applicationProvider);
+    final app = ref.read(applicationProvider);
 
-    tasks = ref.watch(app.getDateKind(widget.number).$1);
-    doneTasks = tasks.where((t) => t.isDone).toList();
-    notDoneTasks = tasks.where((t) => !t.isDone).toList();
+    final dateKind = app.getDateKind(widget.number);
+
+    // final tasks = ref.watch(dateKind.$1);
+    // final tasks = ref.watch(tasksProvider);
+    final tasks = ref.watch(app.getDateKindProvider(widget.number));
+    // final doneTasks = tasks.where((t) => t.isDone).toList();
+    final doneTasks = tasks.where((t) => t.isDone).toList();
+    final notDoneTasks = tasks.where((t) => !t.isDone).toList();
+    final listTitle = dateKind.$2;
 
     ref.listen<List<Task>>(app.getDateKindProvider(widget.number), (
       // 8/13 ここの処理ですべて（今日、明日、その他）のlistHeightの高さを変えてしまうためエラーが起こる可能性あり...(現在はif処理で開かれているもの以外は高さを変えないようにしている)
@@ -276,7 +295,10 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
                   top: 40,
                   child: Container(child: Text('挑戦できるタスクがありません')),
                 ),
-                Positioned(bottom: 0, child: _moreSeeButton()),
+                Positioned(
+                  bottom: 0,
+                  child: _moreSeeButton(doneTasks, notDoneTasks),
+                ),
               ],
             ),
           )
@@ -312,7 +334,10 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
                                 notDonelistHeight,
                               ),
                             ),
-                            Positioned(bottom: 0, child: opacityCon()),
+                            Positioned(
+                              bottom: 0,
+                              child: opacityCon(doneTasks, notDoneTasks),
+                            ),
                           ],
                         ),
 
@@ -330,10 +355,13 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
                               ),
                             ),
                             _cardsView(context, doneTasks, donelistHeight),
-                            Positioned(bottom: 0, child: opacityCon()),
+                            Positioned(
+                              bottom: 0,
+                              child: opacityCon(doneTasks, notDoneTasks),
+                            ),
                           ],
                         ),
-                        _moreSeeButton(),
+                        _moreSeeButton(doneTasks, notDoneTasks),
                       ],
                     ),
                     // Positioned(bottom: 0, child: _moreSeeButton()),

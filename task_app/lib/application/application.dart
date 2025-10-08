@@ -192,7 +192,7 @@ class Application {
     // final _tasks = [...tasks];
     // _tasks.remove(task);
     ref.read(tasksProvider.notifier).removeTask(task);
-    repository.removeTask(task);
+    await repository.removeTask(task);
     cancelTaskNotifi(task.notifiId);
   }
 
@@ -438,7 +438,8 @@ class TaskNotifier extends StateNotifier<List<Task>> {
 
   // タスクの削除
   void removeTask(Task task) {
-    state.remove(task);
+    state = state.where((t) => t.id != task.id).toList();
+    // state.remove(task);
   }
 
   // リストのアップデート
