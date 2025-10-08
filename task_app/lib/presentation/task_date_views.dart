@@ -23,6 +23,7 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
   late final removeListener;
   late double listWidth;
   // late List<Task> selectedTasks;
+  late List<Task> tasks;
   late List<Task> doneTasks;
   late List<Task> notDoneTasks;
   late String listTitle;
@@ -44,9 +45,12 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
 
     app = ref.watch(applicationProvider);
     int number = widget.number;
-    doneTasks = app.getDateKind(widget.number).$1;
-    notDoneTasks = app.getDateKind(widget.number).$2;
-    listTitle = app.getDateKind(number).$3;
+    tasks = ref.watch(app.getDateKind(number).$1);
+    doneTasks = tasks.where((t) => t.isDone).toList();
+    notDoneTasks = tasks.where((t) => !t.isDone).toList();
+    // doneTasks = app.getDateKind(widget.number).$1;
+    // notDoneTasks = app.getDateKind(widget.number).$2;
+    listTitle = app.getDateKind(number).$2;
 
     donelistHeight = getListHeight(doneTasks);
     notDonelistHeight = getListHeight(notDoneTasks);
@@ -63,8 +67,8 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
     // selectedTasks = app.getDateKind(widget.number).$1;
 
     // WidgetsBinding.instance.addPostFrameCallback((_) {
-    doneTasks = app.getDateKind(widget.number).$1;
-    notDoneTasks = app.getDateKind(widget.number).$2;
+    // doneTasks = app.getDateKind(widget.number).$1;
+    // notDoneTasks = app.getDateKind(widget.number).$2;
     // });
 
     if (doneTasks.isEmpty && notDoneTasks.isEmpty) {
@@ -213,6 +217,10 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
 
     final app = ref.watch(applicationProvider);
 
+    tasks = ref.watch(app.getDateKind(widget.number).$1);
+    doneTasks = tasks.where((t) => t.isDone).toList();
+    notDoneTasks = tasks.where((t) => !t.isDone).toList();
+
     ref.listen<List<Task>>(app.getDateKindProvider(widget.number), (
       // 8/13 ここの処理ですべて（今日、明日、その他）のlistHeightの高さを変えてしまうためエラーが起こる可能性あり...(現在はif処理で開かれているもの以外は高さを変えないようにしている)
       previous,
@@ -237,7 +245,7 @@ class _TaskDateViewsState extends ConsumerState<TaskDateViews> {
       }
     });
 
-    final (doneTasks, notDoneTasks, listTitle) = app.getDateKind(widget.number);
+    // final (doneTasks, notDoneTasks, listTitle) = app.getDateKind(widget.number); //ここを消した
 
     // isVisibility = app.getDateListsHightBool(doneTasks, notDoneTasks).$2;
     // isVisibility = false;

@@ -313,33 +313,45 @@ class Application {
   //   return ([], [], 'Error');
   // }
 
-  (List<Task>, List<Task>, String) getDateKind(int number) {
-    final _provider = switch (number) {
-      0 => todayTasksProvider,
-      1 => tomorrowTasksProvider,
-      2 => otherTasksProvider,
-      _ => null,
-    };
-    if (_provider == null) return ([], [], 'Error');
+  // (List<Task>, List<Task>, String) getDateKind(int number) {
+  //   final _provider = switch (number) {
+  //     0 => todayTasksProvider,
+  //     1 => tomorrowTasksProvider,
+  //     2 => otherTasksProvider,
+  //     _ => null,
+  //   };
+  //   if (_provider == null) return ([], [], 'Error');
 
-    final tasks = ref.watch(_provider);
+  //   final tasks = ref.watch(_provider);
 
-    final doneTasks = <Task>[];
-    final notDoneTasks = <Task>[];
-    for (final task in tasks) {
-      (task.isDone ? doneTasks : notDoneTasks).add(task);
+  //   final doneTasks = <Task>[];
+  //   final notDoneTasks = <Task>[];
+  //   for (final task in tasks) {
+  //     (task.isDone ? doneTasks : notDoneTasks).add(task);
+  //   }
+
+  //   final title = switch (number) {
+  //     0 => '今日 (${tasks.length})',
+  //     1 => '昨日 (${tasks.length})',
+  //     2 => 'その他 (${tasks.length})',
+  //     _ => 'Error',
+  //   };
+  //   return (doneTasks, notDoneTasks, title);
+  // }
+  (Provider<List<Task>>, String) getDateKind(int number) {
+    switch (number) {
+      case 0:
+        return (todayTasksProvider, '今日 (${tasks.length})');
+      case 1:
+        return (tomorrowTasksProvider, '昨日 (${tasks.length})');
+      case 2:
+        return (otherTasksProvider, 'その他 (${tasks.length})');
+      case _:
+        return (todayTasksProvider, 'Error'); //ここに違うプロバイダーを入れるべきかも
     }
-
-    final title = switch (number) {
-      0 => '今日 (${tasks.length})',
-      1 => '昨日 (${tasks.length})',
-      2 => 'その他 (${tasks.length})',
-      _ => 'Error',
-    };
-    return (doneTasks, notDoneTasks, title);
   }
 
-  // 日付ごとリストの日付を判別する
+  // 日付ごとリストの日付を判別する これはいるのかわからない
   Provider<List<Task>> getDateKindProvider(int number) {
     return switch (number) {
       0 => todayTasksProvider,
