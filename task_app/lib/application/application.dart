@@ -230,6 +230,11 @@ class Application {
     }
   }
 
+  Future<void> removeLabel(Label label) async {
+    ref.read(labelsProvider.notifier).removeLabel(label);
+    repository.removeLabel(label);
+  }
+
   // タスクをラベル分けする
 
   // タスクの達成状態を管理する
@@ -438,7 +443,7 @@ class TaskNotifier extends StateNotifier<List<Task>> {
 
   // タスクの削除
   void removeTask(Task task) {
-    state = state.where((t) => t.id != task.id).toList();
+    state = state.where((t) => t != task).toList();
     // state.remove(task);
   }
 
@@ -482,6 +487,10 @@ class LabelsTasksNotifier extends StateNotifier<List<Label>> {
     if (!state.contains(label)) {
       state = [...state, label];
     }
+  }
+
+  void removeLabel(Label label) {
+    state = state.where((l) => l != label).toList();
   }
 
   // リストのアップデート

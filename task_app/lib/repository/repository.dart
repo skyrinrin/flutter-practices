@@ -7,6 +7,7 @@ abstract class Repository {
   Future<void> removeTask(Task task);
   Future<void> updateTasks();
   Future<void> addLabel(Label label);
+  Future<void> removeLabel(Label label);
   Future<void> saveAccount(Account account);
   Future<Account> loadAccount();
   Future<void> saveTasks(List<Task> tasks);

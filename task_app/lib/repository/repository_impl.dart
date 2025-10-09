@@ -78,6 +78,12 @@ class RepositoryImpl implements Repository {
     await saveLabels(_cachedLabels);
   }
 
+  @override
+  Future<void> removeLabel(Label label) async {
+    _cachedLabels.remove(label);
+    await saveLabels(_cachedLabels);
+  }
+
   // ラベルの保存
   @override
   Future<void> saveLabels(List<Label> labels) async {
