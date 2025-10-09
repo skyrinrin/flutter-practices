@@ -346,11 +346,14 @@ class Application {
   (Provider<List<Task>>, String) getDateKind(int number) {
     switch (number) {
       case 0:
-        return (todayTasksProvider, '今日 (${tasks.length})');
+        final tasksLength = ref.watch(todayTasksProvider).length;
+        return (todayTasksProvider, '今日 ($tasksLength)');
       case 1:
-        return (tomorrowTasksProvider, '昨日 (${tasks.length})');
+        final tasksLength = ref.watch(tomorrowTasksProvider).length;
+        return (tomorrowTasksProvider, '昨日 ($tasksLength)');
       case 2:
-        return (otherTasksProvider, 'その他 (${tasks.length})');
+        final tasksLength = ref.watch(otherTasksProvider).length;
+        return (otherTasksProvider, 'その他 (${tasksLength})');
       case _:
         return (todayTasksProvider, 'Error'); //ここに違うプロバイダーを入れるべきかも
     }
