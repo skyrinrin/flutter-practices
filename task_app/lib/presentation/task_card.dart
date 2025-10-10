@@ -164,6 +164,7 @@ class _TaskCardState extends ConsumerState<TaskCard> {
   @override
   Widget build(BuildContext context) {
     // print('タスクカード $_id');
+
     List<Label> labels = ref.watch(labelsProvider);
     Label label = labels.where((label) => label.name == task.label).first;
     Color sideColor = label.color;

@@ -15,8 +15,10 @@ class TaskLabelViews extends ConsumerStatefulWidget {
 }
 
 class _TaskLabelViewsState extends ConsumerState<TaskLabelViews> {
+  late double listWidth;
   Widget labelExpansionPanel(Map labelsTasks, Application app) {
     return ExpansionPanelList(
+      // materialGapSize: 0,
       expansionCallback: (int id, bool isExpanded) {
         setState(() {
           ref.read(labelsProvider.notifier).toggleLabel(id);
@@ -24,11 +26,11 @@ class _TaskLabelViewsState extends ConsumerState<TaskLabelViews> {
       },
       children: labelsTasks.entries.map((entry) {
         final Label label = entry.key;
-        final List<Task> labelTasks = entry.value;
+        final List<Task> tasks = entry.value;
         //
-        double panel_height = labelTasks.length * 104 + 24;
+        double panel_height = tasks.length * 104 + 64;
         bool _isVisibility = false;
-        if (labelTasks.isEmpty) {
+        if (tasks.isEmpty) {
           //ここら辺の処理はapplication層で任せるべきかも...
           panel_height = 60;
           _isVisibility = true;
@@ -57,22 +59,93 @@ class _TaskLabelViewsState extends ConsumerState<TaskLabelViews> {
           body: Container(
             width: double.infinity,
             color: Colors.white,
-            padding: EdgeInsets.symmetric(vertical: 16, horizontal: 8),
-            child: labelTasks.isEmpty
+
+            // color: Colors.white,
+            height: panel_height,
+            // height: 1000,
+            // margin: EdgeInsets.only(top: -10),
+            padding: EdgeInsets.symmetric(horizontal: 8),
+            child: tasks.isEmpty
                 ? Text(
                     '挑戦できるタスクはありません',
                     style: TextStyle(color: Colors.black87),
                   )
-                : Column(
-                    children: labelTasks.map((task) {
-                      return Container(
-                        margin: EdgeInsets.symmetric(vertical: 4),
-                        child: null, //ここは絶対あとから追加する
-                        // TaskCard(task: task),
+                :
+                  //
+                  // Expanded(
+                  //   child:
+                  ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: tasks.length,
+                    itemBuilder: (BuildContext, int index) {
+                      return TaskCard(
+                        task: tasks[index],
+                        key: ValueKey(tasks[index].id),
                       );
-                    }).toList(),
-                  ),
+                    },
+                  ), //ここは絶対あとから追加する
           ),
+
+          // TaskCard(task: task),
+
+          // return Container(
+          //   color: Colors.amber,
+          //   height: panel_height,
+          //   // width: listWidth,
+          //   // margin: EdgeInsets.symmetric(vertical: 0),
+          //   padding: EdgeInsets.symmetric(horizontal: 8), //検討が必要
+          //   child: ListView.builder(
+          //     physics: NeverScrollableScrollPhysics(),
+          //     itemCount: tasks.length,
+          //     itemBuilder: (BuildContext, int index) {
+          //       return TaskCard(
+          //         task: tasks[index],
+          //         key: ValueKey(tasks[index].id),
+          //       );
+          //     },
+          //   ), //ここは絶対あとから追加する
+          //   // TaskCard(task: task),
+          // );
+          //
+
+          // Column(
+          //     children: tasks.map((task) {
+          //       return Expanded(
+          //         child: ListView.builder(
+          //           physics: NeverScrollableScrollPhysics(),
+          //           itemCount: tasks.length,
+          //           itemBuilder: (BuildContext, int index) {
+          //             return TaskCard(
+          //               task: tasks[index],
+          //               key: ValueKey(tasks[index].id),
+          //             );
+          //           },
+          //         ), //ここは絶対あとから追加する
+          //       );
+
+          //       // TaskCard(task: task),
+
+          //       // return Container(
+          //       //   color: Colors.amber,
+          //       //   height: panel_height,
+          //       //   // width: listWidth,
+          //       //   // margin: EdgeInsets.symmetric(vertical: 0),
+          //       //   padding: EdgeInsets.symmetric(horizontal: 8), //検討が必要
+          //       //   child: ListView.builder(
+          //       //     physics: NeverScrollableScrollPhysics(),
+          //       //     itemCount: tasks.length,
+          //       //     itemBuilder: (BuildContext, int index) {
+          //       //       return TaskCard(
+          //       //         task: tasks[index],
+          //       //         key: ValueKey(tasks[index].id),
+          //       //       );
+          //       //     },
+          //       //   ), //ここは絶対あとから追加する
+          //       //   // TaskCard(task: task),
+          //       // );
+          //     }).toList(),
+          //   ),
+          // ),
         );
       }).toList(),
     );
@@ -80,6 +153,7 @@ class _TaskLabelViewsState extends ConsumerState<TaskLabelViews> {
 
   @override
   Widget build(BuildContext context) {
+    listWidth = MediaQuery.of(context).size.width - 32;
     // List<Task> tasks = ref.watch(tasksProvider);
     // List<Label> labels = ref.watch(labelsProvider);
     Application app = ref.read(applicationProvider);
